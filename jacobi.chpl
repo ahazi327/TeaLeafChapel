@@ -1,6 +1,7 @@
 /*
  *		JACOBI SOLVER KERNEL
  */
+import settings;
 
 module jacobi{
     var densityCentre: real(64);
@@ -15,10 +16,10 @@ module jacobi{
         const Domain = {1..y-1, 1..x-1};
         const Inner = {halo_depth..y - (1 + halo_depth), halo_depth..x - (1 + halo_depth)};
 
-        if coefficient < CONDUCTIVITY && coefficient < RECIP_CONDUCTIVITY do //TODO reference CONDUCTIVITY
+        // if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY do //TODO reference CONDUCTIVITY
         
-            // die(__LINE__, __FILE__, "Coefficient %d is not valid.\n", coefficient); // die is an int but from where?
-            writeln(__LINE__, __FILE__, "Coefficient %d is not valid.\n", coefficient)
+        //     // die(__LINE__, __FILE__, "Coefficient %d is not valid.\n", coefficient); // die is an int but from where?
+        //     writeln(__LINE__, __FILE__, "Coefficient %d is not valid.\n", coefficient)
         
 
         forall i in Domain do{

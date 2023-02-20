@@ -1,84 +1,116 @@
-#include "settings.h"
-#include <string.h>
-
-#define MAX_CHAR_LEN 256
-
-void set_default_settings(Settings* settings)
-{
-  settings->test_problem_filename = 
-    (char*)malloc(sizeof(char)*MAX_CHAR_LEN);
-  strncpy(settings->test_problem_filename, 
-      DEF_TEST_PROBLEM_FILENAME, MAX_CHAR_LEN);
-
-  settings->tea_in_filename = 
-    (char*)malloc(sizeof(char)*MAX_CHAR_LEN);
-  strncpy(settings->tea_in_filename, 
-      DEF_TEA_IN_FILENAME, MAX_CHAR_LEN);
-
-  settings->tea_out_filename = 
-    (char*)malloc(sizeof(char)*MAX_CHAR_LEN);
-  strncpy(settings->tea_out_filename, 
-      DEF_TEA_OUT_FILENAME, MAX_CHAR_LEN);
-
-  settings->tea_out_fp = NULL;
-  settings->grid_x_min = DEF_GRID_X_MIN;
-  settings->grid_y_min = DEF_GRID_Y_MIN;
-  settings->grid_x_max = DEF_GRID_X_MAX;
-  settings->grid_y_max = DEF_GRID_Y_MAX;
-  settings->grid_x_cells = DEF_GRID_X_CELLS;
-  settings->grid_y_cells = DEF_GRID_Y_CELLS;
-  settings->dt_init = DEF_DT_INIT;
-  settings->max_iters = DEF_MAX_ITERS;
-  settings->eps = DEF_EPS;
-  settings->end_time = DEF_END_TIME;
-  settings->end_step = DEF_END_STEP;
-  settings->summary_frequency = DEF_SUMMARY_FREQUENCY;
-  settings->solver = DEF_SOLVER;
-  settings->coefficient = DEF_COEFFICIENT;
-  settings->error_switch = DEF_ERROR_SWITCH;
-  settings->presteps = DEF_PRESTEPS;
-  settings->eps_lim = DEF_EPS_LIM;
-  settings->check_result = DEF_CHECK_RESULT;
-  settings->ppcg_inner_steps = DEF_PPCG_INNER_STEPS;
-  settings->preconditioner = DEF_PRECONDITIONER;
-  settings->num_states = DEF_NUM_STATES;
-  settings->num_chunks = DEF_NUM_CHUNKS;
-  settings->num_chunks_per_rank = DEF_NUM_CHUNKS_PER_RANK;
-  settings->num_ranks = DEF_NUM_RANKS;
-  settings->halo_depth = DEF_HALO_DEPTH;
-  settings->is_offload = DEF_IS_OFFLOAD;
-  settings->kernel_profile = 
-    (struct Profile*)malloc(sizeof(struct Profile));
-  settings->application_profile = 
-    (struct Profile*)malloc(sizeof(struct Profile));
-  settings->wallclock_profile = 
-    (struct Profile*)malloc(sizeof(struct Profile));
-  settings->fields_to_exchange =
-    (bool*)malloc(sizeof(bool)*NUM_FIELDS);
-  settings->solver_name = 
-    (char*)malloc(sizeof(char)*MAX_CHAR_LEN);
-}
-
-// Resets all of the fields to be exchanged
-void reset_fields_to_exchange(Settings* settings)
-{
-  for(int ii = 0; ii < NUM_FIELDS; ++ii)
-  {
-    settings->fields_to_exchange[ii] = false;
+module settings{
+  const NUM_FIELDS: int = 6;
+  enum Solver {JACOBI_SOLVER, CG_SOLVER, CHEBY_SOLVER, PPCG_SOLVER}
+  enum Geometry {RECTANGULAR, CIRCULAR, POINT}
+  class setting {   
+    const test_problem_filename: string; // possibly need to change these to vars
+    const tea_in_filename: string;
+    const tea_out_filename: string;
+    const tea_out_fps: void;
+    const grid_x_min: real(64);
+    const grid_y_min: real(64);
+    const grid_x_max: real(64);
+    const grid_y_max: real(64);
+    const grid_x_cells: int;
+    const grid_y_cells: int;
+    const dt_init: real(64);
+    const max_iters: int;
+    const eps: real(64);
+    const end_time: real(64);
+    const rank: int;
+    const end_step: real(64);
+    const summary_frequency: int;
+    var solver: string;
+    const coefficient: int;
+    const error_switch: bool;
+    const presteps: int;
+    const eps_lim: real(64);
+    const check_result: int; // maybe bool
+    const ppcg_inner_steps: int;
+    const preconditioner: bool;
+    const num_states: int;
+    const num_chunks: int;
+    const num_chunks_per_rank: int;
+    const num_ranks: int;
+    const halo_depth: int;
+    const is_offload: bool;
+    const kernel_profile: 
+    var fields_to_exchange: [1..NUM_FIELDS] bool;
+    var solver_name: string;
+    var dx: real(64)
+    var dy: real(64)
+    var solver: Solver;
+    // const Kernal_language: bool;// not needed for now
+    // not sure what the profile structs are
   }
-}
+  class state { // maybe change into a record instead
+    var defined: bool;
+    var density: real(64);
+    var energy: real(64);
+    var x_min: real(64);
+    var y_min: real(64);
+    var x_max: real(64);
+    var y_max: real(64);
+    var radius: real(64);
+    var geometry: Geometry;
+  }
 
-// Checks if any of the fields are to be exchanged
-bool is_fields_to_exchange(Settings* settings)
-{
-  for(int ii = 0; ii < NUM_FIELDS; ++ii)
+  var setting_var: setting;
+  setting_var = new setting()
+
+  proc set_default_settings(){
+    setting_var.test_problem_filename = "tea.problems"
+    setting_var.tea_in_filename = "tea.in"
+    setting_var.tea_out_filename = "tea.out"
+    setting_var.tea_out_fp = NULL;
+    setting_var.grid_x_min = 0.0;
+    setting_var.grid_y_min = 0.0;
+    setting_var.grid_x_max = 100.0;
+    setting_var.grid_y_max = 100.0;
+    setting_var.grid_x_cells = 10;
+    setting_var.grid_y_cells = 10;
+    setting_var.dt_init = 0.1;
+    setting_var.max_iters = 10000;
+    setting_var.eps = 0.000000000000001;
+    setting_var.end_time = 10.0;
+    setting_var.end_step = 2147483647;
+    setting_var.summary_frequency = 10;
+    setting_var.solver = CG_SOLVER; //2
+    setting_var.coefficient = 1;
+    setting_var.error_switch = 0;
+    setting_var.presteps = 30;
+    setting_var.eps_lim = 0.00001;
+    setting_var.check_result = 1;
+    setting_var.ppcg_inner_steps = 10;
+    setting_var.preconditioner = 0;
+    setting_var.num_states = 0;
+    setting_var.num_chunks = 1;
+    setting_var.num_chunks_per_rank = 1;
+    setting_var.num_ranks = 1;
+    setting_var.halo_depth = 2;
+    setting_varl.is_offload = 0;
+  }
+
+  // Resets all of the fields to be exchanged
+  proc reset_fields_to_exchange()
   {
-    if(settings->fields_to_exchange[ii])
+    forall ii in 1..NUM_FIELDS do 
     {
-      return true;
+      setting_var.fields_to_exchange[ii] = 0;
     }
   }
 
-  return false;
+  // Checks if any of the fields are to be exchanged
+  proc is_fields_to_exchange(): bool
+  {
+    forall ii in 1..NUM_FIELDS do 
+    {
+      if setting_var.fields_to_exchange[ii] do
+        return 1;
+    }
+
+    return 0;
+  }
 }
+
 
