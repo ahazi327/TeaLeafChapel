@@ -1,6 +1,6 @@
 
 // Initialise the chunk
-module chunks{
+module chunks (x: int, y:int){
   import settings
   record Chunk{
     
@@ -11,6 +11,7 @@ module chunks{
     var top: int;
     var x: int;
     var dt_init: real(64);
+    var neighbours: [1..4294967295 * 4] int; // unsigned long long vs NUM_FACES (4))
 
 
     // int* neighbours; 
