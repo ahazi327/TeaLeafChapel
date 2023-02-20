@@ -1,12 +1,13 @@
 /*
  *		JACOBI SOLVER KERNEL
  */
-import settings;
+
 
 module jacobi{
     var densityCentre: real(64);
     var densityLeft: real(64);
     var densityDown: real(64);
+    import settings;
 
     // Initialises the Jacobi solver
     proc jacobi_init(x: int, y: int, halo_depth: int, coefficient: int, rx: real(64), ry: real(64),
@@ -29,7 +30,7 @@ module jacobi{
 
 
         forall i in Inner do{  //might need to make nested loops here
-            if coefficient == CONDUCTIVITY do  
+            if coefficient == settings.CONDUCTIVITY do  
                 densityCentre = density[i];
                 densityLeft = density[i-1];
                 densityDown = density[i-x];
