@@ -1,5 +1,46 @@
 module settings{
   const NUM_FIELDS: int = 6;
+
+  // Global constants
+const MASTER: int = 0
+const NUM_FACES: int = 4
+const CHUNK_LEFT: int = 0
+const CHUNK_RIGHT: int = 1
+const CHUNK_BOTTOM: int = 2
+const CHUNK_TOP: int = 3
+const EXTERNAL_FACE: int = -1
+const FIELD_DENSITY: int = 0
+const FIELD_ENERGY0: int = 1
+const FIELD_ENERGY1: int = 2
+const FIELD_U: int = 3
+const FIELD_P: int = 4
+const FIELD_SD: int = 5
+const CONDUCTIVITY: int = 1
+const RECIP_CONDUCTIVITY: int = 2
+const CG_ITERS_FOR_EIGENVALUES: int = 20
+
+const ERROR_SWITCH_MAX: real = 1.0
+
+//come back to these later
+// #define MIN(a, b) ((a < b) ? a : b)
+// #define MAX(a, b) ((a > b) ? a : b)
+// #define strmatch(a, b) (strcmp(a, b) == 0)
+// #define sign(a,b) ((b)<0 ? -fabs(a) : fabs(a))
+
+// Sparse Matrix Vector Product
+// #define SMVP(a) \
+//     (1.0 + (kx[index+1]+kx[index])\
+//      + (ky[index+x]+ky[index]))*a[index]\
+//      - (kx[index+1]*a[index+1]+kx[index]*a[index-1])\
+//      - (ky[index+x]*a[index+x]+ky[index]*a[index-x]);
+
+// #define GET_ARRAY_VALUE(len, buffer) \
+//     temp = 0.0;\
+//     for(int ii = 0; ii < len; ++ii) {\
+//         temp += buffer[ii];\
+//     }\
+//     printf("%s = %.12E\n", #buffer, temp);
+
   enum Solver {JACOBI_SOLVER, CG_SOLVER, CHEBY_SOLVER, PPCG_SOLVER}
   enum Geometry {RECTANGULAR, CIRCULAR, POINT}
   class setting {   
