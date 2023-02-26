@@ -7,12 +7,11 @@ module jacobi{
     var densityCentre: real(64);
     var densityLeft: real(64);
     var densityDown: real(64);
-    import settings;
+    use settings;
+    use chunks;
 
     // Initialises the Jacobi solver
-    proc jacobi_init(x: int, y: int, halo_depth: int, coefficient: int, rx: real(64), ry: real(64),
-        density: [?D] real(64), energy: [?D] real(64), u0: [?D] real(64), u: [?D] real(64),
-        kx: [?D] real(64), ky,[?D] real(64)){
+    proc jacobi_init(){
         
         const Domain = {1..y-1, 1..x-1};
         const Inner = {halo_depth..y - (1 + halo_depth), halo_depth..x - (1 + halo_depth)};
@@ -47,9 +46,7 @@ module jacobi{
     }
 
     // The main Jacobi solve step
-    proc main(x: int, y: int, halo_depth: int, coefficient: int, rx: real(64), ry: real(64),
-        density: [?D] real(64), energy: [?D] real(64), u0: [?D] real(64), u: [?D] real(64),
-        kx: [?D] real(64), ky,[?D] real(64)){
+    proc main(){
 
         const Domain = {0..y-1, 0..x-1};
         const Inner = {halo_depth..y - (1 + halo_depth), halo_depth..x - (1 + halo_depth)};
@@ -65,8 +62,8 @@ module jacobi{
                 + (ky[i+x]*r[i+x] + ky[i]*r[i-x]))
             / (1.0 + (kx[i]+kx[i+1])
                     + (ky[i]+ky[i+x]));
-            err += fabs(u[i]-r[i]);
-            error = err //TODO figure out pointers, maybe 'c_ptr(error) = err'
+            err += abs(u[i]-r[i]);
+            // error = err //TODO figure out pointers, maybe 'c_ptr(error) = err'
         }
         
 

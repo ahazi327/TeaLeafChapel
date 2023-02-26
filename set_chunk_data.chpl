@@ -6,28 +6,37 @@
 // Extended kernel for the chunk initialisation
 module set_chunk{
 	use settings;
+	use chunks;
+	var x_min: real;
+	var y_min: real;
 
-	proc set_chunk_data(x: int, y: int, left: int, bottom: int){
+	proc set_chunk_data(){
+		x_min = setting_var.grid_x_min + setting_var.dx * chunk.left:real
+		y_min = setting_var.grid_y_min + setting_var.dy * chunk.bottom:real
+
+		forall ii in 1..chunk.x do {
+			chunk.vertex_x[ii] = x_min + setting_var.dx * (ii-1 - setting_var.halo_depth)  // ii - 1 to account for index offset
+		}
 		
 	}
 
 }
-void set_chunk_data( 
-        Settings* settings,
-        int x,
-        int y,
-        int left,
-        int bottom,
- 	    double* cell_x,
-		double* cell_y,
-		double* vertex_x,
-		double* vertex_y,
-		double* volume,
-		double* x_area,
-		double* y_area)
-{
-    double x_min = settings->grid_x_min + settings->dx*(double)left;
-    double y_min = settings->grid_y_min + settings->dy*(double)bottom;
+// void set_chunk_data( 
+//         Settings* settings,
+//         int x,
+//         int y,
+//         int left,
+//         int bottom,
+//  	    double* cell_x,
+// 		double* cell_y,
+// 		double* vertex_x,
+// 		double* vertex_y,
+// 		double* volume,
+// 		double* x_area,
+// 		double* y_area)
+// {
+//     double x_min = settings->grid_x_min + settings->dx*(double)left;
+//     double y_min = settings->grid_y_min + settings->dy*(double)bottom;
 
 	for(int ii = 0; ii < x+1; ++ii)
 	{
