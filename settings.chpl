@@ -104,7 +104,7 @@ module settings{
     setting_var.test_problem_filename = "tea.problems";
     setting_var.tea_in_filename = "tea.in";
     setting_var.tea_out_filename = "tea.out";
-    setting_var.tea_out_fp = NULL;
+    setting_var.tea_out_fp = void;
     setting_var.grid_x_min = 0.0;
     setting_var.grid_y_min = 0.0;
     setting_var.grid_x_max = 100.0;
@@ -117,7 +117,7 @@ module settings{
     setting_var.end_time = 10.0;
     setting_var.end_step = 2147483647;
     setting_var.summary_frequency = 10;
-    setting_var.solver = CG_SOLVER; //2
+    setting_var.solver = 2; //2 - cg_solver
     setting_var.coefficient = 1;
     setting_var.error_switch = 0;
     setting_var.presteps = 30;
@@ -130,7 +130,7 @@ module settings{
     setting_var.num_chunks_per_rank = 1;
     setting_var.num_ranks = 1;
     setting_var.halo_depth = 2;
-    setting_varl.is_offload = 0;
+    setting_var.is_offload = 0;
   }
 
   // Resets all of the fields to be exchanged
@@ -145,17 +145,18 @@ module settings{
   // Checks if any of the fields are to be exchanged
   proc is_fields_to_exchange()
   {
-    var flag : bool = False;
+    var flag : bool = 0;
     forall ii in 1..NUM_FIELDS do 
     {
       if setting_var.fields_to_exchange[ii] then
-        flag = True;
+        flag = 1;
     }
+    return flag;
 
-    if flag then
-      return 1;
-    else
-      return 0;
+    // if flag then
+    //   return 1;
+    // else
+    //   return 0;
   }
 }
 
