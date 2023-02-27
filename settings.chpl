@@ -47,7 +47,7 @@ module settings{
     const test_problem_filename: string; // possibly need to change these to vars
     const tea_in_filename: string;
     const tea_out_filename: string;
-    const tea_out_fps: void;
+    const tea_out_fps: nothing;
     const grid_x_min: real(64);
     const grid_y_min: real(64);
     const grid_x_max: real(64);
