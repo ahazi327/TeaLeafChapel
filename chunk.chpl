@@ -1,7 +1,7 @@
 
 // Initialise the chunk
 module chunks (x: int, y:int){
-  import settings
+  import settings;
   record Chunk{
     
     var dt_init: real;
@@ -18,39 +18,39 @@ module chunks (x: int, y:int){
     var energy: [1..4294967295] real(64)
     var energy0: [1..4294967295] real(64)
 
-    var u: [1..4294967295] real(64)
-    var u0: [1..4294967295] real(64)
-    var p: [1..4294967295] real(64)
-    var r: [1..4294967295] real(64)
-    var mi: [1..4294967295] real(64)
-    var w: [1..4294967295] real(64)
-    var kx: [1..4294967295] real(64)
-    var ky: [1..4294967295] real(64)
-    var sd: [1..4294967295] real(64)
+    var u: [1..4294967295] real(64);
+    var u0: [1..4294967295] real(64);
+    var p: [1..4294967295] real(64);
+    var r: [1..4294967295] real(64);
+    var mi: [1..4294967295] real(64);
+    var w: [1..4294967295] real(64);
+    var kx: [1..4294967295] real(64);
+    var ky: [1..4294967295] real(64);
+    var sd: [1..4294967295] real(64);
 
-    var cell_x: [1..4294967295] real(64)  // these only account for 1 dimension of the grid each, can be reduced
-    var cell_dx: [1..4294967295] real(64)
-    var cell_y: [1..4294967295] real(64)
-    var cell_dy: [1..4294967295] real(64)
+    var cell_x: [1..4294967295] real(64);  // these only account for 1 dimension of the grid each, can be reduced
+    var cell_dx: [1..4294967295] real(64);
+    var cell_y: [1..4294967295] real(64);
+    var cell_dy: [1..4294967295] real(64);
 
-    var vertex_x: [1..4294967295] real(64)
-    var vertex_dx: [1..4294967295] real(64)
-    var vertex_y: [1..4294967295] real(64)
-    var vertex_dy: [1..4294967295] real(64)
+    var vertex_x: [1..4294967295] real(64);
+    var vertex_dx: [1..4294967295] real(64);
+    var vertex_y: [1..4294967295] real(64);
+    var vertex_dy: [1..4294967295] real(64);
 
-    var volume: [1..4294967295] real(64)
-    var x_area: [1..4294967295] real(64)
-    var y_area: [1..4294967295] real(64)
+    var volume: [1..4294967295] real(64);
+    var x_area: [1..4294967295] real(64);
+    var y_area: [1..4294967295] real(64);
 
     // Cheby and PPCG  
     var theta: real(64);
     var eigmin: real(64);
     var eigmax: real(64);
 
-    var cg_alphas: [1..4294967295] real(64)
-    var cg_betas: [1..4294967295] real(64)
-    var cheby_alphas: [1..4294967295] real(64)
-    var cheby_betas: [1..4294967295] real(64)
+    var cg_alphas: [1..4294967295] real(64);
+    var cg_betas: [1..4294967295] real(64);
+    var cheby_alphas: [1..4294967295] real(64);
+    var cheby_betas: [1..4294967295] real(64);
 
     // int* neighbours; 
     // MPI comm buffers  - probably don't need mpi buffers
@@ -64,11 +64,11 @@ module chunks (x: int, y:int){
     // double* bottom_recv;
   }
 
-  var chunk: Chunk;
-  chunk = new Chunk;
-  chunk.x  = x + setting.halo_depth*2;
-  chunk.y  = y + setting.halo_depth*2;
-  chunk.dt_init = setting.dt_init;
+  var chunk_var: Chunk;
+  chunk_var = new Chunk;
+  chunk_var.x  = x + setting.halo_depth*2;
+  chunk_var.y  = y + setting.halo_depth*2;
+  chunk_var.dt_init = setting.dt_init;
 
 }
 
