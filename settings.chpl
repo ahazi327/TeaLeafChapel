@@ -61,7 +61,7 @@ module settings{
     const rank: int;
     const end_step: real(64);
     const summary_frequency: int;
-    var solver: string;
+    // var solver: string;
     const coefficient: int;
     const error_switch: bool;
     const presteps: int;
@@ -77,10 +77,10 @@ module settings{
     const is_offload: bool;
     // const kernel_profile: 
     var fields_to_exchange: [1..NUM_FIELDS] bool;
-    var solver_name: string;
+    var solver: Solver;
     var dx: real(64);
     var dy: real(64);
-    var solver: Solver;
+    // var solver: Solver;
     // const Kernal_language: bool;// not needed for now
     // not sure what the profile structs are
   }
