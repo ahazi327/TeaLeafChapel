@@ -143,15 +143,19 @@ module settings{
   }
 
   // Checks if any of the fields are to be exchanged
-  proc is_fields_to_exchange(): bool
+  proc is_fields_to_exchange()
   {
+    var flag : bool = False;
     forall ii in 1..NUM_FIELDS do 
     {
       if setting_var.fields_to_exchange[ii] then
-        return 1;
+        flag = True;
     }
 
-    return 0;
+    if flag then
+      return 1
+    else
+      return 0;
   }
 }
 
