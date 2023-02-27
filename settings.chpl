@@ -153,7 +153,7 @@ module settings{
     }
 
     if flag then
-      return 1
+      return 1;
     else
       return 0;
   }
