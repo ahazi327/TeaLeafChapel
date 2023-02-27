@@ -1,5 +1,5 @@
 // Initialise the chunk
-module chunks (x: int, y:int){
+module chunks{
   import settings;
   record Chunk{
     
@@ -12,10 +12,10 @@ module chunks (x: int, y:int){
     var y: int;
     var dt_init: real(64);
     var neighbours: [1..4294967295 * 4] int; // unsigned long long * NUM_FACES (4))
-    var density: [1..4294967295] real(64) // unsigned long long  array size 
-    var density0: [1..4294967295] real(64)  // can reduce this to 100 * 100 as this is max grid size 
-    var energy: [1..4294967295] real(64)
-    var energy0: [1..4294967295] real(64)
+    var density: [1..4294967295] real(64); // unsigned long long  array size 
+    var density0: [1..4294967295] real(64); // can reduce this to 100 * 100 as this is max grid size 
+    var energy: [1..4294967295] real(64);
+    var energy0: [1..4294967295] real(64);
 
     var u: [1..4294967295] real(64);
     var u0: [1..4294967295] real(64);
@@ -62,12 +62,13 @@ module chunks (x: int, y:int){
     // double* bottom_send;
     // double* bottom_recv;
   }
-
-  var chunk_var: Chunk;
-  chunk_var = new Chunk;
-  chunk_var.x  = x + setting.halo_depth*2;
-  chunk_var.y  = y + setting.halo_depth*2;
-  chunk_var.dt_init = setting.dt_init;
+  proc init_chunk (x: int, y:int) {
+    var chunk_var: Chunk;
+    chunk_var = new Chunk();
+    chunk_var.x  = x + setting.halo_depth*2;
+    chunk_var.y  = y + setting.halo_depth*2;
+    chunk_var.dt_init = setting.dt_init;
+  }
 
 }
 
