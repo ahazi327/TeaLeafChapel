@@ -1,4 +1,3 @@
-
 // Initialise the chunk
 module chunks (x: int, y:int){
   import settings;
