@@ -2,24 +2,24 @@ module settings{
   const NUM_FIELDS: int = 6;
 
   // Global constants
-const MASTER: int = 0
-const NUM_FACES: int = 4
-const CHUNK_LEFT: int = 0
-const CHUNK_RIGHT: int = 1
-const CHUNK_BOTTOM: int = 2
-const CHUNK_TOP: int = 3
-const EXTERNAL_FACE: int = -1
-const FIELD_DENSITY: int = 0
-const FIELD_ENERGY0: int = 1
-const FIELD_ENERGY1: int = 2
-const FIELD_U: int = 3
-const FIELD_P: int = 4
-const FIELD_SD: int = 5
-const CONDUCTIVITY: int = 1
-const RECIP_CONDUCTIVITY: int = 2
-const CG_ITERS_FOR_EIGENVALUES: int = 20
+  const MASTER: int = 0;
+  const NUM_FACES: int = 4;
+  const CHUNK_LEFT: int = 0;
+  const CHUNK_RIGHT: int = 1;
+  const CHUNK_BOTTOM: int = 2;
+  const CHUNK_TOP: int = 3;
+  const EXTERNAL_FACE: int = -1;
+  const FIELD_DENSITY: int = 0;
+  const FIELD_ENERGY0: int = 1;
+  const FIELD_ENERGY1: int = 2;
+  const FIELD_U: int = 3;
+  const FIELD_P: int = 4;
+  const FIELD_SD: int = 5;
+  const CONDUCTIVITY: int = 1;
+  const RECIP_CONDUCTIVITY: int = 2;
+  const CG_ITERS_FOR_EIGENVALUES: int = 20;
 
-const ERROR_SWITCH_MAX: real = 1.0
+  const ERROR_SWITCH_MAX: real = 1.0;
 
 //come back to these later
 // #define MIN(a, b) ((a < b) ? a : b)
@@ -78,8 +78,8 @@ const ERROR_SWITCH_MAX: real = 1.0
     const kernel_profile: 
     var fields_to_exchange: [1..NUM_FIELDS] bool;
     var solver_name: string;
-    var dx: real(64)
-    var dy: real(64)
+    var dx: real(64);
+    var dy: real(64);
     var solver: Solver;
     // const Kernal_language: bool;// not needed for now
     // not sure what the profile structs are
@@ -97,9 +97,10 @@ const ERROR_SWITCH_MAX: real = 1.0
   }
 
   var setting_var: setting;
-  setting_var = new setting()
+  setting_var = new setting();
 
-  proc set_default_settings(){
+  proc set_default_settings()
+  {
     setting_var.test_problem_filename = "tea.problems"
     setting_var.tea_in_filename = "tea.in"
     setting_var.tea_out_filename = "tea.out"
