@@ -64,9 +64,9 @@ module chunks{
   proc init_chunk (x: int, y:int) {
     var chunk_var: Chunk;
     chunk_var = new Chunk();
-    chunk_var.x  = x + setting.halo_depth*2;
-    chunk_var.y  = y + setting.halo_depth*2;
-    chunk_var.dt_init = setting_var.dt_init;
+    chunk_var.x  = x + settings.setting_var.halo_depth*2;
+    chunk_var.y  = y + settings.setting_var.halo_depth*2;
+    chunk_var.dt_init = settings.setting_var.dt_init;
   }
 
 }
