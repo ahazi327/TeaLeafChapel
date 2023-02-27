@@ -3,7 +3,6 @@ module chunks{
   import settings;
   record Chunk{
     
-    var dt_init: real;
     var left: int;
     var right: int;
     var bottom: int;
