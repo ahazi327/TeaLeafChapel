@@ -66,7 +66,7 @@ module chunks{
     chunk_var = new Chunk();
     chunk_var.x  = x + setting.halo_depth*2;
     chunk_var.y  = y + setting.halo_depth*2;
-    chunk_var.dt_init = setting.dt_init;
+    chunk_var.dt_init = setting_var.dt_init;
   }
 
 }
