@@ -33,15 +33,14 @@ module jacobi{
                 densityCentre = density[i];
                 densityLeft = density[i-1];
                 densityDown = density[i-x];
-            
             else 
                 densityCentre = 1.0/density[i];
                 densityLeft =  1.0/density[i-1];
                 densityDown = 1.0/density[i-x];
             
             
-            kx[index] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
-            ky[index] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
+            kx[i] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
+            ky[i] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
         }
     }
 
