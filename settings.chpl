@@ -75,7 +75,7 @@ module settings{
     const num_ranks: int;
     const halo_depth: int;
     const is_offload: bool;
-    const kernel_profile: 
+    // const kernel_profile: 
     var fields_to_exchange: [1..NUM_FIELDS] bool;
     var solver_name: string;
     var dx: real(64);
@@ -101,9 +101,9 @@ module settings{
 
   proc set_default_settings()
   {
-    setting_var.test_problem_filename = "tea.problems"
-    setting_var.tea_in_filename = "tea.in"
-    setting_var.tea_out_filename = "tea.out"
+    setting_var.test_problem_filename = "tea.problems";
+    setting_var.tea_in_filename = "tea.in";
+    setting_var.tea_out_filename = "tea.out";
     setting_var.tea_out_fp = NULL;
     setting_var.grid_x_min = 0.0;
     setting_var.grid_y_min = 0.0;
@@ -147,7 +147,7 @@ module settings{
   {
     forall ii in 1..NUM_FIELDS do 
     {
-      if setting_var.fields_to_exchange[ii] do
+      if setting_var.fields_to_exchange[ii] then
         return 1;
     }
 
