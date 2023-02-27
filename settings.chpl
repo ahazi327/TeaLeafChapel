@@ -104,7 +104,7 @@ module settings{
     setting_var.test_problem_filename = "tea.problems";
     setting_var.tea_in_filename = "tea.in";
     setting_var.tea_out_filename = "tea.out";
-    setting_var.tea_out_fp = void;
+    setting_var.tea_out_fp = nothing;
     setting_var.grid_x_min = 0.0;
     setting_var.grid_y_min = 0.0;
     setting_var.grid_x_max = 100.0;
