@@ -30,7 +30,7 @@ module jacobi{
 
         forall i in Inner do{  //might need to make nested loops here
             if coefficient == settings.CONDUCTIVITY then  
-                densityCentre = density[i];
+                densityCentre = density[i];  // come back later when chunk data structure is sorted out
                 densityLeft = density[i-1];
                 densityDown = density[i-x];
             else 

@@ -61,9 +61,11 @@ module chunks{
     // double* bottom_send;
     // double* bottom_recv;
   }
-  proc init_chunk (x: int, y:int) {
+
     var chunk_var: Chunk;
     chunk_var = new Chunk();
+
+  proc init_chunk (x: int, y:int) {
     chunk_var.x  = x + settings.setting_var.halo_depth*2;
     chunk_var.y  = y + settings.setting_var.halo_depth*2;
     chunk_var.dt_init = settings.setting_var.dt_init;

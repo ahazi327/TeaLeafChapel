@@ -5,64 +5,46 @@
 
 // Extended kernel for the chunk initialisation
 module set_chunk{
-	use settings;
-	use chunks;
 	var x_min: real;
 	var y_min: real;
+	use settings;
+	use chunks;
 
 	proc set_chunk_data(){
-		x_min = setting_var.grid_x_min + setting_var.dx * chunk.left:real
-		y_min = setting_var.grid_y_min + setting_var.dy * chunk.bottom:real
+		x_min = setting_var.grid_x_min + setting_var.dx * chunk_var.left:real;
+		y_min = setting_var.grid_y_min + setting_var.dy * chunk_var.bottom:real;
 
-		forall ii in 1..chunk.x do {
-			chunk.vertex_x[ii] = x_min + setting_var.dx * (ii-1 - setting_var.halo_depth)  // ii - 1 to account for index offset
+		forall ii in 1..chunk_var.x+1 do {
+			chunk_var.vertex_x[ii] = x_min + setting_var.dx * (ii-1 - setting_var.halo_depth);  // ii - 1 to account for index offset
 		}
+
+		forall ii in 1..chunk_var.y+1 do {
+			chunk_var.vertex_y[ii] = y_min + setting_var.dy * (ii-1 - setting_var.halo_depth);  
+		}
+
+		forall ii in 1..chunk_var.x+1 do {
+			chunk_var.vertex_x[ii] = x_min + setting_var.dx * (ii-1 - setting_var.halo_depth);  
+		}
+
+		forall ii in 1..chunk_var.y+1 do {
+			chunk_var.vertex_y[ii] = y_min + setting_var.dy * (ii-1 - setting_var.halo_depth);  
+		}
+		
+		forall ii in 1..chunk_var.x-1 do {
+			chunk_var.cell_x = 0.5 * (chunk_var.vertex_x[ii] + chunk_var.vertex_x[ii+1]);
+
+		}
+		forall ii in 1..chunk_var.y-1 do {
+			chunk_var.cell_y = 0.5 * (chunk_var.vertex_y[ii] + chunk_var.vertex_y[ii+1]);
+
+		}
+		forall ii in 1..(chunk_var.x * chunk_var.y)+1 do {
+			chunk_var.volume[ii] = setting_var.dx * setting_var.dy;
+			chunk_var.x_area[ii] = setting_var.dy;
+			chunk_var.y_area[ii] = setting_var.dx;
+		}
+
 		
 	}
 
 }
-// void set_chunk_data( 
-//         Settings* settings,
-//         int x,
-//         int y,
-//         int left,
-//         int bottom,
-//  	    double* cell_x,
-// 		double* cell_y,
-// 		double* vertex_x,
-// 		double* vertex_y,
-// 		double* volume,
-// 		double* x_area,
-// 		double* y_area)
-// {
-//     double x_min = settings->grid_x_min + settings->dx*(double)left;
-//     double y_min = settings->grid_y_min + settings->dy*(double)bottom;
-
-	for(int ii = 0; ii < x+1; ++ii)
-	{
-		vertex_x[ii] = x_min + settings->dx*(ii-settings->halo_depth);
-	}
-
-	for(int ii = 0; ii < y+1; ++ii)
-	{
-		vertex_y[ii] = y_min + settings->dy*(ii-settings->halo_depth);
-	}
-
-	for(int ii = 0; ii < x; ++ii)
-	{
-		cell_x[ii] = 0.5*(vertex_x[ii]+vertex_x[ii+1]);
-	}
-
-	for(int ii = 0; ii < y; ++ii)
-	{
-		cell_y[ii] = 0.5*(vertex_y[ii]+vertex_y[ii+1]);
-	}
-
-	for(int ii = 0; ii < x*y; ++ii)
-	{
-		volume[ii] = settings->dx*settings->dy;
-		x_area[ii] = settings->dy;
-		y_area[ii] = settings->dx;
-	}
-}
-
