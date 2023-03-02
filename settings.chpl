@@ -76,7 +76,7 @@ module settings{
     const halo_depth: int;
     const is_offload: bool;
     // const kernel_profile: 
-    var fields_to_exchange: [1..NUM_FIELDS] bool;
+    var fields_to_exchange: [1..#NUM_FIELDS] bool;
     var solver: Solver;
     var dx: real(64);
     var dy: real(64);
@@ -94,7 +94,7 @@ module settings{
     var y_max: real(64);
     var radius: real(64);
     var geometry: Geometry;
-  }
+  } //TODO init a copy of this into an array
 
   var setting_var: setting;
   setting_var = new setting();

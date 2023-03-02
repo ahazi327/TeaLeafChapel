@@ -7,10 +7,10 @@ module chunks{
     var right: int;
     var bottom: int;
     var top: int;
-    var x: int;
-    var y: int;
+    const x: int;
+    const y: int;
     var dt_init: real(64);
-    var neighbours: [1..4294967295 * 4] int; // unsigned long long * NUM_FACES (4))
+    var neighbours: [0..<settings.NUM_FACES] int; 
     var density: [1..4294967295] real(64); // unsigned long long  array size 
     var density0: [1..4294967295] real(64); // can reduce this to 100 * 100 as this is max grid size 
     var energy: [1..4294967295] real(64);
