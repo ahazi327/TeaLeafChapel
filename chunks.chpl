@@ -62,8 +62,11 @@ module chunks{
     // double* bottom_recv;
   }
 
-    var chunk_var: Chunk;
-    chunk_var = new Chunk();
+  var chunk_var: Chunk;
+  chunk_var = new Chunk();
+
+  var states: [1..chunk_var.x*chunk_var.y] settings.state;
+  states = new settings.state();
 
   proc init_chunk (x: int, y:int) {
     chunk_var.x  = x + settings.setting_var.halo_depth*2;

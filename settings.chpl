@@ -1,6 +1,6 @@
 module settings{
+  
   const NUM_FIELDS: int = 6;
-
   // Global constants
   const MASTER: int = 0;
   const NUM_FACES: int = 4;
@@ -84,7 +84,7 @@ module settings{
     // const Kernal_language: bool;// not needed for now
     // not sure what the profile structs are
   }
-  class state { // maybe change into a record instead
+  record state { // maybe change into a record instead
     var defined: bool;
     var density: real(64);
     var energy: real(64);
@@ -95,6 +95,20 @@ module settings{
     var radius: real(64);
     var geometry: Geometry;
   } //TODO init a copy of this into an array
+
+  // not needed
+  // var default_state: state;
+  // default_state = new state();
+
+  // default_state.defined=false;
+  // default_state.density =0.0;
+  // default_state.energy =0.0;
+  // default_state.x_min =0.0;
+  // default_state.y_min=0.0;
+  // default_state.x_max =0.0;
+  // default_state.x_min =0.0;
+  // default_state.radius=0.0;
+  // default_state.geometry=Geometry.RECTANGULAR;
 
   var setting_var: setting;
   setting_var = new setting();
