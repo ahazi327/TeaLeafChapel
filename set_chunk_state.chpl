@@ -5,10 +5,9 @@
 
 // Entry point for set chunk state kernel
 module set_chunk_state{
-    use Math;
     import chunks;
     import settings;
-    proc set_chunk_state(in states : settings.state, in chunk_var : chunks.Chunk, in setting_var : settings.setting){
+    proc set_chunk_state(in states : settings.state, inout chunk_var : chunks.Chunk, in setting_var : settings.setting){
         // Set the initial state
         forall ii in 0..<setting_var.x*setting_var.y do {
             chunk_var.energy0[ii] = states[0].energy;
@@ -45,8 +44,8 @@ module set_chunk_state{
                     if apply_state
                     {
                         var iii : int = kk + jj*chunk_var.x;
-                        energy0[iii] = states[ss].energy;
-                        density[iii] = states[ss].density;
+                        chunk_var.energy0[iii] = states[ss].energy;
+                        chunk_var.density[iii] = states[ss].density;
                     }
                 }
             }
