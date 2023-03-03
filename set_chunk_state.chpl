@@ -5,87 +5,59 @@
 
 // Entry point for set chunk state kernel
 module set_chunk_state{
+    use Math;
+    import chunks;
+    import settings;
+    proc set_chunk_state(in states : settings.state, in chunk_var : chunks.Chunk, in setting_var : settings.setting){
+        // Set the initial state
+        forall ii in 0..<setting_var.x*setting_var.y do {
+            chunk_var.energy0[ii] = states[0].energy;
+            chunk_var.density[ii] = states[0].density;
+        }
 
 
-}
+        // Apply all of the states in turn
+        forall ss in 1..<setting_var.num_states do {
+            forall jj in 0..<chunk_var.y do {
+                forall kk in 0..<chunk_var.x do {
+                    var apply_state: bool;
 
-
-#include <math.h>
-#include "../../settings.h"
-
-
-void set_chunk_state(
-        int x,
-        int y,
-        double* vertex_x,
-        double* vertex_y,
-        double* cell_x,
-        double* cell_y,
-        double* density,
-        double* energy0,
-        double* u,
-        const int num_states,
-        State* states)
-{
-    // Set the initial state
-    for(int ii = 0; ii != x*y; ++ii)
-    {
-        energy0[ii] = states[0].energy;
-        density[ii] = states[0].density;
-    }	
-
-    // Apply all of the states in turn
-    for(int ss = 1; ss < num_states; ++ss)
-    {
-        for(int jj = 0; jj < y; ++jj) 
-        {
-            for(int kk = 0; kk < x; ++kk) 
-            {
-                int apply_state = 0;
-
-                if(states[ss].geometry == RECTANGULAR)
-                {
-                    apply_state = (
-                            vertex_x[kk+1] >= states[ss].x_min && 
-                            vertex_x[kk] < states[ss].x_max    &&
-                            vertex_y[jj+1] >= states[ss].y_min &&
-                            vertex_y[jj] < states[ss].y_max);
-                }
-                else if(states[ss].geometry == CIRCULAR)
-                {
-                    double radius = sqrt(
-                            (cell_x[kk]-states[ss].x_min)*
-                            (cell_x[kk]-states[ss].x_min)+
-                            (cell_y[jj]-states[ss].y_min)*
-                            (cell_y[jj]-states[ss].y_min));
-
-                    apply_state = (radius <= states[ss].radius);
-                }
-                else if(states[ss].geometry == POINT)
-                {
-                    apply_state = (
-                            vertex_x[kk] == states[ss].x_min &&
-                            vertex_y[jj] == states[ss].y_min);
-                }
-
-                // Check if state applies at this vertex, and apply
-                if(apply_state)
-                {
-                    const int index = kk + jj*x;
-                    energy0[index] = states[ss].energy;
-                    density[index] = states[ss].density;
+                    if states[ss].geometry == settings.Geometry.RECTANGULAR {
+                        apply_state = (
+                            chunk_var.vertex_x[kk+1] >= states[ss].x_min & 
+                            chunk_var.vertex_x[kk] < states[ss].x_max    &
+                            chunk_var.vertex_y[jj+1] >= states[ss].y_min &
+                            chunk_var.vertex_y[jj] < states[ss].y_max);
+                    }
+                    
+                    else if states[ss].geometry == settings.Geometry.CIRCULAR {
+                        var radius: real;
+                        radius = sqrt((cell_x[kk]-states[ss].x_min)*
+                            (chunk_var.cell_x[kk]-states[ss].x_min)+
+                            (chunk_var.cell_y[jj]-states[ss].y_min)*
+                            (chunk_var.cell_y[jj]-states[ss].y_min));
+                    }
+                    else if states[ss].geometry == settings.Geometry.POINT{
+                        apply_state = (
+                                chunk_var.vertex_x[kk] == states[ss].x_min &&
+                                chunk_var.vertex_y[jj] == states[ss].y_min);
+                    }
+                    if apply_state
+                    {
+                        var iii : int = kk + jj*chunk_var.x;
+                        energy0[iii] = states[ss].energy;
+                        density[iii] = states[ss].density;
+                    }
                 }
             }
         }
+        // Set an initial state for u
+        var Domain = {1..<chunk_var.y, 1..<chunk_var.x};
+        
+        forall ii in Domain do{
+            chunk_var.u[ii] = chunk_var.energy0[ii]*chunk_var.density[ii];
+        }
+
     }
 
-    // Set an initial state for u
-    for(int jj = 1; jj != y-1; ++jj) 
-    {
-        for(int kk = 1; kk != x-1; ++kk) 
-        {
-            const int index = kk + jj*x;
-            u[index] = energy0[index]*density[index];
-        }
-    }
 }
