@@ -11,44 +11,44 @@ module chunks{
     const y: int;
     var dt_init: real(64);
     var neighbours: [0..<settings.NUM_FACES] int; 
-    var density: [1..4294967295] real(64); // unsigned long long  array size 
-    var density0: [1..4294967295] real(64); // can reduce this to 100 * 100 as this is max grid size 
-    var energy: [1..4294967295] real(64);
-    var energy0: [1..4294967295] real(64);
+    var density: [1..4294967295] real; // unsigned long long  array size 
+    var density0: [1..4294967295] real; // can reduce this to 100 * 100 as this is max grid size 
+    var energy: [1..4294967295] real;
+    var energy0: [1..4294967295] real;
 
-    var u: [1..4294967295] real(64);
-    var u0: [1..4294967295] real(64);
-    var p: [1..4294967295] real(64);
-    var r: [1..4294967295] real(64);
-    var mi: [1..4294967295] real(64);
-    var w: [1..4294967295] real(64);
-    var kx: [1..4294967295] real(64);
-    var ky: [1..4294967295] real(64);
-    var sd: [1..4294967295] real(64);
+    var u: [1..4294967295] real;
+    var u0: [1..4294967295] real;
+    var p: [1..4294967295] real;
+    var r: [1..4294967295] real;
+    var mi: [1..4294967295] real;
+    var w: [1..4294967295] real;
+    var kx: [1..4294967295] real;
+    var ky: [1..4294967295] real;
+    var sd: [1..4294967295] real;
 
-    var cell_x: [1..4294967295] real(64);  // these only account for 1 dimension of the grid each, can be reduced
-    var cell_dx: [1..4294967295] real(64);
-    var cell_y: [1..4294967295] real(64);
-    var cell_dy: [1..4294967295] real(64);
+    var cell_x: [1..4294967295] real;  // these only account for 1 dimension of the grid each, can be reduced
+    var cell_dx: [1..4294967295] real;
+    var cell_y: [1..4294967295] real;
+    var cell_dy: [1..4294967295] real;
 
-    var vertex_x: [1..4294967295] real(64);
-    var vertex_dx: [1..4294967295] real(64);
-    var vertex_y: [1..4294967295] real(64);
-    var vertex_dy: [1..4294967295] real(64);
+    var vertex_x: [1..4294967295] real;
+    var vertex_dx: [1..4294967295] real;
+    var vertex_y: [1..4294967295] real;
+    var vertex_dy: [1..4294967295] real;
 
-    var volume: [1..4294967295] real(64);
-    var x_area: [1..4294967295] real(64);
-    var y_area: [1..4294967295] real(64);
+    var volume: [1..4294967295] real;
+    var x_area: [1..4294967295] real;
+    var y_area: [1..4294967295] real;
 
     // Cheby and PPCG  
-    var theta: real(64);
-    var eigmin: real(64);
-    var eigmax: real(64);
+    var theta: real;
+    var eigmin: real;
+    var eigmax: real;
 
-    var cg_alphas: [1..4294967295] real(64);
-    var cg_betas: [1..4294967295] real(64);
-    var cheby_alphas: [1..4294967295] real(64);
-    var cheby_betas: [1..4294967295] real(64);
+    var cg_alphas: [1..4294967295] real;
+    var cg_betas: [1..4294967295] real;
+    var cheby_alphas: [1..4294967295] real;
+    var cheby_betas: [1..4294967295] real;
 
     // int* neighbours; 
     // MPI comm buffers  - probably don't need mpi buffers
