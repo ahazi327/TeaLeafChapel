@@ -48,24 +48,24 @@ module settings{
     const tea_in_filename: string;
     const tea_out_filename: string;
     const tea_out_fps: nothing;
-    const grid_x_min: real(64);
-    const grid_y_min: real(64);
-    const grid_x_max: real(64);
-    const grid_y_max: real(64);
+    const grid_x_min: real;
+    const grid_y_min: real;
+    const grid_x_max: real;
+    const grid_y_max: real;
     const grid_x_cells: int;
     const grid_y_cells: int;
-    const dt_init: real(64);
+    const dt_init: real;
     const max_iters: int;
-    const eps: real(64);
-    const end_time: real(64);
+    const eps: real;
+    const end_time: real;
     const rank: int;
-    const end_step: real(64);
+    const end_step: real;
     const summary_frequency: int;
     // var solver: string;
     const coefficient: int;
     const error_switch: bool;
     const presteps: int;
-    const eps_lim: real(64);
+    const eps_lim: real;
     const check_result: int; // maybe bool
     const ppcg_inner_steps: int;
     const preconditioner: bool;
@@ -78,21 +78,21 @@ module settings{
     // const kernel_profile: 
     var fields_to_exchange: [0..<NUM_FIELDS] bool;
     var solver: Solver;
-    var dx: real(64);
-    var dy: real(64);
+    var dx: real;
+    var dy: real;
     // var solver: Solver;
     // const Kernal_language: bool;// not needed for now
     // not sure what the profile structs are
   }
   record state { // maybe change into a record instead
     var defined: bool;
-    var density: real(64);
-    var energy: real(64);
-    var x_min: real(64);
-    var y_min: real(64);
-    var x_max: real(64);
-    var y_max: real(64);
-    var radius: real(64);
+    var density: real;
+    var energy: real;
+    var x_min: real;
+    var y_min: real;
+    var x_max: real;
+    var y_max: real;
+    var radius: real;
     var geometry: Geometry;
   } //TODO init a copy of this into an array
 
