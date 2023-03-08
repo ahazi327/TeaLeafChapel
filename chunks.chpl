@@ -2,44 +2,48 @@
 module chunks{
   use settings;
   //have a proc with an x and y input to use it to init a chunk with those values
+
+  var chunk_x: int;
+  var chunk_y: int;
+
   record Chunk{
     
     var left: int;
     var right: int;
     var bottom: int;
     var top: int;
-    const x: int;
-    const y: int;
+    var x: int = chunk_x;
+    var y: int = chunk_y;
     var dt_init: real;
     var neighbours: [0..<NUM_FACES] int; 
-    var density: [0..<x*y] real;
-    var density0: [0..<x*y] real;
-    var energy: [0..<x*y] real;
-    var energy0: [0..<x*y] real;
+    var density: [0..<chunk_x, 0..<chunk_y] real;
+    var density0: [0..<chunk_x, 0..<chunk_y] real;
+    var energy: [0..<chunk_x, 0..<chunk_y] real;
+    var energy0: [0..<chunk_x, 0..<chunk_y] real;
 
-    var u: [0..<x*y] real;
-    var u0: [0..<x*y] real;
-    var p: [0..<x*y] real;
-    var r: [0..<x*y] real;
-    var mi: [0..<x*y] real;
-    var w: [0..<x*y] real;
-    var kx: [0..<x*y] real;
-    var ky: [0..<x*y] real;
-    var sd: [0..<x*y] real;
+    var u: [0..<chunk_x, 0..<chunk_y] real;
+    var u0: [0..<chunk_x, 0..<chunk_y] real;
+    var p: [0..<chunk_x, 0..<chunk_y] real;
+    var r: [0..<chunk_x, 0..<chunk_y] real;
+    var mi: [0..<chunk_x, 0..<chunk_y] real;
+    var w: [0..<chunk_x, 0..<chunk_y] real;
+    var kx: [0..<chunk_x, 0..<chunk_y] real;
+    var ky: [0..<chunk_x, 0..<chunk_y] real;
+    var sd: [0..<chunk_x, 0..<chunk_y] real;
 
-    var cell_x: [0..<x] real;
-    var cell_dx: [0..<x] real;
-    var cell_y: [0..<y] real;
-    var cell_dy: [0..<y] real;
+    var cell_x: [0..<chunk_x] real;
+    var cell_dx: [0..<chunk_x] real;
+    var cell_y: [0..<chunk_y] real;
+    var cell_dy: [0..<chunk_y] real;
 
-    var vertex_x: [0..<x+1] real;
-    var vertex_dx: [0..<x+1] real;
-    var vertex_y: [0..<y+1] real;
-    var vertex_dy: [0..<y+1] real;
+    var vertex_x: [0..<chunk_x+1] real;
+    var vertex_dx: [0..<chunk_x+1] real;
+    var vertex_y: [0..<chunk_y+1] real;
+    var vertex_dy: [0..<chunk_y+1] real;
 
-    var volume: [0..<x*y] real;
-    var x_area: [0..<(x+1)*y] real;
-    var y_area: [0..<x*(y+1)] real;
+    var volume: [0..<chunk_x, 0..<chunk_y] real;
+    var x_area: [0..<(chunk_x+1), 0..<chunk_y] real;
+    var y_area: [0..<x, 0..<(chunk_y+1)] real;
 
     // Cheby and PPCG  
     var theta: real;
@@ -63,15 +67,19 @@ module chunks{
     // double* bottom_recv;
   }
 
-  var chunk_var: Chunk;
-  chunk_var = new Chunk();
-
-  var states: [1..chunk_var.x*chunk_var.y] settings.state;
+  
+    
+  var states: [0..chunk_var.x, 0..chunk_var.y] settings.state;
   states = new settings.state();
 
+  
+
   proc init_chunk (x: int, y:int) {
-    chunk_var.x  = x + settings.setting_var.halo_depth*2;
-    chunk_var.y  = y + settings.setting_var.halo_depth*2;
+    chunk_x = x + settings.setting_var.halo_depth*2;
+    chunk_y = y + settings.setting_var.halo_depth*2;
+
+    var chunk_var: Chunk;
+    chunk_var = new Chunk();
     chunk_var.dt_init = settings.setting_var.dt_init;
   }
 

@@ -10,17 +10,17 @@ module field_summary {
 
         var Domain = {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth};
 
-        forall ii in Domain do {
+        forall i, j in Domain do {
             var cellVol : real;
-            cellVol = volume[ii];
+            cellVol = volume[i, j];
 
             var cellMass: real;
-            cellMass = cellVol * density[ii];
+            cellMass = cellVol * density[i, j];
 
             vol = vol + cellVol;
             mass = mass + cellMass;
-            ie = ie + cellMass * energy0[ii];
-            temp = temp + cellMass * u[ii];
+            ie = ie + cellMass * energy0[i, j];
+            temp = temp + cellMass * u[i, j];
 
         }
         //*volOut += vol;

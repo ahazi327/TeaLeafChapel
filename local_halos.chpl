@@ -39,11 +39,12 @@ module local_halos {
     // updating halos in a direction
     // Update left halo.
     proc update_left (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real) {  //possibly just use out
-        forall jj in halo_depth..<y-halo_depth do { // only using one forall loop
-            for kk in 0..<depth do{
-                var base: int = jj*x;
-                buffer[base + (halo_depth-kk-1)] = buffer[base+(halo_depth+kk)];
-            }
+        forall kk, jj in {0..<depth, halo_depth..<y-halo_depth} do
+        //forall jj in halo_depth..<y-halo_depth do { // only using one forall loop
+            //for kk in 0..<depth do{
+                //var base: int = jj*x;
+            buffer[jj*x + (halo_depth-kk-1)] = buffer[jj*x+(halo_depth+kk)];
+            //}
         }
 
     }

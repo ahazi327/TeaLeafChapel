@@ -44,37 +44,37 @@ module settings{
   enum Solver {JACOBI_SOLVER, CG_SOLVER, CHEBY_SOLVER, PPCG_SOLVER}
   enum Geometry {RECTANGULAR, CIRCULAR, POINT}
   class setting {   
-    const test_problem_filename: string; // possibly need to change these to vars
-    const tea_in_filename: string;
-    const tea_out_filename: string;
-    const tea_out_fps: nothing;
-    const grid_x_min: real;
-    const grid_y_min: real;
-    const grid_x_max: real;
-    const grid_y_max: real;
-    const grid_x_cells: int;
-    const grid_y_cells: int;
-    const dt_init: real;
-    const max_iters: int;
-    const eps: real;
-    const end_time: real;
-    const rank: int;
-    const end_step: real;
-    const summary_frequency: int;
+    var test_problem_filename: string; // possibly need to change these to vars
+    var tea_in_filename: string;
+    var tea_out_filename: string;
+    var tea_out_fps: nothing;
+    var grid_x_min: real;
+    var grid_y_min: real;
+    var grid_x_max: real;
+    var grid_y_max: real;
+    var grid_x_cells: int;
+    var grid_y_cells: int;
+    var dt_init: real;
+    var max_iters: int;
+    var eps: real;
+    var end_time: real;
+    var rank: int;
+    var end_step: real;
+    var summary_frequency: int;
     // var solver: string;
-    const coefficient: int;
-    const error_switch: bool;
-    const presteps: int;
-    const eps_lim: real;
-    const check_result: int; // maybe bool
-    const ppcg_inner_steps: int;
-    const preconditioner: bool;
-    const num_states: int;
-    const num_chunks: int;
-    const num_chunks_per_rank: int;
-    const num_ranks: int;
-    const halo_depth: int;
-    const is_offload: bool;
+    var coefficient: int;
+    var error_switch: bool;
+    var presteps: int;
+    var eps_lim: real;
+    var check_result: int; // maybe bool
+    var ppcg_inner_steps: int;
+    var preconditioner: bool;
+    var num_states: int;
+    var num_chunks: int;
+    var num_chunks_per_rank: int;
+    var num_ranks: int;
+    var halo_depth: int;
+    var is_offload: bool;
     // const kernel_profile: 
     var fields_to_exchange: [0..<NUM_FIELDS] bool;
     var solver: Solver;
