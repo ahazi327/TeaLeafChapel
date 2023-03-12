@@ -16,7 +16,7 @@ module chunks{
     var y: int = chunk_y;
     var dt_init: real;
     var neighbours: [0..<NUM_FACES] int; 
-    var density: [0..<chunk_x, 0..<chunk_y] real;
+    var density: [0..<chunk_x, 0..<chunk_y] real; // maybe use a domain var for initialising arrays
     var density0: [0..<chunk_x, 0..<chunk_y] real;
     var energy: [0..<chunk_x, 0..<chunk_y] real;
     var energy0: [0..<chunk_x, 0..<chunk_y] real;
@@ -67,20 +67,18 @@ module chunks{
     // double* bottom_recv;
   }
 
-  
-    
-  var states: [0..chunk_var.x, 0..chunk_var.y] settings.state;
-  states = new settings.state();
-
-  
-
-  proc init_chunk (x: int, y:int) {
+  proc init_chunk_and_states (x: int, y:int) {
     chunk_x = x + settings.setting_var.halo_depth*2;
     chunk_y = y + settings.setting_var.halo_depth*2;
 
+    //init chunks
     var chunk_var: Chunk;
     chunk_var = new Chunk();
     chunk_var.dt_init = settings.setting_var.dt_init;
+
+    // init states
+    var states: [0..chunk_var.x, 0..chunk_var.y] settings.state;
+    states = new settings.state();
   }
 
 }
