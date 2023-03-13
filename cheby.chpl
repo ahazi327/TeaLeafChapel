@@ -43,5 +43,6 @@ module cheby {
             r[i, j] = u0[i, j] - smvp;
             p[i, j] = alpha * p[i, j] + beta * r[i, j];
         }
+        cheby_calc_u(x, y, halo_depth, u, p);
     }
 }
