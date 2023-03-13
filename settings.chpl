@@ -1,25 +1,25 @@
 module settings{
   
-  const NUM_FIELDS: int = 6;
+  param NUM_FIELDS: int = 6;
   // Global constants
-  const MASTER: int = 0;
-  const NUM_FACES: int = 4;
-  const CHUNK_LEFT: int = 0;
-  const CHUNK_RIGHT: int = 1;
-  const CHUNK_BOTTOM: int = 2;
-  const CHUNK_TOP: int = 3;
-  const EXTERNAL_FACE: int = -1;
-  const FIELD_DENSITY: int = 0;
-  const FIELD_ENERGY0: int = 1;
-  const FIELD_ENERGY1: int = 2;
-  const FIELD_U: int = 3;
-  const FIELD_P: int = 4;
-  const FIELD_SD: int = 5;
-  const CONDUCTIVITY: int = 1;
-  const RECIP_CONDUCTIVITY: int = 2;
-  const CG_ITERS_FOR_EIGENVALUES: int = 20;
+  param MASTER: int = 0;
+  param NUM_FACES: int = 4;
+  param CHUNK_LEFT: int = 0;
+  param CHUNK_RIGHT: int = 1;
+  param CHUNK_BOTTOM: int = 2;
+  param CHUNK_TOP: int = 3;
+  param EXTERNAL_FACE: int = -1;
+  param FIELD_DENSITY: int = 0;
+  param FIELD_ENERGY0: int = 1;
+  param FIELD_ENERGY1: int = 2;
+  param FIELD_U: int = 3;
+  param FIELD_P: int = 4;
+  param FIELD_SD: int = 5;
+  param CONDUCTIVITY: int = 1;
+  param RECIP_CONDUCTIVITY: int = 2;
+  param CG_ITERS_FOR_EIGENVALUES: int = 20;
 
-  const ERROR_SWITCH_MAX: real = 1.0;
+  param ERROR_SWITCH_MAX: real = 1.0;
 
 //come back to these later
 // #define MIN(a, b) ((a < b) ? a : b)

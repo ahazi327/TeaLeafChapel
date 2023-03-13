@@ -36,47 +36,45 @@ module local_halos {
         if (chunk_neighbours[CHUNK_BOTTOM] == EXTERNAL_FACE) then update_bottom(x,y, halo_depth, depth, buffer);
     }
 
-    // updating halos in a direction
+    // Updating halos in a direction
     // Update left halo.
     proc update_left (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real) {  //possibly just use out
-        forall kk, jj in {0..<depth, halo_depth..<y-halo_depth} do
+        forall (kk, jj) in {0..<halo_depth, halo_depth..<y-halo_depth} do{
         //forall jj in halo_depth..<y-halo_depth do { // only using one forall loop
             //for kk in 0..<depth do{
                 //var base: int = jj*x;
-            buffer[jj*x + (halo_depth-kk-1)] = buffer[jj*x+(halo_depth+kk)];
-            //}
+            // buffer[jj*x + (halo_depth-kk-1)] = buffer[jj*x+(halo_depth+kk)];  // this method of indexing seems to have a bunch of garbage results whenever kk >= halo_depth, 
+            // only requires results where 0 <=kk < halo_depth
+            buffer[halo_depth-kk-1, jj] = buffer[kk + halo_depth, jj];            
         }
 
     }
 
     // Update right halo.
     proc update_right (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
-        forall jj in halo_depth..<y-halo_depth do {
-            for kk in 0..<depth do{
-                var base: int = jj*x;
-                buffer[base+(x-halo_depth+kk)] = buffer[base+(x-halo_depth-1-kk)];
-            }
+        // forall jj in halo_depth..<y-halo_depth do {
+        //     for kk in 0..<depth do{ // using halo depth should be better
+        forall (kk, jj) in {0..<halo_depth, halo_depth..<y-halo_depth} do{
+            buffer[(x-halo_depth+kk), jj] = buffer[(x-halo_depth-1-kk), jj];
+            // }
         }
 
     }
 
     // Update top halo.
     proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
-        for jj in 0..<depth do { 
-            forall kk in halo_depth..<x-halo_depth do{  //parallelise inner loop only
-                buffer[kk+(y-halo_depth+jj)*x] = buffer[kk+(y-halo_depth-1-jj)*x];
-            }
+        forall (kk , jj) in {0..<depth ,halo_depth..<x-halo_depth} do{ 
+            buffer[kk, (y-halo_depth+jj)] = buffer[kk, (y-halo_depth-1-jj)];
         }
 
     }
 
     // Update bottom halo.
     proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
-        for jj in 0..<depth do { 
-            forall kk in halo_depth..<x-halo_depth do{  //parallelise inner loop only
-                buffer[kk+(halo_depth-jj-1)*x] = buffer[kk+(halo_depth+jj)*x];
-            }
+        forall (kk , jj) in {0..<depth ,halo_depth..<x-halo_depth} do{ 
+            buffer[kk, (halo_depth-jj-1)] = buffer[kk, (halo_depth+jj)];
         }
-
     }
+
 }
+

@@ -6,6 +6,18 @@ module chunks{
   var chunk_x: int;
   var chunk_y: int;
 
+  // Domains
+  const num_face_domain = {0..<NUM_FACES};
+  var Domain = {0..<chunk_x, 0..<chunk_y};  // should automatically reallocate arrays when chunk values are changed
+  var states_domain = {0..chunk_x, 0..chunk_x};
+  var x_domain = {0..<chunk_x};
+  var y_domain = {0..<chunk_y};
+  var x1_domain = {0..<chunk_x+1};
+  var y1_domain = {0..<chunk_y+1};
+  var x_area_domain = {0..<(chunk_x+1), 0..<chunk_y};
+  var y_area_domain = {0..<chunk_x, 0..<(chunk_y+1)};
+  var max_iter_domain = {0..<setting_var.max_iters};
+
   record Chunk{
     
     var left: int;
@@ -15,45 +27,45 @@ module chunks{
     var x: int = chunk_x;
     var y: int = chunk_y;
     var dt_init: real;
-    var neighbours: [0..<NUM_FACES] int; 
-    var density: [0..<chunk_x, 0..<chunk_y] real; // maybe use a domain var for initialising arrays
-    var density0: [0..<chunk_x, 0..<chunk_y] real;
-    var energy: [0..<chunk_x, 0..<chunk_y] real;
-    var energy0: [0..<chunk_x, 0..<chunk_y] real;
+    var neighbours: [num_face_domain] int; 
+    var density: [Domain] real; // maybe use a domain var for initialising arrays
+    var density0: [Domain] real;
+    var energy: [Domain] real;
+    var energy0: [Domain] real;
 
-    var u: [0..<chunk_x, 0..<chunk_y] real;
-    var u0: [0..<chunk_x, 0..<chunk_y] real;
-    var p: [0..<chunk_x, 0..<chunk_y] real;
-    var r: [0..<chunk_x, 0..<chunk_y] real;
-    var mi: [0..<chunk_x, 0..<chunk_y] real;
-    var w: [0..<chunk_x, 0..<chunk_y] real;
-    var kx: [0..<chunk_x, 0..<chunk_y] real;
-    var ky: [0..<chunk_x, 0..<chunk_y] real;
-    var sd: [0..<chunk_x, 0..<chunk_y] real;
+    var u: [Domain] real;
+    var u0: [Domain] real;
+    var p: [Domain] real;
+    var r: [Domain] real;
+    var mi: [Domain] real;
+    var w: [Domain] real;
+    var kx: [Domain] real;
+    var ky: [Domain] real;
+    var sd: [Domain] real;
 
-    var cell_x: [0..<chunk_x] real;
-    var cell_dx: [0..<chunk_x] real;
-    var cell_y: [0..<chunk_y] real;
-    var cell_dy: [0..<chunk_y] real;
+    var cell_x: [x_domain] real;
+    var cell_dx: [x_domain] real;
+    var cell_y: [y_domain] real;
+    var cell_dy: [y_domain] real;
 
-    var vertex_x: [0..<chunk_x+1] real;
-    var vertex_dx: [0..<chunk_x+1] real;
-    var vertex_y: [0..<chunk_y+1] real;
-    var vertex_dy: [0..<chunk_y+1] real;
+    var vertex_x: [x1_domain] real;
+    var vertex_dx: [x1_domain] real;
+    var vertex_y: [y1_domain] real;
+    var vertex_dy: [y1_domain] real;
 
-    var volume: [0..<chunk_x, 0..<chunk_y] real;
-    var x_area: [0..<(chunk_x+1), 0..<chunk_y] real;
-    var y_area: [0..<x, 0..<(chunk_y+1)] real;
+    var volume: [Domain] real;
+    var x_area: [x_area_domain] real;
+    var y_area: [y_area_domain] real;
 
     // Cheby and PPCG  
     var theta: real;
     var eigmin: real;
     var eigmax: real;
 
-    var cg_alphas: [0..<setting_var.max_iters] real;
-    var cg_betas: [0..<setting_var.max_iters] real;
-    var cheby_alphas: [0..<setting_var.max_iters] real;
-    var cheby_betas: [0..<setting_var.max_iters] real;
+    var cg_alphas: [max_iter_domain] real;
+    var cg_betas: [max_iter_domain] real;
+    var cheby_alphas: [max_iter_domain] real;
+    var cheby_betas: [max_iter_domain] real;
 
     // int* neighbours; 
     // MPI comm buffers  - probably don't need mpi buffers
@@ -67,6 +79,9 @@ module chunks{
     // double* bottom_recv;
   }
 
+  var chunk_var: Chunk;
+  chunk_var = new Chunk();
+
   proc init_chunk_and_states (x: int, y:int) {
     chunk_x = x + settings.setting_var.halo_depth*2;
     chunk_y = y + settings.setting_var.halo_depth*2;
@@ -77,7 +92,7 @@ module chunks{
     chunk_var.dt_init = settings.setting_var.dt_init;
 
     // init states
-    var states: [0..chunk_var.x, 0..chunk_var.y] settings.state;
+    var states: [states_domain] settings.state;
     states = new settings.state();
   }
 

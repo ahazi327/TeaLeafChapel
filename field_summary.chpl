@@ -10,7 +10,7 @@ module field_summary {
 
         var Domain = {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth};
 
-        forall i, j in Domain do {
+        forall (i, j) in Domain do {
             var cellVol : real;
             cellVol = volume[i, j];
 
