@@ -32,7 +32,7 @@ module cg_driver {
     inout ry: real, inout rro: real) {
         rro = 0.0;
         forall cc in {0.. <setting_var.num_chunks_per_rank} do {
-            run_cg_init(chunk_var[cc].x, chunk_var[cc].y, chunk_var[cc].halo_depth, chunk_var[cc].coefficient, rx, ry, rro,
+            run_cg_init(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].coefficient, rx, ry, rro,
             chunk_var[cc].density, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].r, chunk_var[cc].w,
             chunk_var[cc].kx, chunk_var[cc].ky);
         }
@@ -47,7 +47,7 @@ module cg_driver {
         //sum over ranks TODO This seems to be an MPI things, so ignore for now
 
         forall cc in {0.. <setting_var.num_chunks_per_rank} do {
-            copy_u(chunk_var[cc].x, chunk_var[cc].y, chunk_var[cc].halo_depth, chunk_var[cc].u, chunk_var[cc].u0);
+            copy_u(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].u, chunk_var[cc].u0);
         }
 
     }
@@ -58,7 +58,7 @@ module cg_driver {
         var pw: real;
 
         forall cc in {0.. <setting_var.num_chunks_per_rank} do {
-            cg_calc_w (chunk_var[cc].x, chunk_var[cc].y, chunk_var[cc].halo_depth, pw, chunk_var[cc].p, chunk_var[cc].w, chunk_var[cc].kx,
+            cg_calc_w (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, pw, chunk_var[cc].p, chunk_var[cc].w, chunk_var[cc].kx,
             chunk_var[cc].ky);
         }
         //MPI sum over ranks function
@@ -70,14 +70,14 @@ module cg_driver {
         forall cc in {0.. <setting_var.num_chunks_per_rank} do {
             chunk_var[cc].cg_alphas[tt] = alpha;
 
-            cg_calc_ur(chunk_var[cc].x, chunk_var[cc].y, chunk_var[cc].halo_depth, alpha, rrn, chunk_var[cc].u, chunk_var[cc].p,
+            cg_calc_ur(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, alpha, rrn, chunk_var[cc].u, chunk_var[cc].p,
             chunk_var[cc].r, chunk_var[cc].w);
         }
 
         var beta : real = rrn / rro;
         forall cc in {0.. <setting_var.num_chunks_per_rank} do {
             chunk_var[cc].cg_beta[tt] = alpha;
-            cg_calc_p (chunk_var[cc].x, chunk_var[cc].y, chunk_var[cc].halo_depth, beta, chunk_var[cc].p,
+            cg_calc_p (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, beta, chunk_var[cc].p,
             chunk_var[cc].r);
 
 
