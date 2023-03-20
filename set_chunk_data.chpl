@@ -10,7 +10,7 @@ module set_chunk{
 	use settings;
 	import chunks;
 
-	proc set_chunk_data(ref chunk_var: chunks.Chunk){
+	proc set_chunk_data(ref chunk_var: chunks.Chunk){  // come back and change args
 		x_min = setting_var.grid_x_min + setting_var.dx * chunk_var.left:real;
 		y_min = setting_var.grid_y_min + setting_var.dy * chunk_var.bottom:real;
 

@@ -1,16 +1,16 @@
 module field_summary {
-    proc field_summary (in x: int, in y: int, in halo_depth: int, inout volume: [?V] real,
-    inout density: [?D] real , inout energy0: [?E0] real, inout u: [?U] real, inout volOut: [?VO] real,
-    inout massOut: [?m0] real, inout ieOut: [?iO] real, inout tempOut: [?tO] real){
+    proc field_summary (in x: int, in y: int, in halo_depth: int, inout volume: [?Domain] real,
+    inout density: [Domain] real , inout energy0: [Domain] real, inout u: [Domain] real, out vol: real,
+    out mass: real, out ie: real, out temp: real){
 
         var vol : real;
         var ie : real;
         var temp : real;
         var mass : real; // should be 0.0 already
+        
+        var inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
 
-        var Domain = {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth};
-
-        forall (i, j) in Domain (+ reduce vol, +reduce mass, + reduce ie, + reduce temp) do {
+        forall (i, j) in inner (+ reduce vol, +reduce mass, + reduce ie, + reduce temp) do {
             var cellVol : real;
             cellVol = volume[i, j];
 
@@ -23,11 +23,5 @@ module field_summary {
             temp += cellMass * u[i, j];
 
         }
-        //*volOut += vol;
-        // *ieOut += ie;
-        // *tempOut += temp;
-        // *massOut += mass;
     }
-
-
 }

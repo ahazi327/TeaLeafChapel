@@ -7,11 +7,11 @@ module jacobi{
 
     // Initialises the Jacobi solver
     proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, inout rx: real, inout ry: real, 
-    ref u: [?u_domain] real, ref u0: [?u0_domain] real, ref energy: [?energy_domain] real, ref density: [?density_domain] real,
-    ref kx: [?kx_domain] real, ref ky: [?ky_domain] real){
+    ref u: [?Domain] real, ref u0: [Domain] real, ref energy: [Domain] real, ref density: [Domain] real,
+    ref kx: [Domain] real, ref ky: [Domain] real){
         
-        const Domain = {1..<x-1, 1..<y-1};
-        const Inner = {halo_depth..<x - 1, halo_depth..<y - 1};
+        // const inner_Domain = Domain{1..<x-1, 1..<y-1};
+        const Inner = Domain[halo_depth..<x - 1, halo_depth..<y - 1];
 
         // if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY do //TODO reference CONDUCTIVITY
         
@@ -19,10 +19,12 @@ module jacobi{
         //     writeln(__LINE__, __FILE__, "Coefficient %d is not valid.\n", coefficient)
         
 
-        forall (i, j) in Domain do{
-            u0[i, j] = energy[i, j]*density[i, j];
-            u[i, j] = energy[i, j]*density[i, j];
-        }   
+        // forall (i, j) in inner_Domain do{
+        //     u0[i, j] = energy[i, j]*density[i, j];
+        //     u[i, j] = energy[i, j]*density[i, j];
+        // }   
+        u0 = energy*density;
+        u = energy*density;
 
 
         forall (i, j) in Inner do{ 
@@ -48,14 +50,15 @@ module jacobi{
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?u_domain] real, ref u0: [?u0_domain] real, ref r: [?r_domain] real, ref error: [?error_domain] real,
-    ref kx: [?kx_domain] real, ref ky: [?ky_domain] real){
+    ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, out err: real,
+    ref kx: [Domain] real, ref ky: [Domain] real){
 
-        const Domain = {0..<x, 0..<y};
-        const Inner = {halo_depth..<x - halo_depth, halo_depth..<y + halo_depth};
+        const outer_Domain = Domain[0..<x, 0..<y];
+        const Inner = Domain[halo_depth..<x - halo_depth, halo_depth..<y + halo_depth];
 
-        forall (i, j) in Domain do 
-            r[i, j] = u[i. j];
+        // forall (i, j) in outer_Domain do 
+        //     r[i, j] = u[i. j];
+        r = u;
 
         var err: real = 0.0;
 

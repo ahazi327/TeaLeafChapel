@@ -7,7 +7,7 @@
 module set_chunk_state{
     import chunks;
     import settings;
-    proc set_chunk_state(in states : settings.state, inout chunk_var : chunks.Chunk, in setting_var : settings.setting){
+    proc set_chunk_state(in states : settings.state, inout chunk_var : chunks.Chunk, in setting_var : settings.setting){  //come back later and change args
         // Set the initial state
         forall (i, j) in {0..<setting_var.x, 0..<setting_var.y} do {
             chunk_var.energy0[(i, j)] = states[0, 0].energy;

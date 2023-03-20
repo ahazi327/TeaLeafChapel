@@ -4,21 +4,21 @@
 
 // Calculates the new value for u.
 module cheby {
-    proc cheby_calc_u (const in x: int, const in y: int, const in halo_depth: int, ref u: [?u_domain] real,
-    ref p: [?p_domain] real){
-        
-        forall (i, j) in {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth} with (+ reduce u) do{
-            u[i, j] += p[i, j];
-        }
+    proc cheby_calc_u (const in x: int, const in y: int, const in halo_depth: int, ref u: [?up_domain] real,
+    ref p: [up_domain] real){
+        const halo_dom = [halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
+        // forall (i, j) in halo_dom with (+ reduce u) do{
+        u += p;
+        // }
 
     }
 
     // Initialises the Chebyshev solver
     proc cheby_init (const in x: int, const in y: int, const in halo_depth: int, const in theta: real,
-    ref u: [?u_domain] real, ref u0: [?u0_domain] real, ref p: [?p_domain] real, ref r: [?r_domain] real,
-    ref w: [?w_domain] real, ref kx: [?kx_domain] real, ref ky: [?ky_domain] real){
-        
-        forall (i, j) in {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth} with (+ reduce u) do{
+    ref u: [?Domain] real, ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
+    ref w: [Domain] real, ref kx: [Domain] real, ref ky: [Domain] real){
+        const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
+        forall (i, j) in inner do{  // with (+ reduce u)
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
@@ -32,9 +32,10 @@ module cheby {
 
     // The main chebyshev iteration
     proc cheby_iterate (const in x: int, const in y: int, const in halo_depth: int, inout alpha: real, inout beta: real,
-    ref u: [?u_domain] real, ref u0: [?u0_domain] real, ref p: [?p_domain] real, ref r: [?r_domain] real,
-    ref w: [?w_domain] real, ref kx: [?kx_domain] real, ref ky: [?ky_domain] real){
-        forall (i, j) in {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth} do{
+    ref u: [?Domain] real, ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
+    ref w: [Domain] real, ref kx: [Domain] real, ref ky: [Domain] real){
+        const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
+        forall (i, j) in inner do{
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])

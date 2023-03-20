@@ -28,7 +28,7 @@ module chunks{
     var y: int = chunk_y;
     var dt_init: real;
     var neighbours: [num_face_domain] int; 
-    var density: [Domain] real; // maybe use a domain var for initialising arrays
+    var density: [Domain] real; 
     var density0: [Domain] real;
     var energy: [Domain] real;
     var energy0: [Domain] real;
