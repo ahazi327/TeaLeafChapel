@@ -148,19 +148,20 @@ module settings{
   }
 
   // Resets all of the fields to be exchanged
-  proc reset_fields_to_exchange()
+  proc reset_fields_to_exchange(ref settings_var : setting)
   {
-    forall ii in 1..NUM_FIELDS do 
-    {
-      setting_var.fields_to_exchange[ii] = 0;
-    }
+    // forall ii in 0..<NUM_FIELDS do 
+    // {
+    //   settings_var.fields_to_exchange[ii] = 0;
+    // }
+    settings_var.fields_to_exchange[0..<NUM_FIELDS] = 0;
   }
 
   // Checks if any of the fields are to be exchanged
   proc is_fields_to_exchange()
   {
     var flag : bool = 0;
-    forall ii in 1..NUM_FIELDS do 
+    forall ii in 0..<NUM_FIELDS do 
     {
       if setting_var.fields_to_exchange[ii] then
         flag = 1;

@@ -2,15 +2,25 @@ module local_halos {
     use chunks;
     use settings;
 
-    var depth: int; // temp for now
+
+    // Invoke the halo update kernels
+    proc halo_update_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in depth: int){
+    // Check that we actually have exchanges to perform
+        if setting_var.is_fields_to_exchange {
+            forall cc in {0.. <setting_var.num_chunks_per_rank} do {
+                local_halos (chunk_var[cc].x, chunk_var[cc].y, depth, chunk_var[cc].halo_depth, chunk_var[cc].neighbours, setting_var.fields_to_exchange,
+                chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].sd);
+            }
+        }
+    }
     
-    local_halos(chunk_var.x, chunk_var.y, depth, setting_var.halo_depth, chunk_var.neighbours, setting_var.fields_to_exchange,
-     chunk_var.density, chunk_var.energy0, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.sd); // maybe not needed later
+    // local_halos(chunk_var.x, chunk_var.y, depth, setting_var.halo_depth, chunk_var.neighbours, setting_var.fields_to_exchange,
+    //  chunk_var.density, chunk_var.energy0, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.sd); // maybe not needed later
 
     // The kernel for updating halos locally
     proc local_halos(const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout chunk_neighbours : [0..<NUM_FACES] int,
-    const ref fields_to_exchange: [0..<NUM_FIELDS] bool, inout density: [?D] real, inout energy0: [?E] real,
-    inout energy: [?E1] real, inout u: [?U] real, inout p: [?P] real, inout sd: [?S] real){
+    const ref fields_to_exchange: [0..<NUM_FIELDS] bool, inout density: [?D] real, inout energy0: [D] real,
+    inout energy: [D] real, inout u: [D] real, inout p: [D] real, inout sd: [D] real){
 
         if fields_to_exchange[FIELD_DENSITY] then update_face(x, y, halo_depth, chunk_neighbours, depth, density);
 
