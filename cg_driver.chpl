@@ -16,7 +16,7 @@ module cg_driver {
         cg_init(chunk_var, setting_var, rx, ry, rro);
 
         // Iterate till convergence
-        for tt in 0..< setting_var.max_iters do {
+        for tt in 0..< setting_var.max_iters do {  // using serial execution for correctness.
             cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
 
             halo_update_driver (chunk_var, setting_var, 1);
