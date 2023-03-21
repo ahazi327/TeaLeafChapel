@@ -3,7 +3,7 @@ module local_halos {
     use settings;
 
 
-    // Invoke the halo update kernels
+    // Invoke the halo update kernels using driver
     proc halo_update_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in depth: int){
     // Check that we actually have exchanges to perform
         if setting_var.is_fields_to_exchange {

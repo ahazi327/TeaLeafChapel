@@ -28,7 +28,7 @@ module cheby_driver{
                 is_switch_to_cheby = setting_var.error_switch;
             
             if(!is_switch_to_cheby) then
-            // Perform a CG iteration
+                // Perform a CG iteration
                 cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
             else num_cheby_iters += 1;
 
