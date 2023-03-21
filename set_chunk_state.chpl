@@ -7,7 +7,7 @@
 module set_chunk_state{
     import chunks;
     import settings;
-    proc set_chunk_state(in states : settings.state, inout chunk_var : chunks.Chunk, in setting_var : settings.setting){  //come back later and change args
+    proc set_chunk_state(ref states : settings.state, ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){  //come back later and change args
         // Set the initial state
         forall (i, j) in {0..<setting_var.x, 0..<setting_var.y} do {
             chunk_var.energy0[(i, j)] = states[0, 0].energy;
@@ -59,5 +59,14 @@ module set_chunk_state{
         }
 
     }
+/*
+ *      SET CHUNK STATE DRIVER
+ */
+    // Invokes the set chunk state kernel
+    proc set_chunk_state_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref states : settings.state){
+        // Issue kernel to all local chunks
+        set_chunk_state(states, chunk_var[0], setting_var);
+    }
+
 
 }
