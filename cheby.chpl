@@ -31,7 +31,7 @@ module cheby {
     }
 
     // The main chebyshev iteration
-    proc cheby_iterate (const in y: int, const in halo_depth: int, inout alpha: real, inout beta: real,
+    proc cheby_iterate (const in x: int, const in y: int, const in halo_depth: int, inout alpha: real, inout beta: real,
     ref u: [?Domain] real, ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
     ref w: [Domain] real, ref kx: [Domain] real, ref ky: [Domain] real){
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
