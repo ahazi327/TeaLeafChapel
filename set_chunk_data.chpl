@@ -8,9 +8,9 @@ module set_chunk{
 	var x_min: real;
 	var y_min: real;
 	use settings;
-	import chunks;
+	use chunks;
 
-	proc set_chunk_data(ref chunk_var: chunks.Chunk){  // come back and change args
+	proc set_chunk_data(ref chunk_var: chunks.Chunk, ref setting_var : settings.setting){  // come back and change args
 		x_min = setting_var.grid_x_min + setting_var.dx * chunk_var.left:real;
 		y_min = setting_var.grid_y_min + setting_var.dy * chunk_var.bottom:real;
 
@@ -37,6 +37,15 @@ module set_chunk{
 		}
 
 		
+	}
+
+/*
+ * 		SET CHUNK DATA DRIVER
+ */
+	// Invokes the set chunk data kernel
+	proc set_chunk_data_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
+
+		set_chunk_data(chunk_var[0], setting_var);
 	}
 
 }
