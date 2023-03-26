@@ -4,7 +4,7 @@
  */
 
 // Extended kernel for the chunk initialisation
-module set_chunk{
+module set_chunk_data{
 	var x_min: real;
 	var y_min: real;
 	use settings;

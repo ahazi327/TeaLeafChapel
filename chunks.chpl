@@ -9,7 +9,7 @@ module chunks{
   // Domains
   const num_face_domain = {0..<NUM_FACES};
   var Domain = {0..<chunk_x, 0..<chunk_y};  // should automatically reallocate arrays when chunk values are changed
-  var states_domain = {0..chunk_x, 0..chunk_x};
+  // var states_domain = {0..chunk_x, 0..chunk_y};
   var x_domain = {0..<chunk_x};
   var y_domain = {0..<chunk_y};
   var x1_domain = {0..<chunk_x+1};
@@ -82,19 +82,22 @@ module chunks{
   var chunk_var: Chunk;
   chunk_var = new Chunk();
 
-  proc init_chunk_and_states (x: int, y:int) {
+  proc init_chunk (ref chunk_variable : Chunk, setting_var : settings.setting, x: int, y:int) {
     chunk_x = x + settings.setting_var.halo_depth*2;
     chunk_y = y + settings.setting_var.halo_depth*2;
 
-    //init chunks
-    var chunk_var: Chunk;
-    chunk_var = new Chunk();
+    // TODO might have to manually resize all arrays 
     chunk_var.dt_init = settings.setting_var.dt_init;
 
-    // init states
+
+  }
+  proc init_states (x: int, y:int) {
+     // init states
+    var states_domain : {0..x, 0..y};
     var states: [states_domain] settings.state;
     states = new settings.state();
   }
+     
 
 }
 
