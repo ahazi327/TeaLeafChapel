@@ -84,6 +84,9 @@ module settings{
     // const Kernal_language: bool;// not needed for now
     // not sure what the profile structs are
   }
+
+  // record Profile  - TODO add this later when profiling
+
   record state { // maybe change into a record instead
     var defined: bool;
     var density: real;
