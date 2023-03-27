@@ -3,9 +3,10 @@ module main {
     use chunks;
     use diffuse;
 
-    proc main_function (in argc : int, ref argv : string){
+    writeln("Hello world");
+    proc tealeaf (in argc : int, ref argv : string){
         // test
-        writeln("Hellow world");
+        
 
         //MPI stuff
 
