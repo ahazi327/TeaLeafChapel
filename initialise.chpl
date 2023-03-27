@@ -9,7 +9,7 @@ module initialise {
 
 
     // Initialise settings from input file
-    proc initialise_application (out chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting, 
+    proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting, 
     ref states : [?states_domain] settings.state){ //TODO possibly have states as an input
 
         var states_domain = {0..<1};
@@ -18,11 +18,8 @@ module initialise {
 
         // read_config();  // from parse.chpl
 
-        // set chunks array, must have  already init chunks
         setting_var.num_chunks = setting_var.num_ranks * setting_var.num_chunks_per_rank;
-        var chunks_domain = {0..<setting_var.num_chunks};
-        var chunk_var: [chunks_domain] Chunk;
-        chunk_var = new Chunk();
+        var chunk_var = fill(nil: chunks.Chunk, setting_var.num_chunks - 1); // TODO take these lines and put them into main 
 
         decompose_field(chunk_var, setting_var);
         set_chunk_data_driver(chunk_var. setting_var);
@@ -88,18 +85,18 @@ module initialise {
             var mod_y = setting_var.grid_y_cells % y_chunks;
             var add_x_prev : int = 0;
             var add_y_prev : int = 0;
-
+            var prev_iteration_y = 0;
             // Compute the full decomposition on all ranks
-            forall xx, yy cc, in {0..<x_chunks, 0..<y_chunks, 0..<setting_var.num_chunks_per_rank} do{
+            for (yy, xx, cc) in {0..<x_chunks, 0..<y_chunks, 0..<setting_var.num_chunks_per_rank} do{
+                
                 var add_y : int = (yy < mod_y);
                 var add_x : int = (xx < mod_x);
-
-                var rank : int = cc + setting_var.rank * setting_var.num_chunks_per_rank;
+                var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank);
 
                  // Store the values for all chunks local to rank
-                ifrank == (xx, yy) { // either using tuple or scalar
+                if rank == (xx, yy) { // either using tuple or scalar
 
-                    init_chunk(chunk_var[cc], setting_var, dx+add_x, dy+add_y);
+                    init_chunk(chunk_var, cc, setting_var, dx+add_x, dy+add_y);
 
                     // Set up the mesh ranges
                     chunk_var[cc].left = xx*dx +add_x_prev;
@@ -128,10 +125,15 @@ module initialise {
 
                 // If chunks rounded up, maintain relative location
                 add_x_prev += add_x;
+
+                
+
+                if !prev_iteration_y == yy { // if on a new iteration of why 
+                    add_x_prev = 0;
+                    add_y_prev += add_y; 
+                    prev_iteration_y = yy;
+                }
             }
-            
-            add_x_prev = 0;
-            add_y_prev += add_y;           
         }
     }
 }
