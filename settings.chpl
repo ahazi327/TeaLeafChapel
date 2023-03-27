@@ -113,10 +113,9 @@ module settings{
   // default_state.radius=0.0;
   // default_state.geometry=Geometry.RECTANGULAR;
 
-  var setting_var: setting;
-  setting_var = new setting();
+  var max_iters: int;
 
-  proc set_default_settings()
+  proc set_default_settings(ref setting_var : setting)
   {
     setting_var.test_problem_filename = "tea.problems";
     setting_var.tea_in_filename = "tea.in";
@@ -134,7 +133,7 @@ module settings{
     setting_var.end_time = 10.0;
     setting_var.end_step = 2147483647;
     setting_var.summary_frequency = 10;
-    setting_var.solver = 2; //2 - cg_solver
+    setting_var.solver = Solver.CG_SOLVER; //2 - cg_solver
     setting_var.coefficient = 1;
     setting_var.error_switch = 0;
     setting_var.presteps = 30;
@@ -148,20 +147,23 @@ module settings{
     setting_var.num_ranks = 1;
     setting_var.halo_depth = 2;
     setting_var.is_offload = 0;
+
+    max_iters = setting.setting_var.max_iters;
+
   }
 
   // Resets all of the fields to be exchanged
-  proc reset_fields_to_exchange(ref settings_var : setting)
+  proc reset_fields_to_exchange(ref setting_var : setting)
   {
     // forall ii in 0..<NUM_FIELDS do 
     // {
     //   settings_var.fields_to_exchange[ii] = 0;
     // }
-    settings_var.fields_to_exchange[0..<NUM_FIELDS] = 0;
+    setting_var.fields_to_exchange[0..<NUM_FIELDS] = 0;
   }
 
   // Checks if any of the fields are to be exchanged
-  proc is_fields_to_exchange()
+  proc is_fields_to_exchange(ref setting_var : setting)
   {
     var flag : bool = 0;
     forall ii in 0..<NUM_FIELDS do 
@@ -170,11 +172,6 @@ module settings{
         flag = 1;
     }
     return flag;
-
-    // if flag then
-    //   return 1;
-    // else
-    //   return 0;
   }
 }
 

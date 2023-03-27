@@ -9,8 +9,7 @@ module initialise {
 
 
     // Initialise settings from input file
-    proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting, 
-    ref states : [?states_domain] settings.state){ //TODO possibly have states as an input
+    proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting){ //TODO sort out how states works
 
         var states_domain = {0..<1};
         var states: [states_domain] settings.state;
@@ -18,8 +17,7 @@ module initialise {
 
         // read_config();  // from parse.chpl
 
-        setting_var.num_chunks = setting_var.num_ranks * setting_var.num_chunks_per_rank;
-        var chunk_var = fill(nil: chunks.Chunk, setting_var.num_chunks - 1); // TODO take these lines and put them into main 
+         // TODO take these lines and put them into main 
 
         decompose_field(chunk_var, setting_var);
         set_chunk_data_driver(chunk_var. setting_var);
@@ -128,7 +126,7 @@ module initialise {
 
                 
 
-                if !prev_iteration_y == yy { // if on a new iteration of why 
+                if !prev_iteration_y == yy { // if on a new iteration of y, then reset x and iterate y value 
                     add_x_prev = 0;
                     add_y_prev += add_y; 
                     prev_iteration_y = yy;

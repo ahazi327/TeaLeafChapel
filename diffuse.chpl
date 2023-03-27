@@ -5,6 +5,10 @@ module diffuse{
     use solve_finish_driver;
     use local_halos;
     use field_summary;
+    use ppcg_driver;
+    use cg_driver;
+    use jacobi_driver;
+    use cheby_driver;
 
     // The main timestep loop
     proc diffuse(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
@@ -29,7 +33,7 @@ module diffuse{
         calc_min_timestep(chunk_var, dt, setting_var.num_chunks_per_rank);
 
         // Pick the smallest timestep across all ranks
-        // min_over_ranks
+        // TODO min_over_ranks
 
         var rx : real = dt / (setting_var.dx * setting_var.dx);
         var ry : real = dt / (setting_var.dy * setting_var.dy);

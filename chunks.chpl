@@ -7,7 +7,7 @@ module chunks{
 
   // Domains
   const num_face_domain = {0..<NUM_FACES};
-
+  var max_iters: int = settings.max_iters; //TODO check this
 
   record Chunk{
 
@@ -23,7 +23,7 @@ module chunks{
     var y1_domain = {0..<chunk_y+1};
     var x_area_domain = {0..<(chunk_x+1), 0..<chunk_y};
     var y_area_domain = {0..<chunk_x, 0..<(chunk_y+1)};
-    var max_iter_domain = {0..<setting_var.max_iters};
+    var max_iter_domain = {0..<max_iters};
 
     var left: int;
     var right: int;
@@ -79,17 +79,17 @@ module chunks{
 
   proc init_chunk (ref chunk_variable : [?D] Chunk, in cc : int, ref setting_var : settings.setting, in x: int, in y:int) {
     
-    chunk_variable[cc].chunk_x = x + settings.setting_var.halo_depth*2;
-    chunk_variable[cc].chunk_y = y + settings.setting_var.halo_depth*2;
-    chunk_variable[cc].dt_init = settings.setting_var.dt_init;
+    chunk_variable[cc].chunk_x = x + setting_var.halo_depth*2;
+    chunk_variable[cc].chunk_y = y + setting_var.halo_depth*2;
+    chunk_variable[cc].dt_init = setting_var.dt_init;
     // TODO might have to manually init all array domains and/or all arrays
   }
 
-  proc init_states (x: int, y:int) {
+  proc init_states (x: int, y:int, ref setting_var : settings.setting) {
      // init states
     var states_domain = {0..x, 0..y};
-    var states: [states_domain] settings.state;
-    states = new settings.state();
+    var states: [states_domain] setting_var.state;
+    states = new setting_var.state();
   }
      
 
