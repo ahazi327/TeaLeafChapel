@@ -5,19 +5,15 @@ module initialise {
     use set_chunk_state;
     use local_halos;
     use store_energy;
+    use parse_config;
     param MY_MAX_REAL = 1e308;
 
 
     // Initialise settings from input file
-    proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting){ //TODO sort out how states works
+    proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states]  state){ //TODO sort out how states works
 
-        var states_domain = {0..<1};
-        var states: [states_domain] settings.state;
-        states = new settings.state();
-
-        // read_config();  // from parse.chpl
-
-         // TODO take these lines and put them into main 
+        // read input files for state and setting information
+        read_config(setting_var, states);
 
         decompose_field(chunk_var, setting_var);
         set_chunk_data_driver(chunk_var. setting_var);
@@ -123,8 +119,6 @@ module initialise {
 
                 // If chunks rounded up, maintain relative location
                 add_x_prev += add_x;
-
-                
 
                 if !prev_iteration_y == yy { // if on a new iteration of y, then reset x and iterate y value 
                     add_x_prev = 0;

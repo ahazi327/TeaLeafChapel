@@ -120,7 +120,7 @@ module settings{
     setting_var.test_problem_filename = "tea.problems";
     setting_var.tea_in_filename = "tea.in";
     setting_var.tea_out_filename = "tea.out";
-    setting_var.tea_out_fp = nothing;
+    // setting_var.tea_out_fp = nothing;
     setting_var.grid_x_min = 0.0;
     setting_var.grid_y_min = 0.0;
     setting_var.grid_x_max = 100.0;
@@ -135,20 +135,20 @@ module settings{
     setting_var.summary_frequency = 10;
     setting_var.solver = Solver.CG_SOLVER; //2 - cg_solver
     setting_var.coefficient = 1;
-    setting_var.error_switch = 0;
+    setting_var.error_switch = false;
     setting_var.presteps = 30;
     setting_var.eps_lim = 0.00001;
     setting_var.check_result = 1;
     setting_var.ppcg_inner_steps = 10;
-    setting_var.preconditioner = 0;
+    setting_var.preconditioner = false;
     setting_var.num_states = 0;
     setting_var.num_chunks = 1;
     setting_var.num_chunks_per_rank = 1;
     setting_var.num_ranks = 1;
     setting_var.halo_depth = 2;
-    setting_var.is_offload = 0;
+    setting_var.is_offload = false;
 
-    max_iters = setting.setting_var.max_iters;
+    max_iters = setting_var.max_iters;
 
   }
 
