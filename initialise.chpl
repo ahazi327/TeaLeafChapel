@@ -85,10 +85,10 @@ module initialise {
                 
                 var add_y : int = (yy < mod_y);
                 var add_x : int = (xx < mod_x);
-                var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank);
+                var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank); 
 
                  // Store the values for all chunks local to rank
-                if rank == (xx, yy) { // either using tuple or scalar
+                if rank == (xx, yy) { // either using tuple or scalar , update set to a scaler
 
                     init_chunk(chunk_var, cc, setting_var, dx+add_x, dy+add_y);
 

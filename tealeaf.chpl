@@ -3,6 +3,7 @@ module main {
     use chunks;
     use diffuse;
     use parse_config;
+    use initialise;
 
     proc main (args: [] string){
         //MPI stuff
@@ -13,16 +14,17 @@ module main {
         set_default_settings(setting_var);
 
         // initialise states
-        var num_states: int;
-        find_num_states(setting_var, num_states);
-        setting_var.num_states = num_states;
-        var states_domain = {0..<num_states};
+        find_num_states(setting_var); 
+        //TODO preallocate states to not defined
+        var states_domain = {0..<setting_var.num_states};
         var states: [states_domain] settings.state;
         states = new settings.state();
 
         // Perform initialisation steps
         setting_var.num_chunks = setting_var.num_ranks * setting_var.num_chunks_per_rank;
-        var chunk_var = fill(nil: chunks.Chunk, setting_var.num_chunks - 1);
+        // var chunk_var = fill(nil: chunks.Chunk, setting_var.num_chunks - 1);
+        var chunk_var: [0..<setting_var.num_chunks] chunks.Chunk;
+        // chunk_var  = new Chunk;
 
         initialise_application(chunk_var, setting_var, states);
 

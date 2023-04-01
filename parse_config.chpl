@@ -2,9 +2,10 @@ module parse_config {
     use settings;
     use IO;
     writeln("hello world");
-    proc find_num_states (ref setting_var : setting, out counter : int){
+    proc find_num_states (ref setting_var : setting){
+
         var tea_in = open (setting_var.tea_in_filename, iomode.r); // open file
-        var tea_in_reader = tea_in.reader(); // read file
+        // var tea_in_reader = tea_in.reader(); // read file
 
         var counter : int;
 
@@ -18,39 +19,34 @@ module parse_config {
             } else break; // if past states lines then finish loop
         }
         tea_in.close();
+        setting_var.num_states = counter;
     }
 
     // Read configuration file
     proc read_config(ref setting_var : setting, ref states : [0..<setting_var.num_states]  state){
 
-        // Open the configuration file
-        var tea_in = open (setting_var.tea_in_filename, iomode.r);
-        var tea_in_reader = tea_in.reader();
-
         // Read all of the settings from the config
-        read(tea_in_reader, setting_var);
+        read_file(setting_var, states);
 
         // Set the cell widths now
         setting_var.dx = (setting_var.grid_x_max - setting_var.grid_x_min) / setting_var.grid_x_cells;
         setting_var.dy = (setting_var.grid_y_max - setting_var.grid_y_min) / setting_var.grid_y_cells;
         
-
-        // close the file
-        tea_in.close();
+        
     }   
 
-    proc read(tea_in : file, ref setting_var : setting, ref states : [0..<setting_var.num_states]  state){ 
-        //TODO preallocate states to not defined
-        var states: [int] (string, real, real, string, real, real, real, real);
-        var variables: [string] real;
-        
-        var line = tea_in.readln(); // get first line
+    proc read_file(ref setting_var : setting, ref states : [0..<setting_var.num_states]  state){ 
+        // Open the configuration file
+        var tea_in = open (setting_var.tea_in_filename, iomode.r);
+        var tea_in_reader = tea_in.reader();
+        var line: string;
+        var counter : int; // fine line number
 
-        for line in tea_in.lines() {
-            var line = tea_in.readln();  // Read the next line
+        while tea_in_reader.readLine(line) {
+            counter += 1;
 
             // Check what the next line is equivalent to
-            if line.find("*tea", 0..) {
+            if line.find("*tea") != 1 {
                 continue;
             } else if line.find("*endtea", 0..) {
                 break;  // End of file
@@ -125,59 +121,78 @@ module parse_config {
 
             // Parse the key-value pairs
             else if line.find("xmin", 0..) {
-                setting_var.grid_x_min = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.grid_x_min = value[1] : real;
                 continue;
             } else if line.find("ymin", 0..) {
-                setting_var.grid_y_min = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.grid_y_min = value[1] : real;
                 continue;
             } else if line.find("xmax", 0..) {
-                setting_var.grid_x_max = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.grid_x_max = value[1] : real;
                 continue;
             } else if line.find("ymax", 0..) {
-                setting_var.grid_y_max = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.grid_y_max = value[1] : real;
                 continue;
             } else if line.find("x_cells", 0..) {
-                setting_var.grid_x_cells = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.grid_x_cells = value[1] : int;
                 continue;
             } else if line.find("y_cells", 0..) {
-                setting_var.grid_y_cells = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.grid_y_cells = value[1] : int;
                 continue;
             } else if line.find("initial_timestep", 0..) {
-                setting_var.dt_init = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.dt_init = value[1] : real;
                 continue;
             } else if line.find("end_time", 0..) {
-                setting_var.end_time = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.end_time = value[1] : real;
                 continue;
             } else if line.find("end_step", 0..) {
-                setting_var.end_step = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.end_step = value[1] : real;
                 continue;
             } else if line.find("summary_frequency", 0..) {
-                setting_var.summary_frequency = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.summary_frequency = value[1] : int;
                 continue;
             } else if line.find("presteps", 0..) {
-                setting_var.presteps = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.presteps = value[1] : int;
                 continue;
             } else if line.find("ppcg_inner_steps", 0..) {
-                setting_var.ppcg_inner_steps = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.ppcg_inner_steps = value[1] : int;
                 continue;
             } else if line.find("epslim", 0..) {
-                setting_var.epslim = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.eps_lim = value[1] : real;
                 continue;
             } else if line.find("max_iters", 0..) {
-                setting_var.max_iters = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.max_iters = value[1] : int;
                 continue;
             } else if line.find("eps", 0..) {
-                setting_var.eps = line.split('=')[1].trim().toReal();
+                var value = line.split('=')[1];
+                setting_var.eps = value[1] : real;
                 continue;
             } else if line.find("num_chunks_per_rank", 0..) {
-                setting_var.num_chunks_per_rank = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.num_chunks_per_rank = value[1] : int;
                 continue;
             } else if line.find("halo_depth", 0..) {
-                setting_var.num_chunks_per_rank = line.split('=')[1].trim().toInt();
+                var value = line.split('=')[1];
+                setting_var.num_chunks_per_rank = value[1] : int;
                 continue;
             } else {  // If file is not formatted properly
-                writeln("Warning: unrecognized line ", tea_in.lineno(), ": ", line);
+                writeln("Warning: unrecognized line ", counter, ": ", line);
             }
         }
+        // close the file
+        tea_in.close();
     }
 }
