@@ -1,6 +1,7 @@
 module eigenvalue_driver {
     use settings;
     use chunks;
+    use Math;
     param MY_MAX_REAL = 1e308;
     param MY_MIN_REAL = -2e308;
     // Calculates the eigenvalues from cg_alphas and cg_betas
@@ -45,7 +46,16 @@ module eigenvalue_driver {
         // chunks[cc].eigmin, chunks[cc].eigmax);
 
     
-  }
+    }
+    
+    // Function to implement the sign functionality
+    proc sign(a: real, b: real): real {
+    if b < 0 {
+        return -abs(a);
+    } else {
+        return abs(a);
+    }
+    }
 
     proc tqli (ref d: [?d_domain], ref e: [?e_domain], inout n: int){
 

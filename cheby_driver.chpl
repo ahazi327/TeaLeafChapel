@@ -3,6 +3,8 @@ module cheby_driver{
     use chunks;
     use settings;
     use local_halos;
+    use cg_driver;
+    use solver_methods;
     import cheby;
     param epsilon = 0.00001; // some really small positive number
 
@@ -84,7 +86,7 @@ module cheby_driver{
 
     // Performs the main iteration step
     proc cheby_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in num_cheby_iters: int,
-    inout is_calc_2norm: bool, out error: real){
+    in is_calc_2norm: bool, out error: real){
         // chunks per rank loop
         cheby.cheby_iterate (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].cheby_alphas[num_cheby_iters],
         chunk_var[0].cheby_betas[num_cheby_iters], chunk_var[0].u, chunk_var[0].u0,
@@ -99,8 +101,8 @@ module cheby_driver{
     }
 
     // Calculates the estimated iterations for Chebyshev solver
-    proc cheby_calc_est_iterations (ref chunk_var : [?chunk_domain] chunks.Chunk, in error: int, in bb: int,
-    inout est_iterations: real){ 
+    proc cheby_calc_est_iterations (ref chunk_var : [?chunk_domain] chunks.Chunk, in error: real, in bb: real, ref est_iterations: int){ 
+
          // Condition number is identical in all chunks/ranks
         var condition_number: real = chunk_var[0].eigmax / chunk_var[0].eigmin;
 
@@ -111,7 +113,7 @@ module cheby_driver{
             (sqrt(condition_number) - 1.0) / 
             (sqrt(condition_number) + 1.0);
 
-        est_iterations = round(log(it_alpha) / (2.0*log(gamm)));
+        est_iterations = round(log(it_alpha) / (2.0*log(gamm))) : int;
     }
 
     // Calculates the Chebyshev coefficients for the chunk

@@ -16,7 +16,7 @@ module initialise {
         read_config(setting_var, states);
 
         decompose_field(chunk_var, setting_var);
-        set_chunk_data_driver(chunk_var. setting_var);
+        set_chunk_data_driver(chunk_var, setting_var);
         set_chunk_state_driver(chunk_var, setting_var, states);
 
         // Prime the initial halo data
@@ -26,7 +26,7 @@ module initialise {
         setting_var.fields_to_exchange[FIELD_ENERGY1]=true;
         halo_update_driver (chunk_var, setting_var, 2); // 2 halo depth?
 
-        store_energy_driver(chunk_var, setting_var);
+        store_energy_driver(chunk_var);
     }
 
 
@@ -72,8 +72,8 @@ module initialise {
             //         "Failed to decompose the field with given parameters.\n");
             // }
 
-            var dy: real = setting_var.grid_y_cells / y_chunks;
-            var dx: real = setting_var.grid_x_cells / x_chunks;
+            var dy: int = setting_var.grid_y_cells / y_chunks;
+            var dx: int = setting_var.grid_x_cells / x_chunks;
             
             var mod_x = setting_var.grid_x_cells % x_chunks;
             var mod_y = setting_var.grid_y_cells % y_chunks;
@@ -88,7 +88,7 @@ module initialise {
                 var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank); 
 
                  // Store the values for all chunks local to rank
-                if rank == (xx, yy) { // either using tuple or scalar , update set to a scaler
+                if rank == 1 { // either using tuple or scalar , TODO update set to a scaler, for now keep as one due to only having 1 rank
 
                     init_chunk(chunk_var, cc, setting_var, dx+add_x, dy+add_y);
 

@@ -6,9 +6,9 @@ module local_halos {
     // Invoke the halo update kernels using driver
     proc halo_update_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in depth: int){
     // Check that we actually have exchanges to perform
-        if setting_var.is_fields_to_exchange {
-            forall cc in {0.. <setting_var.num_chunks_per_rank} do {
-                local_halos (chunk_var[cc].x, chunk_var[cc].y, depth, chunk_var[cc].halo_depth, chunk_var[cc].neighbours, setting_var.fields_to_exchange,
+        if is_fields_to_exchange(setting_var) {
+            forall cc in {0..<setting_var.num_chunks_per_rank} do {
+                local_halos (chunk_var[cc].x, chunk_var[cc].y, depth, depth, chunk_var[cc].neighbours, setting_var.fields_to_exchange,
                 chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].sd);
             }
         }

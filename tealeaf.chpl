@@ -11,11 +11,11 @@ module main {
         // Create the settings wrapper
         var setting_var: setting;
         setting_var = new setting();
+        
         set_default_settings(setting_var);
-
+        
         // initialise states
         find_num_states(setting_var); 
-        //TODO preallocate states to not defined
         var states_domain = {0..<setting_var.num_states};
         var states: [states_domain] settings.state;
         states = new settings.state();
@@ -32,8 +32,10 @@ module main {
         // settings_overload(setting_var, argc, argv);
 
         // Perform the solve using default or overloaded diffuse
-        diffuse(chunk_var, setting_var);
 
+        
+        diffuse(chunk_var, setting_var);
+        writeln("got here");
         // Print the kernel-level profiling results
         // if(settings->rank == MASTER)
         // {
@@ -46,7 +48,7 @@ module main {
         return 0; // Exit success
     }
 
-    // after parsing input files, use it to set settings file
+    // after parsing input files, use it to set settings file //TODO maybe remove this
     proc settings_overload(ref setting_var : setting, in argc : int, ref argv: [?D] string){
         
         for aa in 1..<argc do {

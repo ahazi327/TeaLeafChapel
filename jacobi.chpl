@@ -43,8 +43,8 @@ module jacobi{
                 densityDown = 1.0/density[i, j - 1];
             }
 
-            kx[i] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
-            ky[i] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
+            kx[i, j] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
+            ky[i, j] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
         }
     }
 
@@ -54,7 +54,7 @@ module jacobi{
     ref kx: [Domain] real, ref ky: [Domain] real){
 
         const outer_Domain = Domain[0..<x, 0..<y];
-        const Inner = Domain[halo_depth..<x - halo_depth, halo_depth..<y + halo_depth];
+        const Inner = Domain[halo_depth..<(x - halo_depth), halo_depth..<(y + halo_depth)];
 
         // forall (i, j) in outer_Domain do 
         //     r[i, j] = u[i. j];
@@ -62,7 +62,7 @@ module jacobi{
 
         var err: real = 0.0;
 
-        forall (i, j) in Inner (+ reduce err) do {    
+        forall (i, j) in Inner with (+ reduce err) do {    
             u[i, j] = (u0[i, j] 
                 + (kx[i+1, j]*r[i+1, j] + kx[i, j]*r[i-1, j])
                 + (ky[i, j+1]*r[i, j+1] + ky[i, j]*r[i, j-1]))

@@ -66,7 +66,7 @@ module settings{
     var error_switch: bool;
     var presteps: int;
     var eps_lim: real;
-    var check_result: int; // maybe bool
+    var check_result: bool;
     var ppcg_inner_steps: int;
     var preconditioner: bool;
     var num_states: int;
@@ -128,7 +128,7 @@ module settings{
     setting_var.grid_x_cells = 10;
     setting_var.grid_y_cells = 10;
     setting_var.dt_init = 0.1;
-    setting_var.max_iters = 10000;
+    setting_var.max_iters = 10; //TODO change back to 10000
     setting_var.eps = 0.000000000000001;
     setting_var.end_time = 10.0;
     setting_var.end_step = 2147483647;
@@ -138,14 +138,14 @@ module settings{
     setting_var.error_switch = false;
     setting_var.presteps = 30;
     setting_var.eps_lim = 0.00001;
-    setting_var.check_result = 1;
+    setting_var.check_result = true;
     setting_var.ppcg_inner_steps = 10;
     setting_var.preconditioner = false;
     setting_var.num_states = 0;
     setting_var.num_chunks = 1;
     setting_var.num_chunks_per_rank = 1;
     setting_var.num_ranks = 1;
-    setting_var.halo_depth = 2;
+    setting_var.halo_depth = 2; // TODO find out where i can override this
     setting_var.is_offload = false;
 
     max_iters = setting_var.max_iters;
@@ -159,17 +159,17 @@ module settings{
     // {
     //   settings_var.fields_to_exchange[ii] = 0;
     // }
-    setting_var.fields_to_exchange[0..<NUM_FIELDS] = 0;
+    setting_var.fields_to_exchange[0..<NUM_FIELDS] = false;
   }
 
   // Checks if any of the fields are to be exchanged
   proc is_fields_to_exchange(ref setting_var : setting)
   {
-    var flag : bool = 0;
-    forall ii in 0..<NUM_FIELDS do 
+    var flag : bool = false;
+    forall ii in 0..<NUM_FIELDS with (ref flag) do 
     {
       if setting_var.fields_to_exchange[ii] then
-        flag = 1;
+        flag = true;
     }
     return flag;
   }

@@ -5,7 +5,7 @@ module cg {
     use settings;
     use Math;
     proc cg_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: int,
-    inout rx: real, inout ry: real, out rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
+    in rx: real, in ry: real, out rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
     ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  ref kx: [Domain] real,
      ref ky: [Domain] real){
         //TODO implement die line here
@@ -23,9 +23,9 @@ module cg {
 
         forall (i, j) in inner do {
             if (coefficient == CONDUCTIVITY) then
-                w_domain[i,j] = density[i,j];
+                w[i,j] = density[i,j];
             else  
-                w_domain[i,j] = 1.0/density[i,j];
+                w[i,j] = 1.0/density[i,j];
         }
 
         const inner_1 = halo_dom[halo_depth..<x-1, halo_depth..<y-1];
@@ -38,7 +38,7 @@ module cg {
 
         var rro: real= 0.0;
         const inner_2 = halo_dom[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner_2 (+ reduce rro) do {  // with 
+        forall (i, j) in inner_2 with (+ reduce rro) do {  // with 
             w[i,j] =  (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
@@ -70,7 +70,7 @@ module cg {
     ref u: [?Domain] real, ref p: [Domain] real, ref r: [Domain] real, ref w: [Domain] real){
         var rrn: real= 0.0;
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner (+ reduce rrn) do{ //with
+        forall (i, j) in inner with (+ reduce rrn) do{ //with
             u[i, j] = alpha * p[i, j];
             r[i, j] = alpha * w[i, j];
             const temp: real = r[i, j];  // maybe make into var

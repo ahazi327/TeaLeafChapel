@@ -31,8 +31,9 @@ module solver_methods {
     ref buffer: [?buffer_domain] real, out norm: real){
         
         var norm: real = 0.0;
-        const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner (+ reduce norm) do { // with
+        const inner = buffer_domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
+        
+        forall (i, j) in inner with (+ reduce norm) do {
             norm += buffer[i, j]*buffer[i, j];	
         }
         

@@ -14,7 +14,8 @@ module diffuse{
     proc diffuse(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
 
         var wallclock_prev : real = 0.0;
-        for tt in 0..<setting_var.end_step do{ // might have to convert to int
+        const end_step = setting_var.end_step : int;
+        for tt in 0..<end_step do{ // might have to convert to int
             solve(chunk_var, setting_var, tt, wallclock_prev);
         } 
 
@@ -48,16 +49,16 @@ module diffuse{
 
         // Perform the solve with one of the integrated solvers
         select (setting_var.solver){
-            when "JACOBI_SOLVER"{
+            when Solver.JACOBI_SOLVER{
                 jacobi_driver(chunk_var, setting_var, rx, ry, error);
             }
-            when "CG_SOLVER"{
+            when Solver.CG_SOLVER{
                 cg_driver(chunk_var, setting_var, rx, ry, error);
             }
-            when "CHEBY_SOLVER"{
+            when Solver.CHEBY_SOLVER{
                 cheby_driver(chunk_var, setting_var, rx, ry, error);
             }
-            when "PPCG_SOLVER"{
+            when Solver.PPCG_SOLVER{
                 ppcg_driver(chunk_var, setting_var, rx, ry, error);
             }
         }

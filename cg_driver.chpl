@@ -13,10 +13,11 @@ module cg_driver {
         var rro : real;
 
         // Perform CG initialisation
-        cg_init(chunk_var, setting_var, rx, ry, rro);
+        cg_init_driver(chunk_var, setting_var, rx, ry, rro);
 
         // Iterate till convergence
-        for tt in 0..< setting_var.max_iters do {  // using serial execution for correctness.
+        for tt in 0..<setting_var.max_iters do {  // using serial execution for correctness.
+
             cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
 
             halo_update_driver (chunk_var, setting_var, 1);
@@ -28,11 +29,14 @@ module cg_driver {
     }
 
     // Invokes the CG initialisation kernels
-    proc cg_init (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
+    proc cg_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
     inout ry: real, inout rro: real) {
         rro = 0.0;
-        forall cc in {0.. <setting_var.num_chunks_per_rank} do {
-            run_cg_init(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].coefficient, rx, ry, rro,
+
+        // var sharedrxry = (rx, ry);
+
+        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce rro) do {
+            cg_init(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
             chunk_var[cc].density, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].r, chunk_var[cc].w,
             chunk_var[cc].kx, chunk_var[cc].ky);
         }
@@ -46,7 +50,7 @@ module cg_driver {
 
         //sum over ranks TODO This seems to be an MPI things, so ignore for now
 
-        forall cc in {0.. <setting_var.num_chunks_per_rank} do {
+        forall cc in {0..<setting_var.num_chunks_per_rank} do {
             copy_u(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].u, chunk_var[cc].u0);
         }
 
@@ -57,7 +61,8 @@ module cg_driver {
     out rro: real, inout error: real){
         var pw: real;
 
-        forall cc in {0.. <setting_var.num_chunks_per_rank} do {
+        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce pw) do {
+            
             cg_calc_w (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, pw, chunk_var[cc].p, chunk_var[cc].w, chunk_var[cc].kx,
             chunk_var[cc].ky);
         }
@@ -67,7 +72,7 @@ module cg_driver {
         var rrn: real;
     
 
-        forall cc in {0.. <setting_var.num_chunks_per_rank} do {
+        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce rrn) do {
             chunk_var[cc].cg_alphas[tt] = alpha;
 
             cg_calc_ur(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, alpha, rrn, chunk_var[cc].u, chunk_var[cc].p,
@@ -75,14 +80,12 @@ module cg_driver {
         }
 
         var beta : real = rrn / rro;
-        forall cc in {0.. <setting_var.num_chunks_per_rank} do {
-            chunk_var[cc].cg_beta[tt] = alpha;
+        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce beta) do {
+            chunk_var[cc].cg_betas[tt] = alpha;
             cg_calc_p (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, beta, chunk_var[cc].p,
             chunk_var[cc].r);
-
-
         }
-
+        
         error = rrn;
         rro = rrn;
     }

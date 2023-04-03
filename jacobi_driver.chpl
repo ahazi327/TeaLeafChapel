@@ -29,7 +29,7 @@ module jacobi_driver {
     proc jacobi_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
     inout ry: real){
 
-        jacobi_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].coefficient, chunk_var[0].rx, chunk_var[0].ry,
+        jacobi_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, setting_var.coefficient, rx, ry,
             chunk_var[0].u, chunk_var[0].u0, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].kx, chunk_var[0].ky);
 
         copy_u(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0);

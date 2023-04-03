@@ -2,6 +2,7 @@ module ppcg_driver{
     use chunks;
     use settings;
     use cg_driver;
+    use cg;
     use local_halos;
     use eigenvalue_driver;
     use solver_methods;
@@ -86,7 +87,7 @@ module ppcg_driver{
 
         var beta : real = rrn / rro;
 
-        run_cg_calc_p(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p, chunk_var[0].r);
+        cg_calc_p(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p, chunk_var[0].r);
 
         error = rrn;
         rro = rrn;

@@ -9,7 +9,7 @@ module field_summary {
 
     // The field summary kernel
     proc field_summary (in x: int, in y: int, in halo_depth: int, inout volume: [?Domain] real,
-    inout density: [Domain] real, inout energy0: [Domain] real, inout u: [Domain] real, inout vol: real,
+    ref density: [Domain] real, ref energy0: [Domain] real, ref u: [Domain] real, ref vol: real,
     inout mass: real, inout ie: real, inout temp: real){
 
         // var vol : real;
@@ -19,7 +19,7 @@ module field_summary {
         
         var inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
 
-        forall (i, j) in inner (+ reduce vol, +reduce mass, + reduce ie, + reduce temp) do {
+        forall (i, j) in inner with (+ reduce vol, +reduce mass, + reduce ie, + reduce temp) do {
             var cellVol : real;
             cellVol = volume[i, j];
 
@@ -44,8 +44,8 @@ module field_summary {
         
         var vol, ie, temp, mass : real = 0.0;
 
-        field_summary(chunk_var[0].x, chunk_var[0].y, chunk_var[0].energy0, setting_var.halo_depth, 
-            chunk_var[0].volume, chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp);
+        field_summary(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].volume, 
+        chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp);
 
         if(setting_var.check_result && is_solve_finished){ //  if settings->rank == MASTER && ...
             var checking_value : real = 1.0;

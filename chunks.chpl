@@ -7,7 +7,6 @@ module chunks{
 
   // Domains
   const num_face_domain = {0..<NUM_FACES};
-  var max_iters: int = settings.max_iters; //TODO check this
 
   record Chunk{
 
@@ -23,7 +22,7 @@ module chunks{
     var y1_domain = {0..<chunk_y+1};
     var x_area_domain = {0..<(chunk_x+1), 0..<chunk_y};
     var y_area_domain = {0..<chunk_x, 0..<(chunk_y+1)};
-    var max_iter_domain = {0..<max_iters};
+    var max_iter_domain = {0..<settings.max_iters};
 
     var left: int;
     var right: int;
@@ -31,7 +30,7 @@ module chunks{
     var top: int;
     
     var dt_init: real;
-    var neighbours: [num_face_domain] int; 
+    var neighbours: [num_face_domain] int; // change to 2d 
     var density: [Domain] real; 
     var density0: [Domain] real;
     var energy: [Domain] real;
