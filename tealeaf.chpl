@@ -35,7 +35,6 @@ module main {
 
         
         diffuse(chunk_var, setting_var);
-        writeln("got here");
         // Print the kernel-level profiling results
         // if(settings->rank == MASTER)
         // {

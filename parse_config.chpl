@@ -54,11 +54,11 @@ module parse_config {
                 counter += 1;
 
                 // Check what the next line is equivalent to
-                if line.find("*tea") != 1 {
+                if line.find("*tea") != -1 {
                     continue;
-                } else if line.find("*endtea", 0..) {
+                } else if line.find("*endtea", 0..) != -1{
                     break;  // End of file
-                } else if line.find("state ", 0..){
+                } else if line.find("state ", 0..) != -1{
                     var stateNum: int;
                     var density: real;
                     var energy: real;
@@ -95,104 +95,104 @@ module parse_config {
                     continue;
                 
                 // Parse the switches
-                } else if line.find("use_cg", 0..){
+                } else if line.find("use_cg", 0..) != -1{
                     setting_var.solver = Solver.CG_SOLVER;
                     continue;
-                } else if line.find("use_jacobi", 0..) {
+                } else if line.find("use_jacobi", 0..) != -1 {
                     setting_var.solver = Solver.JACOBI_SOLVER;
                     continue;
-                } else if line.find("use_chebyshev", 0..) {
+                } else if line.find("use_chebyshev", 0..) != -1 {
                     setting_var.solver = Solver.CHEBY_SOLVER;
                     continue;
-                } else if line.find("use_ppcg", 0..) {
+                } else if line.find("use_ppcg", 0..) != -1 {
                     setting_var.solver = Solver.PPCG_SOLVER;
                     continue;
-                } else if line.find("use_c_kernels", 0..) {
+                } else if line.find("use_c_kernels", 0..) != -1 {
                     // Do nothing
                     continue;
-                } else if line.find("check_result", 0..) {
+                } else if line.find("check_result", 0..) != -1 {
                     setting_var.check_result = true;
                     continue;
-                } else if line.find("errswitch", 0..) {
+                } else if line.find("errswitch", 0..) != -1 {
                     setting_var.error_switch = true;
                     continue;
-                } else if line.find("preconditioner_on", 0..) {
+                } else if line.find("preconditioner_on", 0..) != -1 {
                     setting_var.preconditioner = true;
                     continue;
-                } else if line.find("coefficient_density", 0..) {
+                } else if line.find("coefficient_density", 0..) != -1 {
                     setting_var.coefficient = CONDUCTIVITY;
                     continue;
-                } else if line.find("coefficient_inverse_density", 0..) {
+                } else if line.find("coefficient_inverse_density", 0..) != -1 {
                     setting_var.coefficient = RECIP_CONDUCTIVITY;
                     continue;
                 } 
 
                 // Parse the key-value pairs
-                else if line.find("xmin", 0..) {
+                else if line.find("xmin", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.grid_x_min = value[1] : real;
                     continue;
-                } else if line.find("ymin", 0..) {
+                } else if line.find("ymin", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.grid_y_min = value[1] : real;
                     continue;
-                } else if line.find("xmax", 0..) {
+                } else if line.find("xmax", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.grid_x_max = value[1] : real;
                     continue;
-                } else if line.find("ymax", 0..) {
+                } else if line.find("ymax", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.grid_y_max = value[1] : real;
                     continue;
-                } else if line.find("x_cells", 0..) {
+                } else if line.find("x_cells", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.grid_x_cells = value[1] : int;
                     continue;
-                } else if line.find("y_cells", 0..) {
+                } else if line.find("y_cells", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.grid_y_cells = value[1] : int;
                     continue;
-                } else if line.find("initial_timestep", 0..) {
+                } else if line.find("initial_timestep", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.dt_init = value[1] : real;
                     continue;
-                } else if line.find("end_time", 0..) {
+                } else if line.find("end_time", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.end_time = value[1] : real;
                     continue;
-                } else if line.find("end_step", 0..) {
+                } else if line.find("end_step", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.end_step = value[1] : real;
                     continue;
-                } else if line.find("summary_frequency", 0..) {
+                } else if line.find("summary_frequency", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.summary_frequency = value[1] : int;
                     continue;
-                } else if line.find("presteps", 0..) {
+                } else if line.find("presteps", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.presteps = value[1] : int;
                     continue;
-                } else if line.find("ppcg_inner_steps", 0..) {
+                } else if line.find("ppcg_inner_steps", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.ppcg_inner_steps = value[1] : int;
                     continue;
-                } else if line.find("epslim", 0..) {
+                } else if line.find("epslim", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.eps_lim = value[1] : real;
                     continue;
-                } else if line.find("max_iters", 0..) {
+                } else if line.find("max_iters", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.max_iters = value[1] : int;
                     continue;
-                } else if line.find("eps", 0..) {
+                } else if line.find("eps", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.eps = value[1] : real;
                     continue;
-                } else if line.find("num_chunks_per_rank", 0..) {
+                } else if line.find("num_chunks_per_rank", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.num_chunks_per_rank = value[1] : int;
                     continue;
-                } else if line.find("halo_depth", 0..) {
+                } else if line.find("halo_depth", 0..) != -1 {
                     var value = line.split('=')[1];
                     setting_var.halo_depth = value[1] : int;
                     continue;

@@ -6,6 +6,7 @@
 module field_summary {
     use settings;
     use chunks;
+    use IO;
 
     // The field summary kernel
     proc field_summary (in x: int, in y: int, in halo_depth: int, inout volume: [?Domain] real,
@@ -53,50 +54,40 @@ module field_summary {
 
             // print_and_log(settings, "Expected %.15e\n", checking_value);
             // print_and_log(settings, "Actual   %.15e\n", temp);
+            writeln("Expected %.15e\n", checking_value);
+            writeln("Actual %.15e\n", temp);
 
             var qa_diff: real = abs(100.0*(temp/checking_value)-100.0);
 
-            // if qa_diff < 0.001 then //print pass
-            // else print failed
+            if qa_diff < 0.001 then writeln("pass with qa_diff of :", qa_diff);//print pass
+            else writeln("failed with qa_diff of :", qa_diff);
         } 
     }
 
     // Fetches the checking value from the test problems file
-    proc get_checking_value (ref setting_var : settings.setting, in checking_value : real){
+    proc get_checking_value (ref setting_var : settings.setting, inout checking_value : real){
+        var counter : int;
+        try {
+            var tea_prob = open (setting_var.test_problem_filename, iomode.r);
+            var tea_prob_reader = tea_prob.reader();
+            
+            
+            var x : int;
+            var y : int;
+            var num_steps: int;
+            // var number : real;
+            var line : string;
 
-        // FILE* test_problem_file = fopen(settings->test_problem_filename, "r");  // TODO input file
-
-        // if(!test_problem_file)
-        // {
-        //     print_and_log(settings,
-        //         "\nWARNING: Could not open the test problem file.\n");
-        // }
-
-        // size_t len = 0;
-        // char* line = NULL;
-
-        // // Get the number of states present in the config file
-        // while(getline(&line, &len, test_problem_file) != EOF)
-        // {
-        //     int x;
-        //     int y;
-        //     int num_steps;
-
-        //     sscanf(line, "%d %d %d %lf", &x, &y, &num_steps, checking_value);
-
-        //     // Found the problem in the file
-        //     if(x == settings->grid_x_cells && y == settings->grid_y_cells &&
-        //         num_steps == settings->end_step)
-        //     {
-        //     fclose(test_problem_file);
-        //     return;
-        //     }
-        // }
-
-        // *checking_value = 1.0;
-        // print_and_log(settings, 
-        //     "\nWARNING: Problem was not found in the test problems file.\n");
-        // fclose(test_problem_file);
+            for line in tea_prob.lines(){
+                tea_prob_reader.read(x, y, num_steps, checking_value);
+                counter += 1;
+                writeln("checking value : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
+            }
+            tea_prob.close();
+        }
+        catch {
+            writeln("Error parsing at line: ", counter);
+        }
 
     }
 }   

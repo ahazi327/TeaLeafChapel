@@ -128,10 +128,10 @@ module settings{
     setting_var.grid_x_cells = 10;
     setting_var.grid_y_cells = 10;
     setting_var.dt_init = 0.1;
-    setting_var.max_iters = 10; //TODO change back to 10000
+    setting_var.max_iters = 10000;
     setting_var.eps = 0.000000000000001;
     setting_var.end_time = 10.0;
-    setting_var.end_step = 2147483647;
+    setting_var.end_step = 30; // revert back to max int 32 later '2147483647'
     setting_var.summary_frequency = 10;
     setting_var.solver = Solver.CG_SOLVER; //2 - cg_solver
     setting_var.coefficient = 1;
