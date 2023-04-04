@@ -88,6 +88,5 @@ module field_summary {
         catch {
             writeln("Error parsing at line: ", counter);
         }
-
     }
 }   
