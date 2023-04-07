@@ -11,14 +11,14 @@ module initialise {
 
     // Initialise settings from input file
     proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states]  state){ //TODO sort out how states works
-
         // read input files for state and setting information
-        read_config(setting_var, states);
-
+        read_config(setting_var, states);  // TODO fix read config
+        
         decompose_field(chunk_var, setting_var);
         set_chunk_data_driver(chunk_var, setting_var);
         set_chunk_state_driver(chunk_var, setting_var, states);
 
+        
         // Prime the initial halo data
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_DENSITY]=true;
@@ -85,11 +85,11 @@ module initialise {
                 
                 var add_y : int = (yy < mod_y);
                 var add_x : int = (xx < mod_x);
-                var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank); 
+                var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank); // TODO come abck alter to fix this when implementing locales
+               
 
                  // Store the values for all chunks local to rank
-                if rank == 1 { // either using tuple or scalar , TODO update set to a scaler, for now keep as one due to only having 1 rank
-
+                if rank == 0 { // either using tuple or scalar , TODO update set to a scaler, for now keep as one due to only having 1 rank
                     init_chunk(chunk_var, cc, setting_var, dx+add_x, dy+add_y);
 
                     // Set up the mesh ranges

@@ -60,15 +60,17 @@ module cg_driver {
     proc cg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
     out rro: real, inout error: real){
         var pw: real;
-
+        
         forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce pw) do {
             
             cg_calc_w (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, pw, chunk_var[cc].p, chunk_var[cc].w, chunk_var[cc].kx,
             chunk_var[cc].ky);
+            
         }
         //MPI sum over ranks function
 
-        var alpha :real = rro / pw;
+        var alpha : real = rro / pw;  // TODO currently 0/0 giving error, pw should not be 0.0
+        
         var rrn: real;
     
 
@@ -88,6 +90,7 @@ module cg_driver {
         
         error = rrn;
         rro = rrn;
+        
     }
 
 }

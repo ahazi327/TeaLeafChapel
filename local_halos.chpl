@@ -71,17 +71,18 @@ module local_halos {
 
     }
 
-    // Update top halo.
+    // Update top halo. // TODO this seems like its the update bottom halo and vise versa
     proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
-        forall (kk , jj) in {0..<depth ,halo_depth..<x-halo_depth} do{ 
-            buffer[kk, (y-halo_depth+jj)] = buffer[kk, (y-halo_depth-1-jj)];
+        forall (jj , kk) in {0..<depth ,halo_depth..<x-halo_depth} do{ 
+            buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, ((y)-halo_depth-1-jj)];
+            // buffer[kk, jj] = buffer[kk, jj];
         }
 
     }
 
     // Update bottom halo.
     proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
-        forall (kk , jj) in {0..<depth ,halo_depth..<x-halo_depth} do{ 
+        forall (jj, kk) in {0..<depth ,halo_depth..<x-halo_depth} do{ 
             buffer[kk, (halo_depth-jj-1)] = buffer[kk, (halo_depth+jj)];
         }
     }

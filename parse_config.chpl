@@ -129,71 +129,71 @@ module parse_config {
 
                 // Parse the key-value pairs
                 else if line.find("xmin", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.grid_x_min = value[1] : real;
                     continue;
                 } else if line.find("ymin", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.grid_y_min = value[1] : real;
                     continue;
                 } else if line.find("xmax", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.grid_x_max = value[1] : real;
                     continue;
                 } else if line.find("ymax", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.grid_y_max = value[1] : real;
                     continue;
                 } else if line.find("x_cells", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.grid_x_cells = value[1] : int;
                     continue;
                 } else if line.find("y_cells", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.grid_y_cells = value[1] : int;
                     continue;
-                } else if line.find("initial_timestep", 0..) != -1 {
-                    var value = line.split('=')[1];
+                } else if line.find("initial_timestep", 0..) != -1 {    
+                    var value = line.split('=')[1..];
                     setting_var.dt_init = value[1] : real;
                     continue;
                 } else if line.find("end_time", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.end_time = value[1] : real;
                     continue;
                 } else if line.find("end_step", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.end_step = value[1] : real;
                     continue;
                 } else if line.find("summary_frequency", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.summary_frequency = value[1] : int;
                     continue;
                 } else if line.find("presteps", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.presteps = value[1] : int;
                     continue;
                 } else if line.find("ppcg_inner_steps", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.ppcg_inner_steps = value[1] : int;
                     continue;
                 } else if line.find("epslim", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.eps_lim = value[1] : real;
                     continue;
                 } else if line.find("max_iters", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.max_iters = value[1] : int;
                     continue;
                 } else if line.find("eps", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.eps = value[1] : real;
                     continue;
                 } else if line.find("num_chunks_per_rank", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.num_chunks_per_rank = value[1] : int;
                     continue;
                 } else if line.find("halo_depth", 0..) != -1 {
-                    var value = line.split('=')[1];
+                    var value = line.split('=')[1..];
                     setting_var.halo_depth = value[1] : int;
                     continue;
                 } else {  // If file is not formatted properly

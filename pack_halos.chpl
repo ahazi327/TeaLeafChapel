@@ -1,7 +1,7 @@
 module pack_halos{
     use settings;
     use chunks;
-    var BigDomain = {0..<chunks.chunk_var.x, 0..<chunks.chunk_var.y};
+    var BigDomain = {0..<chunk_var.x, 0..<chunk_var.y};
     record Kernal {
         var x: int;
         var y: int;
@@ -20,7 +20,7 @@ module pack_halos{
     // Packs right data into buffer.
     proc pack_right (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = BigDomain[halo_depth..<y-halo_depth, x-halo_depth..<x-halo_depth];
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             buffer[kk, jj] = field[kk - halo_depth, jj];  // maybe change halo depth to just 1
         }
     }
@@ -28,7 +28,7 @@ module pack_halos{
     // Packs top data into buffer.
     proc pack_top (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = BigDomain[y-halo_depth-depth..<y-halo_depth, halo_depth..<x-halo_depth];
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             buffer[kk, jj] = field[kk, jj - halo_depth];
         }
     }
@@ -36,7 +36,7 @@ module pack_halos{
     // Packs bottom data into buffer.
     proc pack_bottom (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = BigDomain[halo_depth..<halo_depth + depth, halo_depth..<x-halo_depth];
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             buffer[kk, jj] = field[kk, jj + halo_depth];
         }
     }
@@ -44,7 +44,7 @@ module pack_halos{
     // Unpacks left data from buffer.
     proc unpack_left (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = BigDomain[halo_depth..<y-halo_depth, halo_depth-depth..<halo_depth];
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             field[kk, jj] = buffer[kk + halo_depth, jj];
         }
     }
@@ -52,7 +52,7 @@ module pack_halos{
     // Unpacks right data from buffer.
     proc unpack_right (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = {halo_depth..<y-halo_depth, x-halo_depth..<x-halo_depth+halo_depth};
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             field[kk, jj] = buffer[kk - halo_depth, jj]; 
         }
     }
@@ -60,7 +60,7 @@ module pack_halos{
     // Unpacks top data from buffer.
     proc unpack_top (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = {y-halo_depth..<y-halo_depth+depth, halo_depth..<x-halo_depth};
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             field[kk, jj] = buffer[kk, jj - halo_depth];
         }
     }
@@ -68,7 +68,7 @@ module pack_halos{
     // Unpacks bottom data from buffer.
     proc unpack_bottom (const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout field : [?F] real, inout buffer: [?B] real){
         const inner_domain = {halo_depth-depth..<halo_depth, halo_depth..<x-halo_depth};
-        forall (jj, kk) in inner_domain do{
+        forall (kk, jj) in inner_domain do{
             field[kk, jj] = buffer[kk, jj + halo_depth];
         }
     }

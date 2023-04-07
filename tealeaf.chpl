@@ -13,7 +13,7 @@ module main {
         setting_var = new setting();
         
         set_default_settings(setting_var);
-        
+
         // initialise states
         find_num_states(setting_var); 
         var states_domain = {0..<setting_var.num_states};
@@ -26,6 +26,7 @@ module main {
         var chunk_var: [0..<setting_var.num_chunks] chunks.Chunk;
         // chunk_var  = new Chunk;
 
+        
         initialise_application(chunk_var, setting_var, states);
 
         //TODO fix argc and argv equivalent for chapel

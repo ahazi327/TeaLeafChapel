@@ -14,15 +14,16 @@ module chunks{
     var chunk_y: int;
     var x: int = chunk_x;
     var y: int = chunk_y;
+    
     //Domains
-    var Domain = {0..<chunk_x, 0..<chunk_y};  // should automatically reallocate arrays when chunk values are changed
-    var x_domain = {0..<chunk_x};
-    var y_domain = {0..<chunk_y};
-    var x1_domain = {0..<chunk_x+1};
-    var y1_domain = {0..<chunk_y+1};
-    var x_area_domain = {0..<(chunk_x+1), 0..<chunk_y};
-    var y_area_domain = {0..<chunk_x, 0..<(chunk_y+1)};
-    var max_iter_domain = {0..<settings.max_iters};
+    var Domain : domain(2) = {0..<chunk_x, 0..<chunk_y};  // should automatically reallocate arrays when chunk values are changed
+    var x_domain : domain(1) = {0..<chunk_x};
+    var y_domain : domain(1) = {0..<chunk_y};
+    var x1_domain: domain(1)  = {0..<chunk_x+1};
+    var y1_domain : domain(1) = {0..<chunk_y+1};
+    var x_area_domain : domain(2) = {0..<(chunk_x+1), 0..<chunk_y};
+    var y_area_domain : domain(2) = {0..<chunk_x, 0..<(chunk_y+1)};
+    var max_iter_domain : domain(1) = {0..<settings.max_iters};
 
     var left: int;
     var right: int;
@@ -36,7 +37,7 @@ module chunks{
     var energy: [Domain] real;
     var energy0: [Domain] real;
 
-    var u: [Domain] real;
+    var u: [Domain] real; //TODO find out where to set the main values of these arrays
     var u0: [Domain] real;
     var p: [Domain] real;
     var r: [Domain] real;
@@ -77,11 +78,55 @@ module chunks{
   chunk_var = new Chunk();
 
   proc init_chunk (ref chunk_variable : [?D] Chunk, in cc : int, ref setting_var : settings.setting, in x: int, in y:int) {
-    
     chunk_variable[cc].chunk_x = x + setting_var.halo_depth*2;
     chunk_variable[cc].chunk_y = y + setting_var.halo_depth*2;
+    
+    chunk_variable[cc].x = chunk_variable[cc].chunk_x;
+    chunk_variable[cc].y = chunk_variable[cc].chunk_y; 
+    
+    // manually resize all domains to resize arrays
+    chunk_variable[cc].Domain = {0..<chunk_variable[cc].chunk_x, 0..<chunk_variable[cc].chunk_y};
+    chunk_variable[cc].x1_domain = {0..<chunk_variable[cc].chunk_x+1};
+    chunk_variable[cc].y1_domain = {0..<chunk_variable[cc].chunk_y+1};
+    chunk_variable[cc].x_domain = {0..<chunk_variable[cc].chunk_x};
+    chunk_variable[cc].y_domain = {0..<chunk_variable[cc].chunk_y};
+    chunk_variable[cc].x_area_domain = {0..<(chunk_variable[cc].chunk_x+1), 0..<chunk_variable[cc].chunk_y};
+    chunk_variable[cc].y_area_domain = {0..<chunk_variable[cc].chunk_x, 0..<(chunk_variable[cc].chunk_y+1)};
+    chunk_variable[cc].max_iter_domain = {0..<settings.max_iters};
+
+    writeln("chunk var x: ", chunk_variable[cc].chunk_x, " x: ", x, " for cc of ", cc);
+
+    // set all values in arrays to 0 from nan
+    chunk_variable[cc].u = 0;
+    chunk_variable[cc].u0 = 0;
+    chunk_variable[cc].p = 0;
+    chunk_variable[cc].r = 0;
+    chunk_variable[cc].mi = 0;
+    chunk_variable[cc].w = 0;
+    chunk_variable[cc].kx = 0;
+    chunk_variable[cc].ky = 0;
+    chunk_variable[cc].sd = 0;
+
+    chunk_variable[cc].cell_x = 0;
+    chunk_variable[cc].cell_dx = 0;
+    chunk_variable[cc].cell_y = 0;
+    chunk_variable[cc].cell_dy = 0;
+    
+    chunk_variable[cc].vertex_x = 0;
+    chunk_variable[cc].vertex_dx = 0;
+    chunk_variable[cc].vertex_y = 0;
+    chunk_variable[cc].vertex_dy = 0;
+
+    chunk_variable[cc].volume = 0;
+    chunk_variable[cc].x_area = 0;
+    chunk_variable[cc].y_area = 0;
+
+    chunk_variable[cc].cg_alphas = 0;
+    chunk_variable[cc].cg_betas = 0;
+    chunk_variable[cc].cheby_alphas = 0;
+    chunk_variable[cc].cheby_betas = 0;
+
     chunk_variable[cc].dt_init = setting_var.dt_init;
-    // TODO might have to manually init all array domains and/or all arrays
   }
 
   proc init_states (x: int, y:int, ref setting_var : settings.setting) {
