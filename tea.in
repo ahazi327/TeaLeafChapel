@@ -9,8 +9,8 @@ xmin                = 0.0
 ymin                = 0.0
 xmax                = 10.0
 ymax                = 10.0
-x_cells             = 512
-y_cells             = 512
+x_cells             = 5
+y_cells             = 5
 
 use_cg
 use_c_kernels

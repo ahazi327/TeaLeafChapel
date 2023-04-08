@@ -13,9 +13,6 @@ module local_halos {
             }
         }
     }
-    
-    // local_halos(chunk_var.x, chunk_var.y, depth, setting_var.halo_depth, chunk_var.neighbours, setting_var.fields_to_exchange,
-    //  chunk_var.density, chunk_var.energy0, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.sd); // maybe not needed later
 
     // The kernel for updating halos locally
     proc local_halos(const in x: int, const in y: int, const in depth: int, const in halo_depth: int, inout chunk_neighbours : [0..<NUM_FACES] int,

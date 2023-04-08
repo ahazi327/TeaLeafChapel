@@ -10,7 +10,7 @@ module set_chunk_data{
 	use settings;
 	use chunks;
 
-	proc set_chunk_data(ref chunk_var: chunks.Chunk, ref setting_var : settings.setting){  // come back and change args
+	proc set_chunk_data(ref chunk_var: chunks.Chunk, ref setting_var : settings.setting){ 
 		x_min = setting_var.grid_x_min + setting_var.dx * chunk_var.left:real;
 		y_min = setting_var.grid_y_min + setting_var.dy * chunk_var.bottom:real;
 
@@ -31,11 +31,9 @@ module set_chunk_data{
 			chunk_var.cell_y[ii] = 0.5 * (chunk_var.vertex_y[ii] + chunk_var.vertex_y[ii+1]);
 
 		}
-		// for (i, j) in {0..<chunk_var.x, 0..<chunk_var.y} do {
 		chunk_var.volume = setting_var.dx * setting_var.dy;
 		chunk_var.x_area = setting_var.dy;
 		chunk_var.y_area = setting_var.dx;
-		// }
 	}
 
 /*

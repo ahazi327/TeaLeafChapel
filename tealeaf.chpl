@@ -29,6 +29,7 @@ module main {
         
         initialise_application(chunk_var, setting_var, states);
 
+        
         //TODO fix argc and argv equivalent for chapel
         // settings_overload(setting_var, argc, argv);
 
@@ -36,6 +37,7 @@ module main {
 
         
         diffuse(chunk_var, setting_var);
+        
         // Print the kernel-level profiling results
         // if(settings->rank == MASTER)
         // {
@@ -44,8 +46,6 @@ module main {
 
         // Finalise each individual chunk and application
         //TODO free memory if needed in chapel using array = nil
-
-        return 0; // Exit success
     }
 
     // after parsing input files, use it to set settings file //TODO maybe remove this

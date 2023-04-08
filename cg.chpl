@@ -10,12 +10,11 @@ module cg {
      ref ky: [Domain] real){
         //TODO implement die line here
         const halo_dom = {0..<x, 0..<y};
+
         p[halo_dom] = 0.0;
         r[halo_dom] = 0.0;
         u[halo_dom] = energy[halo_dom] * density[halo_dom];
-
         
-
         const inner = halo_dom[1..<x-1, 1..<y-1];
         forall (i, j) in inner do {
             if (coefficient == CONDUCTIVITY) then
@@ -43,8 +42,9 @@ module cg {
             r[i,j] = u[i,j]-w[i,j];
             p[i,j] = r[i,j];
             rro += r[i,j]*p[i,j];
+            
+            
         }
-        
     }
 
     // Calculates w

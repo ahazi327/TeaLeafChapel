@@ -12,10 +12,10 @@ module diffuse{
 
     // The main timestep loop
     proc diffuse(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
-
+        
         var wallclock_prev : real = 0.0;
         const end_step = setting_var.end_step : int;
-        for tt in 0..<end_step do{ // might have to convert to int
+        for tt in 0..<1 do{  //TODO end_step
             solve(chunk_var, setting_var, tt, wallclock_prev);
         } 
 
@@ -38,13 +38,14 @@ module diffuse{
 
         var rx : real = dt / (setting_var.dx * setting_var.dx);
         var ry : real = dt / (setting_var.dy * setting_var.dy);
-
+       
         // Prepare halo regions for solve
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;
         setting_var.fields_to_exchange[FIELD_DENSITY] = true;
         halo_update_driver(chunk_var, setting_var, 2);
-
+        
+        
         var error : real = 1e10; //garbage value
 
         // Perform the solve with one of the integrated solvers
@@ -54,6 +55,7 @@ module diffuse{
             }
             when Solver.CG_SOLVER{
                 cg_driver(chunk_var, setting_var, rx, ry, error);
+                
             }
             when Solver.CHEBY_SOLVER{
                 cheby_driver(chunk_var, setting_var, rx, ry, error);
@@ -64,7 +66,7 @@ module diffuse{
         }
         // Perform solve finalisation tasks
         solve_finished_driver(chunk_var, setting_var);
-
+        
         if(tt % setting_var.summary_frequency == 0){
             field_summary_driver(chunk_var, setting_var, false);
         }

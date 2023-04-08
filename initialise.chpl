@@ -17,7 +17,7 @@ module initialise {
         decompose_field(chunk_var, setting_var);
         set_chunk_data_driver(chunk_var, setting_var);
         set_chunk_state_driver(chunk_var, setting_var, states);
-
+        
         
         // Prime the initial halo data
         reset_fields_to_exchange(setting_var);
@@ -27,6 +27,8 @@ module initialise {
         halo_update_driver (chunk_var, setting_var, 2); // 2 halo depth?
 
         store_energy_driver(chunk_var);
+
+        
     }
 
 

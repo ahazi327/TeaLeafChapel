@@ -46,19 +46,11 @@ module set_chunk_state{
             }
             if apply_state
             {
-                // var iii : int = kk + jj*chunk_var.x;
                 chunk_var.energy0[kk, jj] = states[ss].energy;
                 chunk_var.density[kk, jj] = states[ss].density;
             }
         }
-//        }
-        // Set an initial state for u
-        // var Domain = {1..<chunk_var.y, 1..<chunk_var.x};
-        
-        // forall (i, j) in Domain do{
             chunk_var.u = chunk_var.energy0 *chunk_var.density;
-        // }
-
     }
 /*
  *      SET CHUNK STATE DRIVER
