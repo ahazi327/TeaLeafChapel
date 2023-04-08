@@ -13,7 +13,7 @@ module set_chunk_state{
         chunk_var.energy0= states[0].energy;
         chunk_var.density = states[0].density;
         // }
-
+        // writeln("states[0].density : ", states[0].density);
 
         // Apply all of the states in turn
 //        forall ss in 1..<setting_var.num_states do {
@@ -22,6 +22,7 @@ module set_chunk_state{
             var apply_state: bool;
 
             if states[ss].geometry == settings.Geometry.RECTANGULAR {
+                
                 apply_state = (
                     (chunk_var.vertex_x[kk+1] >= states[ss].x_min) & 
                     (chunk_var.vertex_x[kk] < states[ss].x_max)    &

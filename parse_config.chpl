@@ -20,9 +20,7 @@ module parse_config {
                 }
             tea_in.close();
 
-            writeln(" counter is currently : ", counter);
             setting_var.num_states = counter;
-            writeln(" num_state is currently : ", setting_var.num_states);
         } catch {
             writeln("Warning: unrecognized line error ", counter);
         }
@@ -49,51 +47,67 @@ module parse_config {
             var tea_in_reader = tea_in.reader();
             var line: string;
             var counter : int; // fine line number
+            // state variables
+            var stateNum: int;
+            var density: real;
+            var energy: real;
+            var geomType: string;
+            var xmin: real;
+            var xmax: real;
+            var ymin: real;
+            var ymax: real;
+            var radius: real;  // Radius in text file goes last
 
             while tea_in_reader.readLine(line) {
                 counter += 1;
-
                 // Check what the next line is equivalent to
                 if line.find("*tea") != -1 {
                     continue;
                 } else if line.find("*endtea", 0..) != -1{
                     break;  // End of file
-                } else if line.find("state ", 0..) != -1{
-                    var stateNum: int;
-                    var density: real;
-                    var energy: real;
-                    var geomType: string;
-                    var xmin: real;
-                    var xmax: real;
-                    var ymin: real;
-                    var ymax: real;
-                    var radius: real;  // Radius in text file goes last
+                } else if line.find("state", 0..) != -1{
+                    var tokens = line.split(); // break line into pieces
+
+                    var temp = tokens[1] : int; // get state number
 
                     // Read all of the states from the configuration file
-                    if stateNum > 1 {
-                        states[stateNum-1].defined = true;
-                        states[stateNum-1].energy = energy;
-                        states[stateNum-1].density = density;
-                        states[stateNum-1].x_min = xmin;
-                        states[stateNum-1].x_max = xmax;
-                        states[stateNum-1].y_min = ymin;
-                        states[stateNum-1].y_max = ymax;
+                    if temp == 1 {
+                        states[temp-1].defined = true; //TODO double check this
+                        var energy_val = tokens[3].split('=')[0..];
+                        var density_val = tokens[2].split('=')[0..];
+                        states[temp-1].energy = energy_val[1] : real;
+                        states[temp-1].density = density_val[1] : real;
+                    } else {
+                        // get value after equals
+                        var energy_val = tokens[3].split('=')[0..];
+                        var density_val = tokens[2].split('=')[0..];
+                        var xmin_val = tokens[5].split('=')[0..];
+                        var xmax_val = tokens[6].split('=')[0..];
+                        var ymin_val = tokens[7].split('=')[0..];
+                        var ymax_val = tokens[8].split('=')[0..];
+                        var geomType_val = tokens[4].split('=')[0..];
 
-                        if geomType =="rectangle"  
-                            {states[stateNum-1].geometry = Geometry.RECTANGULAR;}
-                        else if geomType =="circular" 
-                            {states[stateNum-1].geometry = Geometry.CIRCULAR;
-                            states[stateNum-1].radius = radius;}  // Only use radius var if geometry is set to circular
-                        else if geomType =="point" 
-                            {states[stateNum-1].geometry = Geometry.POINT;}
-                    } 
-                    else if stateNum == 1 { // State 1 is the default state so geometry irrelevant
-                        states[stateNum-1].defined = true;
-                        states[stateNum-1].energy = energy;
-                        states[stateNum-1].density = density;
-                    }   
+                        states[temp-1].defined = true;
+                        states[temp-1].energy = energy_val[1] : real;
+                        states[temp-1].density = density_val[1] : real;
+                        states[temp-1].x_min = xmin_val[1] : real;
+                        states[temp-1].x_max = xmax_val[1] : real;
+                        states[temp-1].y_min = ymin_val[1] : real;
+                        states[temp-1].y_max = ymax_val[1] : real;
+
+                        if geomType_val[1] == "rectangle"  
+                            {states[temp-1].geometry = Geometry.RECTANGULAR;}
+                        else if geomType_val[1] == "circular" 
+                        {
+                            // Only use radius var if geometry is set to circular
+                            var radius_val = tokens[9].split('=')[0..];
+                            states[temp-1].geometry = Geometry.CIRCULAR;
+                            states[temp-1].radius = radius_val[1]: real;
+                        }  
+                        else if geomType_val[1] == "point" 
+                            {states[temp-1].geometry = Geometry.POINT;}
+                    }
                     continue;
-                
                 // Parse the switches
                 } else if line.find("use_cg", 0..) != -1{
                     setting_var.solver = Solver.CG_SOLVER;

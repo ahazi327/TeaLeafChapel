@@ -32,7 +32,6 @@ module cg {
             ky[i, j] = ry*(w[i, j-1]+w[i, j]) /
                 (2.0*w[i, j-1]*w[i, j]);
         }
-        writeln("coefficient : ", coefficient);
 
         var rro: real= 0.0;
         const inner_2 = halo_dom[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];

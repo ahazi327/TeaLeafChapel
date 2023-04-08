@@ -36,8 +36,6 @@ module set_chunk_data{
 		chunk_var.x_area = setting_var.dy;
 		chunk_var.y_area = setting_var.dx;
 		// }
-
-		
 	}
 
 /*
