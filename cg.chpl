@@ -5,7 +5,7 @@ module cg {
     use settings;
     use Math;
     proc cg_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: int,
-    in rx: real, in ry: real, out rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
+    in rx: real, in ry: real, ref rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
     ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  ref kx: [Domain] real,
      ref ky: [Domain] real){
         //TODO implement die line here
@@ -20,7 +20,7 @@ module cg {
             if (coefficient == CONDUCTIVITY) then
                 w[i,j] = density[i,j];
             else  
-                w[i,j] = 1.0/density[i,j]; // TODO nan caused by 1.0/ density (0.0)...
+                w[i,j] = 1.0/density[i,j];
             
         }
 
@@ -32,7 +32,6 @@ module cg {
                 (2.0*w[i, j-1]*w[i, j]);
         }
 
-        var rro: real= 0.0;
         const inner_2 = halo_dom[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         forall (i, j) in inner_2 with (+ reduce rro) do {
             w[i,j] =  (1.0 + (kx[i+1, j]+kx[i, j])
@@ -48,10 +47,9 @@ module cg {
     }
 
     // Calculates w
-    proc cg_calc_w (const in x: int, const in y: int, const in halo_depth: int, inout pw: real, ref p: [?Domain] real,
+    proc cg_calc_w (const in x: int, const in y: int, const in halo_depth: int, ref pw: real, ref p: [?Domain] real,
     ref w: [Domain] real, ref kx: [Domain] real, ref ky: [Domain] real){
-        // var pw: real = 0.0;
-        
+
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         forall (i, j) in inner with (+ reduce pw) do{
             const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
@@ -65,16 +63,14 @@ module cg {
     }
 
     // Calculates u and r
-    proc cg_calc_ur(const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, out rrn: real, 
+    proc cg_calc_ur(const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, ref rrn: real, 
     ref u: [?Domain] real, ref p: [Domain] real, ref r: [Domain] real, ref w: [Domain] real){
-        var rrn: real= 0.0;
         
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         
         forall (i, j) in inner with (+ reduce rrn) do{ //with
             u[i, j] = alpha * p[i, j];
             r[i, j] = alpha * w[i, j];
-            
             
             const temp: real = r[i, j];  // maybe make into var
             rrn += temp * temp;
@@ -85,9 +81,6 @@ module cg {
     // Calculates p
     proc cg_calc_p (const in x: int, const in y: int, const in halo_depth: int, const in beta: real,
     ref p: [?Domain] real, ref r: [Domain] real) {
-        // forall (i, j) in {halo_depth..<x-halo_depth, halo_depth..<y-halo_depth} {
-            // p[i, j] = beta * p[i, j] + r[i, j];
-        // }
         const halo_dom = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         p[halo_dom] = beta * p[halo_dom] + r[halo_dom];
     }

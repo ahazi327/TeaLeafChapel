@@ -7,16 +7,16 @@ module cg_driver {
     //TODO ADD PROFILING
 
     // Performs a full solve with the CG solver kernels
-    proc cg_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real, out error: real){
+    proc cg_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    ref ry: real, ref error: real){
         //var tt: int;
         var rro : real;
 
         // Perform CG initialisation
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);
-
+        
         // Iterate till convergence
-        for tt in 0..<setting_var.max_iters do {  // using serial execution for correctness.
+        for tt in 0..<setting_var.max_iters do {  // using serial execution for correctness. //
 
             cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
 
@@ -24,14 +24,12 @@ module cg_driver {
 
             if (sqrt(abs(error)) < setting_var.eps) then break;
         }
-
         // print log
     }
 
     // Invokes the CG initialisation kernels
-    proc cg_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real, inout rro: real) {
-        rro = 0.0;
+    proc cg_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    ref ry: real, ref rro: real) {
 
         // var sharedrxry = (rx, ry);
 
@@ -58,7 +56,7 @@ module cg_driver {
 
     // Invokes the main CG solve kernels
     proc cg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
-    out rro: real, inout error: real){
+    ref rro: real, ref error: real){
         var pw: real;
         
         forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce pw) do {
@@ -69,7 +67,7 @@ module cg_driver {
         }
         //MPI sum over ranks function
 
-        var alpha : real = rro / pw;  // TODO currently 0/0 giving error, pw should not be 0.0
+        var alpha : real = rro / pw;
         
         var rrn: real;
     
@@ -82,6 +80,7 @@ module cg_driver {
         }
 
         var beta : real = rrn / rro;
+        
         forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce beta) do {
             chunk_var[cc].cg_betas[tt] = alpha;
             cg_calc_p (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, beta, chunk_var[cc].p,
@@ -90,7 +89,6 @@ module cg_driver {
         
         error = rrn;
         rro = rrn;
-        
     }
 
 }

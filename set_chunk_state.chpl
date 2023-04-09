@@ -9,14 +9,10 @@ module set_chunk_state{
     import settings;
     proc set_chunk_state(ref states : [0..<setting_var.num_states]settings.state, ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){  //come back later and change args
         // Set the initial state
-        // forall (i, j) in {0..<chunk_var.x, 0..<chunk_var.y} do {
         chunk_var.energy0= states[0].energy;
         chunk_var.density = states[0].density;
-        // }
-        // writeln("states[0].density : ", states[0].density);
 
         // Apply all of the states in turn
-//        forall ss in 1..<setting_var.num_states do {
         // use a 3d domain for this one
         forall (kk, jj, ss) in {0..<chunk_var.x, 0..<chunk_var.y, 1..<setting_var.num_states } with (ref chunk_var) do {
             var apply_state: bool;

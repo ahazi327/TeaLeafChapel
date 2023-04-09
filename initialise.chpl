@@ -24,7 +24,7 @@ module initialise {
         setting_var.fields_to_exchange[FIELD_DENSITY]=true;
         setting_var.fields_to_exchange[FIELD_ENERGY0]=true;
         setting_var.fields_to_exchange[FIELD_ENERGY1]=true;
-        halo_update_driver (chunk_var, setting_var, 2); // 2 halo depth?
+        halo_update_driver (chunk_var, setting_var, 2);
 
         store_energy_driver(chunk_var);
 
@@ -83,7 +83,7 @@ module initialise {
             var add_y_prev : int = 0;
             var prev_iteration_y = 0;
             // Compute the full decomposition on all ranks
-            for (yy, xx, cc) in {0..<x_chunks, 0..<y_chunks, 0..<setting_var.num_chunks_per_rank} do{
+            for (xx, yy, cc) in {0..<x_chunks, 0..<y_chunks, 0..<setting_var.num_chunks_per_rank} do{
                 
                 var add_y : int = (yy < mod_y);
                 var add_x : int = (xx < mod_x);
@@ -103,19 +103,19 @@ module initialise {
                     // Set up the chunk connectivity
                     if xx == 0 then 
                         chunk_var[cc].neighbours[CHUNK_LEFT] = EXTERNAL_FACE;
-                    else chunk_var[cc].neighbours[CHUNK_LEFT] = (xx + yy*x_chunks) - 1; // TODO possibly needs fixing to 2d using tuples
+                    else chunk_var[cc].neighbours[CHUNK_LEFT] = (xx - 1, yy); // TODO possibly needs fixing to 2d using tuples
 
                     if xx == x_chunks-1 then 
                         chunk_var[cc].neighbours[CHUNK_RIGHT] = EXTERNAL_FACE;
-                    else chunk_var[cc].neighbours[CHUNK_RIGHT] = (xx + yy*x_chunks) + 1;
+                    else chunk_var[cc].neighbours[CHUNK_RIGHT] = (xx + 1, yy);
 
                     if yy == 0 then 
                         chunk_var[cc].neighbours[CHUNK_BOTTOM] = EXTERNAL_FACE;
-                    else chunk_var[cc].neighbours[CHUNK_BOTTOM] = (xx + yy*x_chunks) - x_chunks;
+                    else chunk_var[cc].neighbours[CHUNK_BOTTOM] = (xx, yy - 1);
 
                     if yy == y_chunks-1 then 
                         chunk_var[cc].neighbours[CHUNK_TOP] = EXTERNAL_FACE;
-                    else chunk_var[cc].neighbours[CHUNK_TOP] = (xx + yy*x_chunks) + x_chunks;
+                    else chunk_var[cc].neighbours[CHUNK_TOP] = (xx, yy + 1);
 
                 }  
 

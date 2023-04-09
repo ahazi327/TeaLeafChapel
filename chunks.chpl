@@ -6,7 +6,7 @@ module chunks{
   
 
   // Domains
-  const num_face_domain = {0..<NUM_FACES};
+  const num_face_domain = {-1..<NUM_FACES, -1..<NUM_FACES};
 
   record Chunk{
 
@@ -31,7 +31,7 @@ module chunks{
     var top: int;
     
     var dt_init: real;
-    var neighbours: [num_face_domain] int; // change to 2d 
+    var neighbours: [num_face_domain] (int, int); // change to 2d 
     var density: [Domain] real; 
     var density0: [Domain] real;
     var energy: [Domain] real;

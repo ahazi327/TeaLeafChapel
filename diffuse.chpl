@@ -15,7 +15,7 @@ module diffuse{
         
         var wallclock_prev : real = 0.0;
         const end_step = setting_var.end_step : int;
-        for tt in 0..<1 do{  //TODO end_step
+        for tt in 0..<end_step do{  //TODO end_step
             solve(chunk_var, setting_var, tt, wallclock_prev);
         } 
 
