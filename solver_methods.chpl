@@ -7,7 +7,9 @@ module solver_methods {
     proc copy_u (const in x: int, const in y: int, const in halo_depth: int, 
     ref u: [?u_domain] real, ref u0: [u_domain] real){
         
-        u0 = u; // whole array assignment instead of individually assigning
+        // whole array assignment instead of individually assigning
+        var halo_domain = u_domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
+        u0[halo_domain] = u[halo_domain]; 
     }
 
     // Calculates the current value of r
@@ -28,25 +30,22 @@ module solver_methods {
 
     // Calculates the 2 norm of a given buffer
     proc calculate_2norm (const in x: int, const in y: int, const in halo_depth: int, 
-    ref buffer: [?buffer_domain] real, out norm: real){
-        
-        var norm: real = 0.0;
+    ref buffer: [?buffer_domain] real, ref norm: real){
+        var norm_temp: real;
         const inner = buffer_domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
         
-        forall (i, j) in inner with (+ reduce norm) do {
-            norm += buffer[i, j]*buffer[i, j];	
+        forall (i, j) in inner with (+ reduce norm_temp) do {
+            norm_temp += buffer[i, j]*buffer[i, j];	
         }
         
-        // *norm += norm_temp;
+        norm += norm_temp;
     }
 
     // Finalises the solution
     proc finalise (const in x: int, const in y: int, const in halo_depth: int, 
     ref energy: [?Domain] real, ref density: [Domain] real, ref u: [Domain] real) {
 
-        // forall (i, j) in {halo_depth..< x - halo_depth, halo_depth..<y-halo_depth} do {
-        //     energy[i, j] = u[i, j]/density[i, j];
-        // }
-        energy = u / density;
+        var halo_domain = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
+        energy[halo_domain] = u[halo_domain] / density[halo_domain];
     }
 }

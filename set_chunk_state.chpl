@@ -13,40 +13,43 @@ module set_chunk_state{
         chunk_var.density = states[0].density;
 
         // Apply all of the states in turn
-        // use a 3d domain for this one
-        forall (kk, jj, ss) in {0..<chunk_var.x, 0..<chunk_var.y, 1..<setting_var.num_states } with (ref chunk_var) do {
-            var apply_state: bool;
+        for ss in 1..<setting_var.num_states do { // TODO try turning back into a single loop  // use a 3d domain for this one
+            for jj in 0..<chunk_var.y do {
+                for kk in 0..<chunk_var.x do {
 
-            if states[ss].geometry == settings.Geometry.RECTANGULAR {
-                
-                apply_state = (
-                    (chunk_var.vertex_x[kk+1] >= states[ss].x_min) & 
-                    (chunk_var.vertex_x[kk] < states[ss].x_max)    &
-                    (chunk_var.vertex_y[jj+1] >= states[ss].y_min) &
-                    (chunk_var.vertex_y[jj] < states[ss].y_max));
-            }
-            
-            else if states[ss].geometry == settings.Geometry.CIRCULAR {
-                var radius: real;
-                radius = sqrt((chunk_var.cell_x[kk]-states[ss].x_min)*
-                    (chunk_var.cell_x[kk]-states[ss].x_min)+
-                    (chunk_var.cell_y[jj]-states[ss].y_min)*
-                    (chunk_var.cell_y[jj]-states[ss].y_min));
+                    var apply_state: bool = false;
 
-                apply_state = (radius <= states[ss].radius);
-            }
-            else if states[ss].geometry == settings.Geometry.POINT{
-                apply_state = (
-                        chunk_var.vertex_x[kk] == states[ss].x_min &&
-                        chunk_var.vertex_y[jj] == states[ss].y_min);
-            }
-            if apply_state
-            {
-                chunk_var.energy0[kk, jj] = states[ss].energy;
-                chunk_var.density[kk, jj] = states[ss].density;
+                    if states[ss].geometry == settings.Geometry.RECTANGULAR {
+                        if (chunk_var.vertex_x[kk+1] >= states[ss].x_min) && 
+                            (chunk_var.vertex_x[kk] < states[ss].x_max)    &&
+                            (chunk_var.vertex_y[jj+1] >= states[ss].y_min) &&
+                            (chunk_var.vertex_y[jj] < states[ss].y_max) then apply_state = true;
+                    }
+                    
+                    else if states[ss].geometry == settings.Geometry.CIRCULAR {
+                        var radius: real;
+                        
+                        radius = sqrt((chunk_var.cell_x[kk]-states[ss].x_min)*
+                            (chunk_var.cell_x[kk]-states[ss].x_min)+
+                            (chunk_var.cell_y[jj]-states[ss].y_min)*
+                            (chunk_var.cell_y[jj]-states[ss].y_min));
+
+                        if radius <= states[ss].radius then apply_state = true;
+                    }
+                    else if states[ss].geometry == settings.Geometry.POINT{
+                        if chunk_var.vertex_x[kk] == states[ss].x_min && chunk_var.vertex_y[jj] == states[ss].y_min then 
+                            apply_state = true;
+                    }
+                    if apply_state 
+                    {
+                        chunk_var.energy0[kk, jj] = states[ss].energy;
+                        chunk_var.density[kk, jj] = states[ss].density;
+                    }
+                }
             }
         }
-            chunk_var.u = chunk_var.energy0 *chunk_var.density;
+            var Domain = {1..<chunk_var.x-1, 1..<chunk_var.y-1};
+            chunk_var.u[Domain] = chunk_var.energy0[Domain] *chunk_var.density[Domain];
     }
 /*
  *      SET CHUNK STATE DRIVER

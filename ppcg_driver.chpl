@@ -10,10 +10,11 @@ module ppcg_driver{
 
     // Performs a full solve with the PPCG solver
     proc ppcg_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real, out error: real){
+    inout ry: real){
         var tt, num_ppcg_iters: int;
         var rro: real;
         var is_switch_to_ppcg : int;
+        var error : real;
 
         // Perform CG initialisation  // is this supposed to be ppcg???
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);

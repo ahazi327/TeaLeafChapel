@@ -44,24 +44,21 @@ module diffuse{
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;
         setting_var.fields_to_exchange[FIELD_DENSITY] = true;
         halo_update_driver(chunk_var, setting_var, 2);
-        
-        
-        var error : real = 1e10; //garbage value
 
         // Perform the solve with one of the integrated solvers
         select (setting_var.solver){
             when Solver.JACOBI_SOLVER{
-                jacobi_driver(chunk_var, setting_var, rx, ry, error);
+                jacobi_driver(chunk_var, setting_var, rx, ry);
             }
             when Solver.CG_SOLVER{
-                cg_driver(chunk_var, setting_var, rx, ry, error);
+                cg_driver(chunk_var, setting_var, rx, ry);
                 
             }
             when Solver.CHEBY_SOLVER{
-                cheby_driver(chunk_var, setting_var, rx, ry, error);
+                cheby_driver(chunk_var, setting_var, rx, ry);
             }
             when Solver.PPCG_SOLVER{
-                ppcg_driver(chunk_var, setting_var, rx, ry, error);
+                ppcg_driver(chunk_var, setting_var, rx, ry);
             }
         }
         // Perform solve finalisation tasks

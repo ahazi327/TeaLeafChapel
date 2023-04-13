@@ -31,7 +31,7 @@ module field_summary {
                                 
             }
         }
-        writeln("temp ==   ", temp);
+        writeln("Checking Value : ", temp);
     }
 
 /*
@@ -44,15 +44,17 @@ module field_summary {
         
         var vol, ie, temp, mass : real = 0.0;
 
-        field_summary(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].volume, 
-        chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp);
+        for cc in 0..<setting_var.num_chunks_per_rank do {
+            field_summary(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].volume, 
+        chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].u, vol, mass, ie, temp);
+        }
 
         if(setting_var.check_result && is_solve_finished){ //  if settings->rank == MASTER && ...
             var checking_value : real = 1.0;
             get_checking_value(setting_var, checking_value);
 
-            writeln("Expected %.15e\n", checking_value);
-            writeln("Actual %.15e\n", temp);
+            writeln("Expected: \n", checking_value);
+            writeln("Actual: \n", temp);
 
             var qa_diff: real = abs(100.0*(temp/checking_value)-100.0);
 
@@ -68,7 +70,6 @@ module field_summary {
             var tea_prob = open (setting_var.test_problem_filename, iomode.r);
             var tea_prob_reader = tea_prob.reader();
             
-            
             var x : int;
             var y : int;
             var num_steps: int;
@@ -77,14 +78,14 @@ module field_summary {
             for line in tea_prob.lines(){
                 tea_prob_reader.read(x, y, num_steps, checking_value);
                 counter += 1;
-                writeln("checking value : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
-                // Found the problem in the file
-                // if(x == settings->grid_x_cells && y == settings->grid_y_cells &&
-                //     num_steps == settings->end_step)
-                // {
-                // fclose(test_problem_file);
-                // return;
-                // }
+
+                if ( x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && num_steps == setting_var.end_step) {
+                    // Found the problem in the file
+                    writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
+                    tea_prob.close();
+                    return;
+                }
+                writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value, " value not found in problem.");
             }
             tea_prob.close();
         }

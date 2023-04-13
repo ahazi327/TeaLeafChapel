@@ -8,23 +8,27 @@ module cg_driver {
 
     // Performs a full solve with the CG solver kernels
     proc cg_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
-    ref ry: real, ref error: real){
+    ref ry: real){
         //var tt: int;
         var rro : real;
+        var t : int;
+        var error : real;
 
         // Perform CG initialisation
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);
         
         // Iterate till convergence
-        for tt in 0..<setting_var.max_iters do {  // using serial execution for correctness. //
-
+        for tt in 0..<setting_var.max_iters do {
+            t = tt + 1;
             cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
 
             halo_update_driver (chunk_var, setting_var, 1);
 
-            if (sqrt(abs(error)) < setting_var.eps) then break;
+            // if (sqrt(abs(error)) < setting_var.eps) then break;
+            
         }
         // print log
+        // writeln("CG: ", t, " iterations\n");
     }
 
     // Invokes the CG initialisation kernels

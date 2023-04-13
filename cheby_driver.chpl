@@ -9,11 +9,12 @@ module cheby_driver{
     param epsilon = 0.00001; // some really small positive number
 
     proc cheby_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real, out error: real){
+    inout ry: real){
 
         var tt, est_iterations, num_cheby_iters: int;
         var rro: real;
         var is_switch_to_cheby : int;
+        var error : real;
 
         // Perform CG initialisation
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);

@@ -31,35 +31,36 @@ module cg {
             ky[i, j] = ry*(w[i, j-1]+w[i, j]) /
                 (2.0*w[i, j-1]*w[i, j]);
         }
-
+        
+        var rro_temp : real; 
         const inner_2 = halo_dom[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner_2 with (+ reduce rro) do {
+        forall (i, j) in inner_2 with (+ reduce rro_temp) do {
             w[i,j] =  (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
                 - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
             r[i,j] = u[i,j]-w[i,j];
             p[i,j] = r[i,j];
-            rro += r[i,j]*p[i,j];
-            
-            
+            rro_temp += r[i,j]*p[i,j];   
         }
+        rro += rro_temp;
     }
 
     // Calculates w
     proc cg_calc_w (const in x: int, const in y: int, const in halo_depth: int, ref pw: real, ref p: [?Domain] real,
     ref w: [Domain] real, ref kx: [Domain] real, ref ky: [Domain] real){
-
+        var pw_temp : real;
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner with (+ reduce pw) do{
+        forall (i, j) in inner with (+ reduce pw_temp) do{
             const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*p[i, j]
                 - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
                 - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
             w[i,j] = smvp;
-            pw += smvp * p[i, j];
+            pw_temp += smvp * p[i, j];
             
         }
+        pw += pw_temp;
     }
     
     // Calculates u and r
