@@ -100,7 +100,7 @@ module initialise {
                     chunk_var[cc].bottom = yy*dy +add_y_prev;
                     chunk_var[cc].top = chunk_var[cc].bottom + dy + add_y;
 
-                    // Set up the chunk connectivity
+                    // Set up the chunk connectivity //TODO output error comes from here
                     if xx == 0 then 
                         chunk_var[cc].neighbours[CHUNK_LEFT] = EXTERNAL_FACE;
                     else chunk_var[cc].neighbours[CHUNK_LEFT] = (xx - 1, yy); // TODO possibly needs fixing to 2d using tuples

@@ -1,38 +1,37 @@
-/*
- * 		FIELD SUMMARY KERNEL
- * 		Calculates aggregates of values in field.
- */	
+
 
 module field_summary {
     use settings;
     use chunks;
     use IO;
 
+   /*
+    * 		FIELD SUMMARY KERNEL
+    * 		Calculates aggregates of values in field.
+    */	
     // The field summary kernel
-    proc field_summary (in x: int, in y: int, in halo_depth: int, inout volume: [?Domain] real,
+    proc field_summary (in x: int, in y: int, in halo_depth: int, ref volume: [?Domain] real,
     ref density: [Domain] real, ref energy0: [Domain] real, ref u: [Domain] real, ref vol: real,
-    inout mass: real, inout ie: real, inout temp: real){
+    ref mass: real, ref ie: real, ref temp: real){
 
-        // var vol : real;
-        // var ie : real;
-        // var temp : real;
-        // var mass : real; // should be 0.0 already
-        
         var inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
 
-        forall (i, j) in inner with (+ reduce vol, +reduce mass, + reduce ie, + reduce temp) do {
-            var cellVol : real;
-            cellVol = volume[i, j];
+        for j in {halo_depth..<y-halo_depth} do {
+            for i in {halo_depth..<x-halo_depth} do {
+                var cellVol : real;
+                cellVol = volume[i, j];
 
-            var cellMass: real;
-            cellMass = cellVol * density[i, j];
+                var cellMass: real;
+                cellMass = cellVol * density[i, j];
 
-            vol += cellVol;
-            mass += cellMass;
-            ie += cellMass * energy0[i, j];
-            temp += cellMass * u[i, j];
-
+                vol += cellVol;
+                mass += cellMass;
+                ie += cellMass * energy0[i, j];
+                temp += cellMass * u[i, j];
+                                
+            }
         }
+        writeln("temp ==   ", temp);
     }
 
 /*
@@ -52,8 +51,6 @@ module field_summary {
             var checking_value : real = 1.0;
             get_checking_value(setting_var, checking_value);
 
-            // print_and_log(settings, "Expected %.15e\n", checking_value);
-            // print_and_log(settings, "Actual   %.15e\n", temp);
             writeln("Expected %.15e\n", checking_value);
             writeln("Actual %.15e\n", temp);
 
@@ -75,13 +72,19 @@ module field_summary {
             var x : int;
             var y : int;
             var num_steps: int;
-            // var number : real;
             var line : string;
 
             for line in tea_prob.lines(){
                 tea_prob_reader.read(x, y, num_steps, checking_value);
                 counter += 1;
                 writeln("checking value : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
+                // Found the problem in the file
+                // if(x == settings->grid_x_cells && y == settings->grid_y_cells &&
+                //     num_steps == settings->end_step)
+                // {
+                // fclose(test_problem_file);
+                // return;
+                // }
             }
             tea_prob.close();
         }

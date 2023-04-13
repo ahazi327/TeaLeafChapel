@@ -37,7 +37,7 @@ module chunks{
     var energy: [Domain] real;
     var energy0: [Domain] real;
 
-    var u: [Domain] real; //TODO find out where to set the main values of these arrays
+    var u: [Domain] real;
     var u0: [Domain] real;
     var p: [Domain] real;
     var r: [Domain] real;

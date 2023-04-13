@@ -32,6 +32,7 @@ module cg_driver {
     ref ry: real, ref rro: real) {
 
         // var sharedrxry = (rx, ry);
+        rro = 0.0;
 
         forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce rro) do {
             cg_init(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
@@ -43,7 +44,6 @@ module cg_driver {
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
         setting_var.fields_to_exchange[FIELD_P] = true;
-        //remote halo driver here TODO if needed, currently seems like an MPI specific function
         halo_update_driver(chunk_var, setting_var, 1);
 
         //sum over ranks TODO This seems to be an MPI things, so ignore for now

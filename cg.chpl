@@ -61,21 +61,22 @@ module cg {
             
         }
     }
-
+    
     // Calculates u and r
     proc cg_calc_ur(const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, ref rrn: real, 
     ref u: [?Domain] real, ref p: [Domain] real, ref r: [Domain] real, ref w: [Domain] real){
-        
+        var rrn_temp : real;
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         
-        forall (i, j) in inner with (+ reduce rrn) do{ //with
-            u[i, j] = alpha * p[i, j];
-            r[i, j] = alpha * w[i, j];
+        forall (i, j) in inner with (+ reduce rrn_temp) do{ //with
+            u[i, j] += alpha * p[i, j];
+            r[i, j] -= alpha * w[i, j];
             
             const temp: real = r[i, j];  // maybe make into var
-            rrn += temp * temp;
+            rrn_temp += temp * temp;
             
         }
+        rrn += rrn_temp;
     }
 
     // Calculates p
