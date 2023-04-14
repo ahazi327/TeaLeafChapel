@@ -75,13 +75,17 @@ module eigenvalue_driver {
                     if (abs(e[m])+dd == dd) then break;
                 }
 
-                if m == l then break;
-
+                if m == l then {
+                    break;
+                }
                 
-                // if (iter++ == 30){
-                //     die(__LINE__, __FILE__,
-                //         "Too many iterations in TQLI routine\n");
-                // }
+                iteration += 1;
+                if (iteration == 30){
+                    // die(__LINE__, __FILE__,
+                    //     "Too many iterations in TQLI routine\n");
+                    writeln ("Too many iterations in TQLI routine");
+                    break;
+                }
 
                 g=(d[l+1]-d[l])/(2.0*e[l]);
                 r=sqrt((g*g)+1.0);
@@ -90,13 +94,13 @@ module eigenvalue_driver {
                 c=1.0;
                 p=0.0;
 
-                for ii in l..#m-1 do{
+                for ii in m-1..l by -1 {
                     f=s*e[ii];
                     b=c*e[ii];
                     r=sqrt(f*f+g*g);
                     e[ii+1]=r;
-                    if(r == 0.0){
-                        d[i+1]-=p;
+                    if r == 0.0 {
+                        d[ii+1]-=p;
                         e[m]=0.0;
                         continue;
                     }

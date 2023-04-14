@@ -131,7 +131,7 @@ module chunks{
 
   proc init_states (x: int, y:int, ref setting_var : settings.setting) {
      // init states
-    var states_domain = {0..x, 0..y};
+    var states_domain = {0..<x, 0..<y};
     var states: [states_domain] setting_var.state;
     states = new setting_var.state();
   }

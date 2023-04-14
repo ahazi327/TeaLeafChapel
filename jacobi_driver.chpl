@@ -7,18 +7,16 @@ module jacobi_driver {
 
     // Performs a full solve with the Jacobi solver kernels
     proc jacobi_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real){
+    inout ry: real, ref err: real){
 
         jacobi_init_driver(chunk_var, setting_var, rx, ry);
         // Iterate till convergence
-        var tt: int;
-        var err : real;
-
         for tt in 0..<setting_var.max_iters do {
+            
             jacobi_main_step_driver(chunk_var, setting_var, tt, err);
 
             halo_update_driver(chunk_var, setting_var, 1);
-
+            // writeln(" tt : ", tt, " with error value of :", err);
             if(abs(err) < setting_var.eps) then break;
         }
         // print_and_log(settings, "Jacobi: \t\t%d iterations\n", tt);
@@ -40,7 +38,7 @@ module jacobi_driver {
     }
 
     // Invokes the main Jacobi solve kernels
-    proc jacobi_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt: int,
+    proc jacobi_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
     ref err: real){
         jacobi_iterate(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, 
             chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky);

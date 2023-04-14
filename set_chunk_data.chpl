@@ -11,15 +11,15 @@ module set_chunk_data{
 	use chunks;
 
 	proc set_chunk_data(ref chunk_var: chunks.Chunk, ref setting_var : settings.setting){ 
-		x_min = setting_var.grid_x_min + setting_var.dx * chunk_var.left:real;
-		y_min = setting_var.grid_y_min + setting_var.dy * chunk_var.bottom:real;
+		x_min = setting_var.grid_x_min + setting_var.dx * (chunk_var.left:real);
+		y_min = setting_var.grid_y_min + setting_var.dy * (chunk_var.bottom:real);
 
 		//as this is just set up, serial execution is used
-		forall ii in 0..chunk_var.x with (ref chunk_var) do { 
+		forall ii in 0..<chunk_var.x+1 with (ref chunk_var) do { 
 			chunk_var.vertex_x[ii] = x_min + setting_var.dx * (ii - setting_var.halo_depth); 
 		}
 
-		forall ii in 0..chunk_var.y with (ref chunk_var) do {
+		forall ii in 0..<chunk_var.y+1 with (ref chunk_var) do {
 			chunk_var.vertex_y[ii] = y_min + setting_var.dy * (ii - setting_var.halo_depth);  
 		}
 		

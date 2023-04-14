@@ -10,7 +10,7 @@ module local_halos {
 
             // do remote halo driver first
 
-            forall cc in {0..<setting_var.num_chunks_per_rank} do {
+            for cc in {0..<setting_var.num_chunks_per_rank} do {
                 local_halos (chunk_var[cc].x, chunk_var[cc].y, depth, depth, chunk_var[cc].neighbours, setting_var.fields_to_exchange,
                 chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].sd);
             }
@@ -48,6 +48,7 @@ module local_halos {
 
     // Updating halos in a direction
     // Update left halo.
+    // TODO seems like only updating the left halo actually makes a difference
     proc update_left (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real) {  // TODO possibly update far left halo using right side column
         for jj in halo_depth..<y-halo_depth do{
             for kk in 0..<depth do {
@@ -69,7 +70,8 @@ module local_halos {
 
     // Update bottom halo.
      // TODO this seems like its the update bottom halo and vise versa
-    proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
+     // TODO last 0.13 error seems to be coming from the top and bottom halos not doing anything, even if theyre removed it outputs the same
+    proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in {0..<depth} do{ 
             forall kk in {halo_depth..<x-halo_depth} do {
                 buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, ((y)-halo_depth-1-jj)];
@@ -80,7 +82,7 @@ module local_halos {
     }
 
     // Update top halo.
-    proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
+    proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in {0..<depth} do{ 
             forall kk in {halo_depth..<x-halo_depth} do {
                 buffer[kk, (halo_depth-jj-1)] = buffer[kk, (halo_depth+jj)];

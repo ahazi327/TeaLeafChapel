@@ -16,6 +16,7 @@ module diffuse{
         var wallclock_prev : real = 0.0;
         const end_step = setting_var.end_step : int;
         for tt in 0..<end_step do{
+            
             solve(chunk_var, setting_var, tt, wallclock_prev);
         } 
 
@@ -31,7 +32,7 @@ module diffuse{
 
         // Calculate minimum timestep information
         var dt : real = setting_var.dt_init;
-        calc_min_timestep(chunk_var, dt, setting_var.num_chunks_per_rank);
+        // calc_min_timestep(chunk_var, dt, setting_var.num_chunks_per_rank);
 
         // Pick the smallest timestep across all ranks
         // TODO min_over_ranks
@@ -45,20 +46,25 @@ module diffuse{
         setting_var.fields_to_exchange[FIELD_DENSITY] = true;
         halo_update_driver(chunk_var, setting_var, 2);
 
+        var error : real = 1e+10;
+
         // Perform the solve with one of the integrated solvers
         select (setting_var.solver){
             when Solver.JACOBI_SOLVER{
-                jacobi_driver(chunk_var, setting_var, rx, ry);
+                jacobi_driver(chunk_var, setting_var, rx, ry, error);
+                writeln("Using the Jacobi Solver...");
             }
             when Solver.CG_SOLVER{
                 cg_driver(chunk_var, setting_var, rx, ry);
-                
+                writeln("Using the CG Solver...");
             }
             when Solver.CHEBY_SOLVER{
                 cheby_driver(chunk_var, setting_var, rx, ry);
+                writeln("Using the Cheby Solver...");
             }
             when Solver.PPCG_SOLVER{
                 ppcg_driver(chunk_var, setting_var, rx, ry);
+                writeln("Using the PPCG Solver...");
             }
         }
         // Perform solve finalisation tasks
@@ -78,7 +84,7 @@ module diffuse{
         // print_and_log(settings, "Error: \t\t\t%.6e\n", error);
     }
 
-    proc calc_min_timestep (ref chunk_var : [?chunk_domain] chunks.Chunk, ref dt: real, in chunks_per_task : int){
+    proc calc_min_timestep (ref chunk_var : [?chunk_domain] chunks.Chunk, ref dt: real, const in chunks_per_task : int){
        for cc in 0..<chunks_per_task do {
 
             // Calculates a value for dt

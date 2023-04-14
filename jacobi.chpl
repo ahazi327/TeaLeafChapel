@@ -45,7 +45,7 @@ module jacobi{
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, out err: real,
+    ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
     ref kx: [Domain] real, ref ky: [Domain] real){
 
         const outer_Domain = Domain[0..<x, 0..<y];
@@ -55,7 +55,7 @@ module jacobi{
 
         var err: real = 0.0;
 
-        for (i, j) in Inner do {    
+        forall (i, j) in Inner with (+reduce err) do {    
             u[i, j] = (u0[i, j] 
                 + (kx[i+1, j]*r[i+1, j] + kx[i, j]*r[i-1, j])
                 + (ky[i, j+1]*r[i, j+1] + ky[i, j]*r[i, j-1]))
@@ -63,8 +63,10 @@ module jacobi{
                     + (ky[i, j]+ky[i, j+1]));
 
             err += abs(u[i, j]-r[i, j]);
+            // writeln(" jacobi iteration error : ", err);
 
         }
+        error = err;
     }
 }
 
