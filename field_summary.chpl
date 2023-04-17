@@ -44,10 +44,10 @@ module field_summary {
         
         var vol, ie, temp, mass : real = 0.0;
 
-        for cc in 0..<setting_var.num_chunks_per_rank do {
-            field_summary(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].volume, 
-        chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].u, vol, mass, ie, temp);
-        }
+        // for cc in 0..<setting_var.num_chunks_per_rank do {
+        field_summary(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].volume, 
+        chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp);
+        // }
 
         if(setting_var.check_result && is_solve_finished){ //  if settings->rank == MASTER && ...
             var checking_value : real = 1.0;

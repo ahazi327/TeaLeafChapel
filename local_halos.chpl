@@ -10,10 +10,10 @@ module local_halos {
 
             // do remote halo driver first
 
-            for cc in {0..<setting_var.num_chunks_per_rank} do {
-                local_halos (chunk_var[cc].x, chunk_var[cc].y, depth, depth, chunk_var[cc].neighbours, setting_var.fields_to_exchange,
-                chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].sd);
-            }
+            // for cc in {0..<setting_var.num_chunks_per_rank} do {
+            local_halos (chunk_var[0].x, chunk_var[0].y, depth, depth, chunk_var[0].neighbours, setting_var.fields_to_exchange,
+            chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].energy, chunk_var[0].u, chunk_var[0].p, chunk_var[0].sd);
+            // }
         }
     }
 
@@ -37,13 +37,13 @@ module local_halos {
 
     // Updates faces in turn.
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, ref chunk_neighbours : [-1..<NUM_FACES, -1..<NUM_FACES] (int, int), const in depth: int, inout buffer: [?D] real){
-        // if (chunk_neighbours[CHUNK_LEFT] == EXTERNAL_FACE) then update_left(x,y, halo_depth, depth, buffer);
+        if (chunk_neighbours[CHUNK_LEFT] == EXTERNAL_FACE) then update_left(x,y, halo_depth, depth, buffer);
 
-        // if (chunk_neighbours[CHUNK_RIGHT] == EXTERNAL_FACE) then update_right(x,y, halo_depth, depth, buffer);
+        if (chunk_neighbours[CHUNK_RIGHT] == EXTERNAL_FACE) then update_right(x,y, halo_depth, depth, buffer);
 
-        // if (chunk_neighbours[CHUNK_TOP] == EXTERNAL_FACE) then update_top(x,y, halo_depth, depth, buffer);
+        if (chunk_neighbours[CHUNK_TOP] == EXTERNAL_FACE) then update_top(x,y, halo_depth, depth, buffer);
         
-        // if (chunk_neighbours[CHUNK_BOTTOM] == EXTERNAL_FACE) then update_bottom(x,y, halo_depth, depth, buffer);
+        if (chunk_neighbours[CHUNK_BOTTOM] == EXTERNAL_FACE) then update_bottom(x,y, halo_depth, depth, buffer);
     }
 
     // Updating halos in a direction

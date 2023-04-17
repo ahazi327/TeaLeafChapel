@@ -18,6 +18,8 @@ module solve_finish_driver {
 
         finalise(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].u);
 
+
+        reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;
         halo_update_driver(chunk_var, setting_var, 1);
     }
