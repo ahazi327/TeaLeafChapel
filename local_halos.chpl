@@ -73,7 +73,7 @@ module local_halos {
      // TODO last 0.13 error seems to be coming from the top and bottom halos not doing anything, even if theyre removed it outputs the same
     proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in {0..<depth} do{ 
-            forall kk in {halo_depth..<x-halo_depth} do {
+            for kk in {halo_depth..<x-halo_depth} do {
                 buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, ((y)-halo_depth-1-jj)];
                 // buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, (halo_depth+jj)];
                 
@@ -84,7 +84,7 @@ module local_halos {
     // Update top halo.
     proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in {0..<depth} do{ 
-            forall kk in {halo_depth..<x-halo_depth} do {
+            for kk in {halo_depth..<x-halo_depth} do {
                 buffer[kk, (halo_depth-jj-1)] = buffer[kk, (halo_depth+jj)];
                 // buffer[kk, (halo_depth-jj-1)] = buffer[kk,((y)-halo_depth-1-jj)];
             }
