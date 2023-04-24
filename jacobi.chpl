@@ -4,6 +4,7 @@
 module jacobi{
     use settings;
     use chunks;
+    use Math;
 
     // Initialises the Jacobi solver
     proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, ref rx: real, ref ry: real, 
@@ -29,13 +30,13 @@ module jacobi{
 
             if coefficient == CONDUCTIVITY {  
                 densityCentre = density[i, j];
-                densityLeft = density[i - 1, j];
-                densityDown = density[i, j - 1];
+                densityLeft = density[i, j-1];
+                densityDown = density[i-1, j ];
             }
             else {
                 densityCentre = 1.0/density[i, j];
-                densityLeft =  1.0/density[i - 1, j];
-                densityDown = 1.0/density[i, j - 1];
+                densityLeft =  1.0/density[i, j - 1];
+                densityDown = 1.0/density[i - 1, j];
             }
 
             kx[i, j] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
@@ -48,24 +49,25 @@ module jacobi{
     ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
     ref kx: [Domain] real, ref ky: [Domain] real){
 
-        const outer_Domain = Domain[0..<y, 0..<x];
+        const outer_Domain = Domain[0..y, 0..x];
         const Inner = Domain[halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)];
 
         r[outer_Domain] = u[outer_Domain];
 
         var err: real = 0.0;
 
-        forall (i, j) in Inner with (+ reduce err) do {    
+        forall (i, j) in Inner  with (+ reduce err) do {    
             u[i, j] = (u0[i, j] 
-                + (kx[i+1, j]*r[i+1, j] + kx[i, j]*r[i-1, j])
-                + (ky[i, j+1]*r[i, j+1] + ky[i, j]*r[i, j-1]))
-            / (1.0 + (kx[i, j]+kx[i+1, j])
-                    + (ky[i, j]+ky[i, j+1]));
+                + (kx[i, j+1]*r[i, j+1] + kx[i, j]*r[i, j-1])
+                + (ky[i+1, j]*r[i+1, j] + ky[i, j]*r[i-1, j]))
+            / (1.0 + (kx[i, j]+kx[i, j+1])
+                    + (ky[i, j]+ky[i+1, j]));
 
             err += abs(u[i, j]-r[i, j]);
-            // writeln(" jacobi iteration error : ", err);
+            
 
         }
+        // writeln(" jacobi iteration error : ", err);
         error = err;
     }
 }

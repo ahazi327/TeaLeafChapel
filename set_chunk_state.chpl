@@ -15,7 +15,7 @@ module set_chunk_state{
         
 
         // Apply all of the states in turn
-        forall ss in 1..<setting_var.num_states with (ref chunk_var) do { // TODO try turning back into a single loop  // use a 3d domain for this one
+        for ss in 1..<setting_var.num_states do { // TODO try turning back into a single loop  // use a 3d domain for this one
             // writeln(" xmins are : ", states[ss].x_min);
 
             // If a state boundary falls exactly on a cell boundary

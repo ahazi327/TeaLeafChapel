@@ -19,10 +19,10 @@ module solver_methods {
 
         const inner = Domain[halo_depth..<y - halo_depth, halo_depth..<x - halo_depth];
         forall (i, j) in inner do {
-            const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
-                + (ky[i, j+1]+ky[i, j]))*u[i, j]
-                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
-                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+            const smvp: real = (1.0 + ((kx[i, j+1]+kx[i, j])
+                + (ky[i+1, j]+ky[i, j])))*u[i, j]
+                - ((kx[i, j+1]*u[i, j+1])+(kx[i, j]*u[i, j-1]))
+                - ((ky[i+1, j]*u[i+1, j])+(ky[i, j]*u[i-1, j]));
             
             r[i, j] = u0[i, j] - smvp;
         }
