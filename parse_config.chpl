@@ -34,8 +34,8 @@ module parse_config {
         read_file(setting_var, states);
 
         // Set the cell widths now
-        setting_var.dx = (setting_var.grid_x_max - setting_var.grid_x_min) / setting_var.grid_x_cells;
-        setting_var.dy = (setting_var.grid_y_max - setting_var.grid_y_min) / setting_var.grid_y_cells;
+        setting_var.dx = (setting_var.grid_x_max - setting_var.grid_x_min) / (setting_var.grid_x_cells : real);
+        setting_var.dy = (setting_var.grid_y_max - setting_var.grid_y_min) / (setting_var.grid_y_cells : real);
         
         
     }   
@@ -76,6 +76,7 @@ module parse_config {
                         var energy_val = tokens[3].split('=')[0..];
                         var density_val = tokens[2].split('=')[0..];
                         states[temp-1].energy = energy_val[1] : real;
+                        writeln(" ENERGY HERE IS : ", states[temp-1].energy);
                         states[temp-1].density = density_val[1] : real;
                     } else {
                         // get value after equals
@@ -89,6 +90,7 @@ module parse_config {
 
                         states[temp-1].defined = true;
                         states[temp-1].energy = energy_val[1] : real;
+                        writeln(" ENERGY HERE IS : ", states[temp-1].energy);
                         states[temp-1].density = density_val[1] : real;
                         states[temp-1].x_min = xmin_val[1] : real;
                         states[temp-1].x_max = xmax_val[1] : real;

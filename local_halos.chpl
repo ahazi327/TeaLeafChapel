@@ -10,10 +10,10 @@ module local_halos {
 
             // do remote halo driver first
 
-            for cc in {0..<setting_var.num_chunks_per_rank} do {
-                local_halos (chunk_var[cc].x, chunk_var[cc].y, depth, depth, chunk_var[cc].neighbours, setting_var.fields_to_exchange,
-                chunk_var[cc].density, chunk_var[cc].energy0, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].sd);
-            }
+            // for cc in {0..<setting_var.num_chunks_per_rank} do {
+            local_halos (chunk_var[0].x, chunk_var[0].y, depth, setting_var.halo_depth, chunk_var[0].neighbours, setting_var.fields_to_exchange,
+            chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].energy, chunk_var[0].u, chunk_var[0].p, chunk_var[0].sd);
+            // }
         }
     }
 
@@ -41,9 +41,11 @@ module local_halos {
 
         if (chunk_neighbours[CHUNK_RIGHT] == EXTERNAL_FACE) then update_right(x,y, halo_depth, depth, buffer);
 
+        if (chunk_neighbours[CHUNK_BOTTOM] == EXTERNAL_FACE) then update_bottom(x,y, halo_depth, depth, buffer);
+
         if (chunk_neighbours[CHUNK_TOP] == EXTERNAL_FACE) then update_top(x,y, halo_depth, depth, buffer);
         
-        if (chunk_neighbours[CHUNK_BOTTOM] == EXTERNAL_FACE) then update_bottom(x,y, halo_depth, depth, buffer);
+        
     }
 
     // Updating halos in a direction
@@ -52,8 +54,10 @@ module local_halos {
     proc update_left (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real) {  // TODO possibly update far left halo using right side column
         for jj in halo_depth..<y-halo_depth do{
             for kk in 0..<depth do {
-                buffer[halo_depth-kk-1, jj] = buffer[kk + halo_depth, jj]; 
-                // buffer[halo_depth-kk-1, jj] = buffer[(x-halo_depth-1-kk), jj];   
+                buffer[jj, halo_depth-kk-1] = buffer[jj, kk + halo_depth]; 
+                //     buffer[halo_depth-kk-1, jj] = buffer[(x-halo_depth-1-kk), jj]; 
+                
+                  
             }  
         }
     }
@@ -62,8 +66,9 @@ module local_halos {
     proc update_right (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in halo_depth..<y-halo_depth do{
             for kk in 0..<depth do {
-                buffer[(x-halo_depth+kk), jj] = buffer[(x-halo_depth-1-kk), jj];
+                buffer [jj, (x-halo_depth + kk)] = buffer [jj, ((x-halo_depth)-(kk + 1))];
                 // buffer[(x-halo_depth+kk), jj] = buffer[kk + halo_depth, jj];
+                
             }
         }
     }
@@ -71,22 +76,24 @@ module local_halos {
     // Update bottom halo.
      // TODO this seems like its the update bottom halo and vise versa
      // TODO last 0.13 error seems to be coming from the top and bottom halos not doing anything, even if theyre removed it outputs the same
-    proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
+    proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in {0..<depth} do{ 
-            forall kk in {halo_depth..<x-halo_depth} do {
-                buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, ((y)-halo_depth-1-jj)];
+            for kk in {halo_depth..<x-halo_depth} do {
+                buffer[((y - halo_depth) + jj), kk] = buffer[((y - halo_depth) - (jj + 1)), kk];
                 // buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, (halo_depth+jj)];
+                
                 
             }
         }
     }
 
     // Update top halo.
-    proc update_bottom (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
+    proc update_top (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, inout buffer: [?D] real)  {
         for jj in {0..<depth} do{ 
-            forall kk in {halo_depth..<x-halo_depth} do {
-                buffer[kk, (halo_depth-jj-1)] = buffer[kk, (halo_depth+jj)];
+            for kk in {halo_depth..<x-halo_depth} do {
+                buffer[(halo_depth - jj - 1), kk] = buffer[(halo_depth+jj), kk];
                 // buffer[kk, (halo_depth-jj-1)] = buffer[kk,((y)-halo_depth-1-jj)];
+                
             }
         }
     }

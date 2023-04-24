@@ -125,7 +125,7 @@ module settings{
   proc is_fields_to_exchange(ref setting_var : setting)
   {
     var flag : bool = false;
-    forall ii in 0..<NUM_FIELDS with (ref flag) do 
+    for ii in 0..<NUM_FIELDS do 
     {
       if setting_var.fields_to_exchange[ii] then
         flag = true;

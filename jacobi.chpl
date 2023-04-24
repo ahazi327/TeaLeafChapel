@@ -10,8 +10,8 @@ module jacobi{
     ref u: [?Domain] real, ref u0: [Domain] real, ref energy: [Domain] real, ref density: [Domain] real,
     ref kx: [Domain] real, ref ky: [Domain] real){
         
-        const inner_Domain = Domain[1..<x-1, 1..<y-1];
-        const Inner = Domain[halo_depth..<x - 1, halo_depth..<y - 1];
+        const inner_Domain = Domain[1..<y-1, 1..<x-1];
+        const Inner = Domain[halo_depth..<y - 1, halo_depth..<x - 1];
 
         // if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY do //TODO reference CONDUCTIVITY
         
@@ -22,7 +22,7 @@ module jacobi{
         u[inner_Domain] = u0[inner_Domain];
 
 
-        forall (i, j) in Inner do{ 
+        for (i, j) in Inner do{ 
             var densityCentre: real;
             var densityLeft: real;
             var densityDown: real;
@@ -48,14 +48,14 @@ module jacobi{
     ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
     ref kx: [Domain] real, ref ky: [Domain] real){
 
-        const outer_Domain = Domain[0..<x, 0..<y];
-        const Inner = Domain[halo_depth..<(x - halo_depth), halo_depth..<(y - halo_depth)];
+        const outer_Domain = Domain[0..<y, 0..<x];
+        const Inner = Domain[halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)];
 
         r[outer_Domain] = u[outer_Domain];
 
         var err: real = 0.0;
 
-        forall (i, j) in Inner with (+reduce err) do {    
+        for (i, j) in Inner do {    
             u[i, j] = (u0[i, j] 
                 + (kx[i+1, j]*r[i+1, j] + kx[i, j]*r[i-1, j])
                 + (ky[i, j+1]*r[i, j+1] + ky[i, j]*r[i, j-1]))

@@ -44,7 +44,7 @@ module initialise {
         var y_chunks = 0;
 
         // Decompose by minimal area to perimeter
-        for xx in 1..#number_of_chunks do{
+        for xx in 1..number_of_chunks do{
 
             if number_of_chunks % xx then continue;
 

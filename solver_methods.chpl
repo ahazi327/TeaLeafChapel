@@ -17,8 +17,8 @@ module solver_methods {
     ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref kx: [Domain] real,
     ref ky: [Domain] real){
 
-        const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner do {
+        const inner = Domain[halo_depth..<y - halo_depth, halo_depth..<x - halo_depth];
+        for (i, j) in inner do {
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
@@ -32,9 +32,9 @@ module solver_methods {
     proc calculate_2norm (const in x: int, const in y: int, const in halo_depth: int, 
     ref buffer: [?buffer_domain] real, ref norm: real){
         var norm_temp: real;
-        const inner = buffer_domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
+        const inner = buffer_domain[halo_depth..<y - halo_depth, halo_depth..<x-halo_depth];
         
-        forall (i, j) in inner with (+ reduce norm_temp) do {
+        for (i, j) in inner do {
             norm_temp += buffer[i, j]*buffer[i, j];	
         }
         
@@ -45,7 +45,7 @@ module solver_methods {
     proc finalise (const in x: int, const in y: int, const in halo_depth: int, 
     ref energy: [?Domain] real, ref density: [Domain] real, ref u: [Domain] real) {
 
-        var halo_domain = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
+        var halo_domain = Domain[halo_depth-1..< y - halo_depth, halo_depth-1..<x-halo_depth];
         energy[halo_domain] = u[halo_domain] / density[halo_domain];
     }
 }
