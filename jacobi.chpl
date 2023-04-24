@@ -22,7 +22,7 @@ module jacobi{
         u[inner_Domain] = u0[inner_Domain];
 
 
-        for (i, j) in Inner do{ 
+        forall (i, j) in Inner do{ 
             var densityCentre: real;
             var densityLeft: real;
             var densityDown: real;
@@ -55,7 +55,7 @@ module jacobi{
 
         var err: real = 0.0;
 
-        for (i, j) in Inner do {    
+        forall (i, j) in Inner with (+ reduce err) do {    
             u[i, j] = (u0[i, j] 
                 + (kx[i+1, j]*r[i+1, j] + kx[i, j]*r[i-1, j])
                 + (ky[i, j+1]*r[i, j+1] + ky[i, j]*r[i, j-1]))

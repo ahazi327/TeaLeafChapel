@@ -18,7 +18,7 @@ module solver_methods {
     ref ky: [Domain] real){
 
         const inner = Domain[halo_depth..<y - halo_depth, halo_depth..<x - halo_depth];
-        for (i, j) in inner do {
+        forall (i, j) in inner do {
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
@@ -33,11 +33,10 @@ module solver_methods {
     ref buffer: [?buffer_domain] real, ref norm: real){
         var norm_temp: real;
         const inner = buffer_domain[halo_depth..<y - halo_depth, halo_depth..<x-halo_depth];
-        
-        for (i, j) in inner do {
+
+        forall (i, j) in inner with (+ reduce norm_temp) do {
             norm_temp += buffer[i, j]*buffer[i, j];	
         }
-        
         norm += norm_temp;
     }
 
