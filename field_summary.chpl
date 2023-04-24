@@ -14,10 +14,10 @@ module field_summary {
     ref density: [Domain] real, ref energy0: [Domain] real, ref u: [Domain] real, ref vol: real,
     ref mass: real, ref ie: real, ref temp: real){
 
-        var inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
+        var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
-        for j in {halo_depth..<y-halo_depth} do {
-            for i in {halo_depth..<x-halo_depth} do {
+        for j in {halo_depth..<x-halo_depth} do {
+            for i in {halo_depth..<y-halo_depth} do {
                 var cellVol : real;
                 cellVol = volume[i, j];
 

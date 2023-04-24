@@ -10,8 +10,8 @@ module jacobi{
     ref u: [?Domain] real, ref u0: [Domain] real, ref energy: [Domain] real, ref density: [Domain] real,
     ref kx: [Domain] real, ref ky: [Domain] real){
         
-        const inner_Domain = Domain[1..<x-1, 1..<y-1];
-        const Inner = Domain[halo_depth..<x - 1, halo_depth..<y - 1];
+        const inner_Domain = Domain[1..<y-1, 1..<x-1];
+        const Inner = Domain[halo_depth..<y - 1, halo_depth..<x - 1];
 
         // if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY do //TODO reference CONDUCTIVITY
         
@@ -48,8 +48,8 @@ module jacobi{
     ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
     ref kx: [Domain] real, ref ky: [Domain] real){
 
-        const outer_Domain = Domain[0..<x, 0..<y];
-        const Inner = Domain[halo_depth..<(x - halo_depth), halo_depth..<(y - halo_depth)];
+        const outer_Domain = Domain[0..<y, 0..<x];
+        const Inner = Domain[halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)];
 
         r[outer_Domain] = u[outer_Domain];
 

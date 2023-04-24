@@ -35,7 +35,7 @@ module chunks{
     var density: [Domain] real; 
     var density0: [Domain] real;
     var energy: [Domain] real;
-    var energy0: [Domain] real;
+    var energy0: [Domain] real; //TODO maybe reverse the x and y for this one
 
     var u: [Domain] real;
     var u0: [Domain] real;
@@ -77,7 +77,7 @@ module chunks{
   var chunk_var: Chunk;
   chunk_var = new Chunk();
 
-  proc init_chunk (ref chunk_variable : [?D] Chunk, in cc : int, ref setting_var : settings.setting, in x: int, in y:int) {
+  proc init_chunk (ref chunk_variable : [?D] Chunk, in cc : int, ref setting_var : settings.setting, const in x: int, const in y:int) {
     chunk_variable[cc].chunk_x = x + setting_var.halo_depth*2;
     chunk_variable[cc].chunk_y = y + setting_var.halo_depth*2;
     
@@ -106,6 +106,10 @@ module chunks{
     chunk_variable[cc].kx = 0;
     chunk_variable[cc].ky = 0;
     chunk_variable[cc].sd = 0;
+    chunk_variable[cc].energy = 0;
+    chunk_variable[cc].energy0 = 0;
+    chunk_variable[cc].density = 0;
+    chunk_variable[cc].density0 = 0;
 
     chunk_variable[cc].cell_x = 0;
     chunk_variable[cc].cell_dx = 0;
@@ -129,12 +133,12 @@ module chunks{
     chunk_variable[cc].dt_init = setting_var.dt_init;
   }
 
-  proc init_states (x: int, y:int, ref setting_var : settings.setting) {
-     // init states
-    var states_domain = {0..<x, 0..<y};
-    var states: [states_domain] setting_var.state;
-    states = new setting_var.state();
-  }
+  // proc init_states (x: int, y:int, ref setting_var : settings.setting) {
+  //    // init states
+  //   var states_domain = {0..<x, 0..<y};
+  //   var states: [states_domain] setting_var.state;
+  //   states = new setting_var.state();
+  // }
      
 
 }

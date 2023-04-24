@@ -18,6 +18,7 @@ module diffuse{
         for tt in 0..<end_step do{
             
             solve(chunk_var, setting_var, tt, wallclock_prev);
+            // writeln("e array: \n", chunk_var.energy);
         } 
 
         field_summary_driver(chunk_var, setting_var, true);

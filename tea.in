@@ -16,7 +16,7 @@ use_jacobi
 use_c_kernels
 check_result
 
-eps                 = 1.0e-4
+eps                 = 1.0e-15
 max_iters           = 5000
 
 initial_timestep    = 0.004
