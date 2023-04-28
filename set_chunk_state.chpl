@@ -33,50 +33,48 @@ module set_chunk_state{
 
             // writeln(" xmin and xmax values: " ,states[ss].x_min, "  ", states[ss].x_max);
             
-            for jj in 0..<chunk_var.y do {
-                for kk in 0..<chunk_var.x do {
+            for (jj, kk) in {0..<chunk_var.x, 0..<chunk_var.y} do {
 
-                    var apply_state: bool = false;
+                var apply_state: bool = false;
 
-                    if states[ss].geometry == settings.Geometry.RECTANGULAR {
-                        if (chunk_var.vertex_x[kk+1] >= states[ss].x_min) && 
-                        (chunk_var.vertex_x[kk] < states[ss].x_max) && 
-                        (chunk_var.vertex_y[jj+1] >= states[ss].y_min) && 
-                        (chunk_var.vertex_y[jj] < states[ss].y_max){
-                                apply_state = true;
-                            }
-                    }
-                    
-                    else if states[ss].geometry == settings.Geometry.CIRCULAR {
-                        var radius: real;
-                        
-                        radius = sqrt(
-                            ((chunk_var.cell_x[kk]-states[ss].x_min)*
-                            (chunk_var.cell_x[kk]-states[ss].x_min))+
-                            ((chunk_var.cell_y[jj]-states[ss].y_min)*
-                            (chunk_var.cell_y[jj]-states[ss].y_min)));
-
-                        if radius <= states[ss].radius then apply_state = true;
-                    }
-                    else if states[ss].geometry == settings.Geometry.POINT{
-                        if chunk_var.vertex_x[kk] == states[ss].x_min && 
-                        chunk_var.vertex_y[jj] == states[ss].y_min {
+                if states[ss].geometry == settings.Geometry.RECTANGULAR {
+                    if (chunk_var.vertex_x[jj+1] >= states[ss].x_min) && 
+                    (chunk_var.vertex_x[jj] < states[ss].x_max) && 
+                    (chunk_var.vertex_y[kk+1] >= states[ss].y_min) && 
+                    (chunk_var.vertex_y[kk] < states[ss].y_max){
                             apply_state = true;
                         }
-                            
+                }
+                
+                else if states[ss].geometry == settings.Geometry.CIRCULAR {
+                    var radius: real;
+                    
+                    radius = sqrt(
+                        ((chunk_var.cell_x[jj]-states[ss].x_min)*
+                        (chunk_var.cell_x[jj]-states[ss].x_min))+
+                        ((chunk_var.cell_y[kk]-states[ss].y_min)*
+                        (chunk_var.cell_y[kk]-states[ss].y_min)));
+
+                    if radius <= states[ss].radius then apply_state = true;
+                }
+                else if states[ss].geometry == settings.Geometry.POINT{
+                    if chunk_var.vertex_x[jj] == states[ss].x_min && 
+                    chunk_var.vertex_y[kk] == states[ss].y_min {
+                        apply_state = true;
                     }
-                    if apply_state 
-                    {
-                        chunk_var.energy0[jj, kk] = states[ss].energy;  // Note: reversed kk and jj to match output from reference code
-                        chunk_var.density[jj, kk] = states[ss].density;
-                        // writeln(" when y and x are : ", jj, " ", kk);
-                    }
+                        
+                }
+                if apply_state 
+                {
+                    chunk_var.energy0[jj, kk] = states[ss].energy;  // Note: reversed kk and jj to match output from reference code
+                    chunk_var.density[jj, kk] = states[ss].density;
+                    // writeln(" when y and x are : ", jj, " ", kk);
                 }
             }
         }
             // writeln("current  density array : \n",  chunk_var.density);
 
-            var Domain = {1..<chunk_var.y-1, 1..<chunk_var.x-1};
+            var Domain = {1..<chunk_var.x-1, 1..<chunk_var.y-1};
             chunk_var.u[Domain] = chunk_var.energy0[Domain] *chunk_var.density[Domain];
             // writeln("current  u array : \n",  chunk_var.u);
     }

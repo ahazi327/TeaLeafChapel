@@ -15,10 +15,13 @@ module diffuse{
         
         var wallclock_prev : real = 0.0;
         const end_step = setting_var.end_step : int;
+
+        // writeln(" problem initialised and generated the following array Volume : \n", chunk_var.volume);
+        // field_summary_driver(chunk_var, setting_var, false);
         for tt in 0..<end_step do{
             
             solve(chunk_var, setting_var, tt, wallclock_prev);
-            // writeln("e array: \n", chunk_var.energy);
+            // writeln("r array: \n", chunk_var.r);
         } 
 
         field_summary_driver(chunk_var, setting_var, true);
@@ -47,17 +50,19 @@ module diffuse{
         setting_var.fields_to_exchange[FIELD_DENSITY] = true;
         halo_update_driver(chunk_var, setting_var, 2);
 
-        var error : real = 1e+10;
+        var error : real = 0;
 
         // Perform the solve with one of the integrated solvers
         select (setting_var.solver){
             when Solver.JACOBI_SOLVER{
                 jacobi_driver(chunk_var, setting_var, rx, ry, error);
-                writeln("Using the Jacobi Solver...");
+                writeln("Conduction error rating : ", error);
+                writeln("Using the Jacobi Solver... at timestep: ", tt + 1);
             }
             when Solver.CG_SOLVER{
-                cg_driver(chunk_var, setting_var, rx, ry);
-                writeln("Using the CG Solver...");
+                cg_driver(chunk_var, setting_var, rx, ry, error);
+                writeln("Conduction error rating : ", error);
+                writeln("Using the CG Solver... at timestep: ", tt + 1);
             }
             when Solver.CHEBY_SOLVER{
                 cheby_driver(chunk_var, setting_var, rx, ry);

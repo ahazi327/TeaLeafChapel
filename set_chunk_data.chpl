@@ -15,11 +15,11 @@ module set_chunk_data{
 		y_min = setting_var.grid_y_min + setting_var.dy * (chunk_var.bottom:real);
 
 		//as this is just set up, serial execution is used
-		for ii in 0..<chunk_var.x+1 do { 
+		for ii in 0..chunk_var.x do { 
 			chunk_var.vertex_x[ii] = x_min + setting_var.dx * (ii - setting_var.halo_depth); 
 		}
 
-		for ii in 0..<chunk_var.y+1 do {
+		for ii in 0..chunk_var.y do {
 			chunk_var.vertex_y[ii] = y_min + setting_var.dy * (ii - setting_var.halo_depth);  
 		}
 		

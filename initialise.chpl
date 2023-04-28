@@ -106,22 +106,22 @@ module initialise {
                         if xx == 0 then 
                             chunk_var[cc].neighbours[CHUNK_LEFT] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_LEFT] = (xx - 1, yy); // TODO possibly needs fixing to 2d using tuples
-                        writeln("chunk_var[",cc,"].neighbours[CHUNK_LEFT] : ", chunk_var[cc].neighbours[CHUNK_LEFT]);
+                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_LEFT] : ", chunk_var[cc].neighbours[CHUNK_LEFT]);
 
                         if xx == x_chunks-1 then 
                             chunk_var[cc].neighbours[CHUNK_RIGHT] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_RIGHT] = (xx + 1, yy);
-                        writeln("chunk_var[",cc,"].neighbours[CHUNK_RIGHT] : ", chunk_var[cc].neighbours[CHUNK_RIGHT]);
+                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_RIGHT] : ", chunk_var[cc].neighbours[CHUNK_RIGHT]);
                         
                         if yy == 0 then 
                             chunk_var[cc].neighbours[CHUNK_TOP] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_TOP] = (xx, yy - 1);
-                        writeln("chunk_var[",cc,"].neighbours[CHUNK_TOP] : ", chunk_var[cc].neighbours[CHUNK_TOP]);
+                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_TOP] : ", chunk_var[cc].neighbours[CHUNK_TOP]);
 
                         if yy == y_chunks-1 then 
                             chunk_var[cc].neighbours[CHUNK_BOTTOM] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_BOTTOM] = (xx, yy + 1);
-                        writeln("chunk_var[",cc,"].neighbours[CHUNK_BOTTOM] : ", chunk_var[cc].neighbours[CHUNK_BOTTOM]);
+                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_BOTTOM] : ", chunk_var[cc].neighbours[CHUNK_BOTTOM]);
 
                     }  
                 }

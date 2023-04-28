@@ -14,7 +14,7 @@ module field_summary {
     ref density: [Domain] real, ref energy0: [Domain] real, ref u: [Domain] real, ref vol: real,
     ref mass: real, ref ie: real, ref temp: real){
 
-        var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
+        var inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
 
         for j in {halo_depth..<x-halo_depth} do { // TODO maybe make this into a forall loop
             for i in {halo_depth..<y-halo_depth} do {
@@ -31,7 +31,8 @@ module field_summary {
                                 
             }
         }
-        writeln("Checking Value : ", temp);
+        // writeln("Mass Value : ", mass);
+        // writeln("Checking Value : ", temp);
     }
 
 /*
@@ -81,11 +82,11 @@ module field_summary {
 
                 if ( x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && num_steps == setting_var.end_step) {
                     // Found the problem in the file
-                    writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
+                    // writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
                     tea_prob.close();
                     return;
                 }
-                writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value, " value not found in problem.");
+                // writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value, " value not found in problem.");
             }
             tea_prob.close();
         }

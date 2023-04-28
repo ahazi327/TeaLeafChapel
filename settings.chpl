@@ -58,8 +58,6 @@ module settings{
     var solver: Solver;
     var dx: real;
     var dy: real;
-    // const Kernal_language: bool;// not needed for now
-    // not sure what the profile structs are
   }
 
   // record Profile  - TODO add this later when profiling

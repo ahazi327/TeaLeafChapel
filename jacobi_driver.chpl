@@ -13,14 +13,16 @@ module jacobi_driver {
         // Iterate till convergence
         for tt in 0..<setting_var.max_iters do {
             
-            jacobi_main_step_driver(chunk_var, setting_var, tt, err);
+            jacobi_main_step_driver(chunk_var, setting_var, tt, err, rx, ry);
 
             halo_update_driver(chunk_var, setting_var, 1);
             // writeln(" tt : ", tt, " with error value of :", err);
-            if(abs(err) < setting_var.eps) then break;
+            if(abs(err) < setting_var.eps){
+                writeln("Iteration : ", tt+1);
+                break;
+            }
         }
         // print_and_log(settings, "Jacobi: \t\t%d iterations\n", tt);
-
     }
 
     // Invokes the CG initialisation kernels
@@ -39,9 +41,9 @@ module jacobi_driver {
 
     // Invokes the main Jacobi solve kernels
     proc jacobi_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
-    ref err: real){
+    ref err: real, inout rx: real, inout ry: real){
         jacobi_iterate(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, 
-            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky);
+            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky, rx, ry, chunk_var[0]);
 
         if tt % 50 == 0 {
             halo_update_driver(chunk_var, setting_var, 1);

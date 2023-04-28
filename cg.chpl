@@ -26,20 +26,19 @@ module cg {
 
         const inner_1 = halo_dom[halo_depth..<x-1, halo_depth..<y-1];
         forall (i, j) in inner_1 do {
-            kx[i, j] = rx*(w[i-1, j]+w[i, j]) / 
-                (2.0*w[i-1, j]*w[i, j]);
-            ky[i, j] = ry*(w[i, j-1]+w[i, j]) /
-                (2.0*w[i, j-1]*w[i, j]);
+            kx[i, j] = rx*(w[i-1, j]+w[i, j]) / (2.0*w[i-1, j]*w[i, j]);
+            ky[i, j] = ry*(w[i, j-1]+w[i, j]) / (2.0*w[i, j-1]*w[i, j]);
         }
         
-        var rro_temp : real; 
+        var rro_temp : real = 0.0; 
         const inner_2 = halo_dom[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         forall (i, j) in inner_2 with (+ reduce rro_temp) do {
-            w[i,j] =  (1.0 + (kx[i+1, j]+kx[i, j])
+            const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
                 - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
-            r[i,j] = u[i,j]-w[i,j];
+            w[i, j] = smvp;
+            r[i,j] = u[i,j] - smvp;
             p[i,j] = r[i,j];
             rro_temp += r[i,j]*p[i,j];   
         }
@@ -49,7 +48,7 @@ module cg {
     // Calculates w
     proc cg_calc_w (const in x: int, const in y: int, const in halo_depth: int, ref pw: real, ref p: [?Domain] real,
     ref w: [Domain] real, ref kx: [Domain] real, ref ky: [Domain] real){
-        var pw_temp : real;
+        var pw_temp : real = 0.0;
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         forall (i, j) in inner with (+ reduce pw_temp) do{
             const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
@@ -66,7 +65,7 @@ module cg {
     // Calculates u and r
     proc cg_calc_ur(const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, ref rrn: real, 
     ref u: [?Domain] real, ref p: [Domain] real, ref r: [Domain] real, ref w: [Domain] real){
-        var rrn_temp : real;
+        var rrn_temp : real = 0.0;
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         
         forall (i, j) in inner with (+ reduce rrn_temp) do{ //with

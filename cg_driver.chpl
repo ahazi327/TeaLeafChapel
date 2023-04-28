@@ -8,27 +8,26 @@ module cg_driver {
 
     // Performs a full solve with the CG solver kernels
     proc cg_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
-    ref ry: real){
+    ref ry: real, ref error: real){
         //var tt: int;
-        var rro : real;
+        var rro : real = 0.0;
         var t : int;
-        var error : real;
 
         // Perform CG initialisation
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);
         
         // Iterate till convergence
         for tt in 0..<setting_var.max_iters do {
-            t = tt + 1;
             cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
 
             halo_update_driver (chunk_var, setting_var, 1);
 
-            // if (sqrt(abs(error)) < setting_var.eps) then break;
-            
+            if (sqrt(abs(error)) < setting_var.eps){
+                writeln("Iteration : ", tt+1);
+                break;
+            }
         }
         // print log
-        // writeln("CG: ", t, " iterations\n");
     }
 
     // Invokes the CG initialisation kernels
@@ -38,7 +37,7 @@ module cg_driver {
         // var sharedrxry = (rx, ry);
         rro = 0.0;
 
-        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce rro) do {
+        for cc in {0..<setting_var.num_chunks_per_rank} do {
             cg_init(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
             chunk_var[cc].density, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].r, chunk_var[cc].w,
             chunk_var[cc].kx, chunk_var[cc].ky);
@@ -52,7 +51,7 @@ module cg_driver {
 
         //sum over ranks TODO This seems to be an MPI things, so ignore for now
 
-        forall cc in {0..<setting_var.num_chunks_per_rank} do {
+        for cc in {0..<setting_var.num_chunks_per_rank} do {
             copy_u(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].u, chunk_var[cc].u0);
         }
 
@@ -61,9 +60,9 @@ module cg_driver {
     // Invokes the main CG solve kernels
     proc cg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
     ref rro: real, ref error: real){
-        var pw: real;
+        var pw: real = 0.0;
         
-        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce pw) do {
+        for cc in {0..<setting_var.num_chunks_per_rank} do {
             
             cg_calc_w (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, pw, chunk_var[cc].p, chunk_var[cc].w, chunk_var[cc].kx,
             chunk_var[cc].ky);
@@ -73,10 +72,10 @@ module cg_driver {
 
         var alpha : real = rro / pw;
         
-        var rrn: real;
+        var rrn: real = 0.0;
     
 
-        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce rrn) do {
+        for cc in {0..<setting_var.num_chunks_per_rank} do {
             chunk_var[cc].cg_alphas[tt] = alpha;
 
             cg_calc_ur(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, alpha, rrn, chunk_var[cc].u, chunk_var[cc].p,
@@ -85,8 +84,8 @@ module cg_driver {
 
         var beta : real = rrn / rro;
         
-        forall cc in {0..<setting_var.num_chunks_per_rank} with (+ reduce beta) do {
-            chunk_var[cc].cg_betas[tt] = alpha;
+        for cc in {0..<setting_var.num_chunks_per_rank} do {
+            chunk_var[cc].cg_betas[tt] = beta;
             cg_calc_p (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, beta, chunk_var[cc].p,
             chunk_var[cc].r);
         }
