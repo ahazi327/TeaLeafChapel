@@ -10,7 +10,8 @@ module ppcg{
         // forall (i, j) in {halo_depth..< x-halo_depth, halo_depth..< y - halo_depth} do{
         //     sd[i, j] = r[i, j] / theta;
         // }
-        sd = r / theta;
+        const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
+        sd[inner] = r[inner] / theta;
     }
 
     // The PPCG inner iteration
@@ -33,7 +34,7 @@ module ppcg{
 
         //     sd[i, j] = alpha * sd[i, j] + beta * r[i, j];
         // }
-        sd = alpha * sd + beta * r;
+        sd[inner] = alpha * sd[inner] + beta * r[inner];
 
 
     }

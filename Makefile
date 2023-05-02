@@ -13,6 +13,11 @@ $(TARGET): $(SRCS)
 run: $(TARGET)
 	./$(TARGET)
 
+# Record/report rule
+report: $(TARGET)
+	perf record ./$(TARGET) 
+	perf report
+
 # Clean rule
 clean:
 	rm -f $(TARGET)

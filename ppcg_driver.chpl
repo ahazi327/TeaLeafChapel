@@ -10,30 +10,32 @@ module ppcg_driver{
 
     // Performs a full solve with the PPCG solver
     proc ppcg_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real){
-        var tt, num_ppcg_iters: int;
+    inout ry: real, ref error: real){
+        var tt_prime, num_ppcg_iters: int;
         var rro: real;
         var is_switch_to_ppcg : int;
-        var error : real;
 
         // Perform CG initialisation  // is this supposed to be ppcg???
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);
 
         // Iterate till convergence
         for tt in 0..<setting_var.max_iters do {
+            
             // If we have already ran PPCG inner iterations, continue
             // If we are error switching, check the error
             // If not error switching, perform preset iterations
             // Perform enough iterations to converge eigenvalues
-            if error < setting_var.eps_lim && tt > CG_ITERS_FOR_EIGENVALUES then 
-                is_switch_to_ppcg = num_ppcg_iters;
-            else if tt > setting_var.presteps && error < ERROR_SWITCH_MAX then
-                is_switch_to_ppcg = setting_var.error_switch;
+            
+            if (num_ppcg_iters:bool) || setting_var.error_switch then
+                is_switch_to_ppcg = (error < setting_var.eps_lim) & (tt > CG_ITERS_FOR_EIGENVALUES);    
+            else
+                is_switch_to_ppcg = (tt > setting_var.presteps) & (error < ERROR_SWITCH_MAX);
 
-        if(!is_switch_to_ppcg) then
-            // Perform a CG iteration
-            cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
-        else num_ppcg_iters += 1;
+            // writeln ("what is is_switch_to_ppcg : ", is_switch_to_ppcg, "\n");
+            if is_switch_to_ppcg == 0 then
+                // Perform a CG iteration
+                cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
+            else num_ppcg_iters += 1;
 
             // If first step perform initialisation
             if num_ppcg_iters == 1{
@@ -49,11 +51,11 @@ module ppcg_driver{
         
             halo_update_driver(chunk_var, setting_var, 1);
             if(abs(error) < setting_var.eps) then break;
+            tt_prime += 1;
         }
-        // print_and_log(settings, "CG: \t\t\t%d iterations\n", tt-num_cheby_iters+1);
-        // print_and_log(settings, 
-        //     "Cheby: \t\t\t%d iterations (%d estimated)\n", 
-        //     num_cheby_iters, est_iterations);
+
+        writeln("CG:   ",  tt_prime-num_ppcg_iters+1, " ");
+        writeln("PPCG: ",  num_ppcg_iters, " (", setting_var.ppcg_inner_steps," inner iterations per)");
     }
 
     // Invokes the PPCG initialisation kernels

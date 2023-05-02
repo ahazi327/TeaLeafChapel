@@ -15,13 +15,11 @@ module diffuse{
         
         var wallclock_prev : real = 0.0;
         const end_step = setting_var.end_step : int;
-
-        // writeln(" problem initialised and generated the following array Volume : \n", chunk_var.volume);
-        // field_summary_driver(chunk_var, setting_var, false);
+        writeln("Using the ", setting_var.solver : string, "\n");
+        
         for tt in 0..<end_step do{
-            
+            writeln("Timestep ", tt + 1);
             solve(chunk_var, setting_var, tt, wallclock_prev);
-            // writeln("r array: \n", chunk_var.r);
         } 
 
         field_summary_driver(chunk_var, setting_var, true);
@@ -69,8 +67,9 @@ module diffuse{
                 writeln("Using the Cheby Solver...");
             }
             when Solver.PPCG_SOLVER{
-                ppcg_driver(chunk_var, setting_var, rx, ry);
-                writeln("Using the PPCG Solver...");
+                ppcg_driver(chunk_var, setting_var, rx, ry, error);
+                writeln("Conduction error : ", error, "\n");
+                
             }
         }
         // Perform solve finalisation tasks
