@@ -9,18 +9,19 @@ module cheby_driver{
     param epsilon = 0.00001; // some really small positive number
 
     proc cheby_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real){
+    inout ry: real, ref error: real){
 
         var tt, est_iterations, num_cheby_iters: int;
         var rro: real;
         var is_switch_to_cheby : int;
-        var error : real;
 
         // Perform CG initialisation
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);
         
+        var tt_prime : int;
         // Iterate till convergence
         for tt in 0..<setting_var.max_iters do {
+            
             // If we have already ran cheby iterations, continue
             // If we are error switching, check the error
             // If not error switching, perform preset iterations
@@ -56,13 +57,14 @@ module cheby_driver{
             
             halo_update_driver(chunk_var, setting_var, 1);
             if(abs(error) < setting_var.eps) then break;
-                
-        
+            tt_prime += 1;
         }
         // print_and_log(settings, "CG: \t\t\t%d iterations\n", tt-num_cheby_iters+1);
         // print_and_log(settings, 
         //     "Cheby: \t\t\t%d iterations (%d estimated)\n", 
         //     num_cheby_iters, est_iterations);
+        writeln("CG iterations : ", tt_prime-num_cheby_iters+1);
+        writeln("Cheby iterations : ", tt_prime, " (", est_iterations, " estimated)\n");
     }
 
     proc cheby_init_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in num_cg_iters: int,

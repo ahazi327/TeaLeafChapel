@@ -54,8 +54,8 @@ module ppcg_driver{
             tt_prime += 1;
         }
 
-        writeln("CG:   ",  tt_prime-num_ppcg_iters+1, " ");
-        writeln("PPCG: ",  num_ppcg_iters, " (", setting_var.ppcg_inner_steps," inner iterations per)");
+        writeln("CG iterations:   ",  tt_prime-num_ppcg_iters+1, " ");
+        writeln("PPCG iterations: ",  num_ppcg_iters, " (", setting_var.ppcg_inner_steps," inner iterations per)");
     }
 
     // Invokes the PPCG initialisation kernels

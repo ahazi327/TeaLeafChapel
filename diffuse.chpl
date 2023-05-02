@@ -54,24 +54,21 @@ module diffuse{
         select (setting_var.solver){
             when Solver.JACOBI_SOLVER{
                 jacobi_driver(chunk_var, setting_var, rx, ry, error);
-                writeln("Conduction error rating : ", error);
-                writeln("Using the Jacobi Solver... at timestep: ", tt + 1);
             }
             when Solver.CG_SOLVER{
                 cg_driver(chunk_var, setting_var, rx, ry, error);
-                writeln("Conduction error rating : ", error);
-                writeln("Using the CG Solver... at timestep: ", tt + 1);
+
             }
             when Solver.CHEBY_SOLVER{
-                cheby_driver(chunk_var, setting_var, rx, ry);
-                writeln("Using the Cheby Solver...");
+                cheby_driver(chunk_var, setting_var, rx, ry, error);
             }
             when Solver.PPCG_SOLVER{
                 ppcg_driver(chunk_var, setting_var, rx, ry, error);
-                writeln("Conduction error : ", error, "\n");
+                
                 
             }
         }
+        writeln("Conduction error : ", error, "\n");
         // Perform solve finalisation tasks
         solve_finished_driver(chunk_var, setting_var);
         

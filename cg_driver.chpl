@@ -16,18 +16,19 @@ module cg_driver {
         // Perform CG initialisation
         cg_init_driver(chunk_var, setting_var, rx, ry, rro);
         
+        var tt_prime : int;
         // Iterate till convergence
         for tt in 0..<setting_var.max_iters do {
+            
             cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
 
             halo_update_driver (chunk_var, setting_var, 1);
 
-            if (sqrt(abs(error)) < setting_var.eps){
-                writeln("Iteration : ", tt+1);
-                break;
-            }
+            if (sqrt(abs(error)) < setting_var.eps) then break;
+
+            tt_prime += 1;
         }
-        // print log
+        writeln("CG iterations : ", tt_prime);
     }
 
     // Invokes the CG initialisation kernels

@@ -16,7 +16,7 @@ module chunks{
     var y: int = chunk_y;
     
     //Domains
-    var Domain : domain(2) = {0..<chunk_x, 0..<chunk_y};  // should automatically reallocate arrays when chunk values are changed
+    var Domain : domain(2) = {0..<chunk_x, 0..<chunk_y};
     var x_domain : domain(1) = {0..<chunk_x};
     var y_domain : domain(1) = {0..<chunk_y};
     var x1_domain: domain(1)  = {0..<chunk_x+1};
@@ -31,11 +31,11 @@ module chunks{
     var top: int;
     
     var dt_init: real;
-    var neighbours: [num_face_domain] (int, int); // change to 2d 
+    var neighbours: [num_face_domain] (int, int);
     var density: [Domain] real; 
     var density0: [Domain] real;
     var energy: [Domain] real;
-    var energy0: [Domain] real; //TODO maybe reverse the x and y for this one
+    var energy0: [Domain] real;
 
     var u: [Domain] real;
     var u0: [Domain] real;
@@ -94,8 +94,6 @@ module chunks{
     chunk_variable[cc].y_area_domain = {0..<chunk_variable[cc].chunk_x, 0..<(chunk_variable[cc].chunk_y+1)};
     chunk_variable[cc].max_iter_domain = {0..<settings.max_iters};
 
-    writeln("chunk var x: ", chunk_variable[cc].chunk_x, " x: ", x, " for cc of ", cc);
-
     // set all values in arrays to 0 from nan
     chunk_variable[cc].u = 0;
     chunk_variable[cc].u0 = 0;
@@ -132,13 +130,4 @@ module chunks{
 
     chunk_variable[cc].dt_init = setting_var.dt_init;
   }
-
-  // proc init_states (x: int, y:int, ref setting_var : settings.setting) {
-  //    // init states
-  //   var states_domain = {0..<x, 0..<y};
-  //   var states: [states_domain] setting_var.state;
-  //   states = new setting_var.state();
-  // }
-     
-
 }

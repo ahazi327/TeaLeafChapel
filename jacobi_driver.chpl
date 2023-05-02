@@ -11,18 +11,16 @@ module jacobi_driver {
 
         jacobi_init_driver(chunk_var, setting_var, rx, ry);
         // Iterate till convergence
+        var tt_prime : int;
         for tt in 0..<setting_var.max_iters do {
             
             jacobi_main_step_driver(chunk_var, setting_var, tt, err, rx, ry);
 
             halo_update_driver(chunk_var, setting_var, 1);
-            // writeln(" tt : ", tt, " with error value of :", err);
-            if(abs(err) < setting_var.eps){
-                writeln("Iteration : ", tt+1);
-                break;
-            }
+            if(abs(err) < setting_var.eps) then break;
+            tt_prime += 1;
         }
-        // print_and_log(settings, "Jacobi: \t\t%d iterations\n", tt);
+        writeln("Jacobi iterations : ", tt_prime);
     }
 
     // Invokes the CG initialisation kernels

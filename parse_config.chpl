@@ -58,7 +58,7 @@ module parse_config {
             var ymax: real;
             var radius: real;  // Radius in text file goes last
 
-            while tea_in_reader.readLine(line) {
+            while tea_in_reader.readLine(line) { //TODO maybe improve this implementation
                 counter += 1;
                 // Check what the next line is equivalent to
                 if line.find("*tea") != -1 {
@@ -72,11 +72,10 @@ module parse_config {
 
                     // Read all of the states from the configuration file
                     if temp == 1 {
-                        states[temp-1].defined = true; //TODO double check this
+                        states[temp-1].defined = true;
                         var energy_val = tokens[3].split('=')[0..];
                         var density_val = tokens[2].split('=')[0..];
                         states[temp-1].energy = energy_val[1] : real;
-                        // writeln(" ENERGY HERE IS : ", states[temp-1].energy);
                         states[temp-1].density = density_val[1] : real;
                     } else {
                         // get value after equals
@@ -90,7 +89,6 @@ module parse_config {
 
                         states[temp-1].defined = true;
                         states[temp-1].energy = energy_val[1] : real;
-                        // writeln(" ENERGY HERE IS : ", states[temp-1].energy);
                         states[temp-1].density = density_val[1] : real;
                         states[temp-1].x_min = xmin_val[1] : real;
                         states[temp-1].x_max = xmax_val[1] : real;
