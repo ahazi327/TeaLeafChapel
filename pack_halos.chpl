@@ -1,7 +1,8 @@
 module pack_halos{
     use settings;
     use chunks;
-    var BigDomain = {0..<chunk_var.x, 0..<chunk_var.y};
+    // var BigDomain = {0..<chunk_var.x, 0..<chunk_var.y}; // TODO temp fix later
+    var BigDomain = {0..5, 0..5};
     record Kernal {
         var x: int;
         var y: int;

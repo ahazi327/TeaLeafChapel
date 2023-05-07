@@ -67,11 +67,11 @@ module initialise {
         }
 
         // Check that the decomposition didn't fail
-        // if(!x_chunks || !y_chunks)
-        // {
-        //     die(__LINE__, __FILE__, 
-        //         "Failed to decompose the field with given parameters.\n");
-        // }
+        if(!x_chunks || !y_chunks)
+        {
+            writeln("Failed to decompose the field with given parameters.\n");
+            exit(-1);
+        }
 
         var dy: int = setting_var.grid_y_cells / y_chunks;
         var dx: int = setting_var.grid_x_cells / x_chunks;
@@ -91,10 +91,10 @@ module initialise {
                 for cc in 0..<setting_var.num_chunks_per_rank do{
                     var rank : int = cc + (setting_var.rank * setting_var.num_chunks_per_rank); // TODO come back alter to fix this when implementing locales
                     
-
-                        // Store the values for all chunks local to rank
-                    if rank == 0 { // either using tuple or scalar , TODO update set to a scaler, for now keep as one due to only having 1 rank
-                        init_chunk(chunk_var, cc, setting_var, dx+add_x, dy+add_y);
+                    // Store the values for all chunks local to rank
+                    if rank == 0 { // either using tuple or scalar , TODO update set to a scaler, for now keep as one due to only having 1 rank              
+                        // initialise local chunk
+                        chunk_var[rank] = new Chunk(setting_var.halo_depth, (dx+add_x), (dy+add_y), setting_var.dt_init);
 
                         // Set up the mesh ranges - important for locales later
                         chunk_var[cc].left = xx*dx +add_x_prev;
@@ -105,23 +105,19 @@ module initialise {
                         // Set up the chunk connectivity
                         if xx == 0 then 
                             chunk_var[cc].neighbours[CHUNK_LEFT] = EXTERNAL_FACE;
-                        else chunk_var[cc].neighbours[CHUNK_LEFT] = (xx - 1, yy); // TODO possibly needs fixing to 2d using tuples
-                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_LEFT] : ", chunk_var[cc].neighbours[CHUNK_LEFT]);
+                        else chunk_var[cc].neighbours[CHUNK_LEFT] = (xx - 1, yy);
 
                         if xx == x_chunks-1 then 
                             chunk_var[cc].neighbours[CHUNK_RIGHT] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_RIGHT] = (xx + 1, yy);
-                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_RIGHT] : ", chunk_var[cc].neighbours[CHUNK_RIGHT]);
                         
                         if yy == 0 then 
                             chunk_var[cc].neighbours[CHUNK_TOP] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_TOP] = (xx, yy - 1);
-                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_TOP] : ", chunk_var[cc].neighbours[CHUNK_TOP]);
 
                         if yy == y_chunks-1 then 
                             chunk_var[cc].neighbours[CHUNK_BOTTOM] = EXTERNAL_FACE;
                         else chunk_var[cc].neighbours[CHUNK_BOTTOM] = (xx, yy + 1);
-                        // writeln("chunk_var[",cc,"].neighbours[CHUNK_BOTTOM] : ", chunk_var[cc].neighbours[CHUNK_BOTTOM]);
 
                     }  
                 }

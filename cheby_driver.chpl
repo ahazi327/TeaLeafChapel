@@ -59,10 +59,6 @@ module cheby_driver{
             if(abs(error) < setting_var.eps) then break;
             tt_prime += 1;
         }
-        // print_and_log(settings, "CG: \t\t\t%d iterations\n", tt-num_cheby_iters+1);
-        // print_and_log(settings, 
-        //     "Cheby: \t\t\t%d iterations (%d estimated)\n", 
-        //     num_cheby_iters, est_iterations);
         writeln("CG iterations : ", tt_prime-num_cheby_iters+1);
         writeln("Cheby iterations : ", tt_prime, " (", est_iterations, " estimated)\n");
     }

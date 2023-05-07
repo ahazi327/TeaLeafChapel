@@ -22,10 +22,10 @@ module main {
 
         // Perform initialisation steps
         setting_var.num_chunks = setting_var.num_ranks * setting_var.num_chunks_per_rank;
-        // var chunk_var = fill(nil: chunks.Chunk, setting_var.num_chunks - 1);
-        var chunk_var: [0..<setting_var.num_chunks] chunks.Chunk;
-        // chunk_var  = new Chunk;
-
+        
+        // Create array of records of chunks and initialise temporarily
+        var num_chunks : domain(1) = {0..<setting_var.num_chunks};
+        var chunk_var: [num_chunks] chunks.Chunk = new Chunk (0, 0, 0, 0);
         
         initialise_application(chunk_var, setting_var, states);
 

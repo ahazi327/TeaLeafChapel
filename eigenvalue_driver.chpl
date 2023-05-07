@@ -96,9 +96,8 @@ module eigenvalue_driver {
                 var ii_prime : int;
                 
                 for ii in 0..diff {
-                    
                     ii_prime = diff - ii;
-                    ii_prime = l +  ii_prime; // WHY DID THIS WORK ??? ... at 2am
+                    ii_prime = l +  ii_prime;
                     f=s*e[ii_prime];
                     b=c*e[ii_prime];
                     r=sqrt((f*f)+(g*g));

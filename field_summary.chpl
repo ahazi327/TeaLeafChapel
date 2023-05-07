@@ -59,8 +59,8 @@ module field_summary {
 
             var qa_diff: real = abs(100.0*(temp/checking_value)-100.0);
 
-            if qa_diff < 0.001 then writeln("pass with qa_diff of :", qa_diff);//print pass
-            else writeln("failed with qa_diff of :", qa_diff);
+            if qa_diff < 0.001 then writeln("Passed with qa_diff of ", qa_diff);
+            else writeln("Failed with qa_diff of ", qa_diff);
         } 
     }
 

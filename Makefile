@@ -1,5 +1,5 @@
 CC = chpl
-CFLAGS = --fast --static --debug
+CFLAGS = --fast --debug
 TARGET = tealeaf
 
 # Collect all the source files with a .chpl extension
