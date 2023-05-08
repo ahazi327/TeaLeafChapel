@@ -41,7 +41,7 @@ module jacobi_driver {
     proc jacobi_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
     ref err: real, inout rx: real, inout ry: real){
         jacobi_iterate(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, 
-            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky, rx, ry, chunk_var[0]);
+            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky, rx, ry);
 
         if tt % 50 == 0 {
             halo_update_driver(chunk_var, setting_var, 1);
