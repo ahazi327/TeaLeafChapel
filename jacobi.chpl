@@ -62,7 +62,8 @@ module jacobi{
         // r[outer_Domain] = u[outer_Domain];
 
         for i in outer_Domain do {
-            r[i] = u[i];
+            r[i] = u[i] + 1;
+            r[i] -= 1;
         }
 
         var err: real;
