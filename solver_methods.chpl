@@ -34,10 +34,10 @@ module solver_methods {
         var norm_temp: real;
         const inner = buffer_domain[halo_depth..<x - halo_depth, halo_depth..<y-halo_depth];
 
-        forall (i, j) in inner with (+ reduce norm_temp) do {
-            norm_temp += buffer[i, j]*buffer[i, j];	
+        forall (i, j) in inner with (+ reduce norm) do {
+            norm += buffer[i, j]*buffer[i, j];	
         }
-        norm += norm_temp;
+        // norm += norm_temp;
     }
 
     // Finalises the solution

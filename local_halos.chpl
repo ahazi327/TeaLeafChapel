@@ -57,9 +57,6 @@ module local_halos {
         forall jj in halo_depth..<y-halo_depth do{
             for kk in 0..<depth do {
                 buffer[halo_depth-kk-1, jj] = buffer[kk + halo_depth, jj]; 
-                //     buffer[halo_depth-kk-1, jj] = buffer[(x-halo_depth-1-kk), jj]; 
-                
-                  
             }  
         }
     }
@@ -69,8 +66,6 @@ module local_halos {
         forall jj in halo_depth..<y-halo_depth do{
             for kk in 0..<depth do {
                 buffer [(x-halo_depth + kk), jj] = buffer [((x-halo_depth)-(kk + 1)), jj];
-                // buffer[(x-halo_depth+kk), jj] = buffer[kk + halo_depth, jj];
-                
             }
         }
     }
@@ -82,9 +77,6 @@ module local_halos {
         for jj in {0..<depth} do{ 
             forall kk in {halo_depth..<x-halo_depth} do {
                 buffer[kk, ((y - halo_depth) + jj)] = buffer[kk, ((y - halo_depth) - (jj + 1))];
-                // buffer[kk, ((y)-halo_depth+jj)] = buffer[kk, (halo_depth+jj)];
-                
-                
             }
         }
     }
@@ -94,8 +86,6 @@ module local_halos {
         for jj in {0..<depth} do{ 
             forall kk in {halo_depth..<x-halo_depth} do {
                 buffer[kk, (halo_depth - jj - 1)] = buffer[kk, (halo_depth+jj)];
-                // buffer[kk, (halo_depth-jj-1)] = buffer[kk,((y)-halo_depth-1-jj)];
-                
             }
         }
     }
