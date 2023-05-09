@@ -1,12 +1,18 @@
 module main {
+    use Time;
     use settings;
     use chunks;
     use diffuse;
     use parse_config;
     use initialise;
+    
 
     proc main (args: [] string){
         //MPI stuff
+
+        // Time full program elapsed time
+        var wallclock = new stopwatch();
+        wallclock.start();
 
         // Create the settings wrapper
         var setting_var: setting;
@@ -46,6 +52,9 @@ module main {
 
         // Finalise each individual chunk and application
         //TODO free memory if needed in chapel using array = nil
+
+        wallclock.stop();
+        writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");
     }
 
     // after parsing input files, use it to set settings file //TODO maybe remove this

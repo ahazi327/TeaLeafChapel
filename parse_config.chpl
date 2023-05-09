@@ -6,13 +6,13 @@ module parse_config {
         var counter : int;
 
         try {
-            var tea_in = open (setting_var.tea_in_filename, iomode.r); // open file
+            var tea_in = open (setting_var.tea_in_filename, ioMode.r); // open file
             var tea_in_reader = tea_in.reader(); // read file
 
             
             var line: string;
             
-                for line in tea_in.lines(){ // as long as not last line
+                for line in tea_in_reader.lines(){ // as long as not last line
                     if line.find("state") != -1 {
                         counter += 1;
                     }
@@ -43,7 +43,7 @@ module parse_config {
     proc read_file(ref setting_var : setting, ref states : [0..<setting_var.num_states] state){ 
         // Open the configuration file
         try {
-            var tea_in = open (setting_var.tea_in_filename, iomode.r);
+            var tea_in = open (setting_var.tea_in_filename, ioMode.r);
             var tea_in_reader = tea_in.reader();
             var line: string;
             var counter : int; // fine line number

@@ -13,24 +13,24 @@ module diffuse{
     // The main timestep loop
     proc diffuse(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
         
-        var wallclock_prev : real = 0.0;
+        
         const end_step = setting_var.end_step : int;
         writeln("Using the ", setting_var.solver : string, "\n");
         
         for tt in 0..<end_step do{
             writeln("Timestep ", tt + 1);
-            solve(chunk_var, setting_var, tt, wallclock_prev);
+            solve(chunk_var, setting_var, tt);
         } 
 
         field_summary_driver(chunk_var, setting_var, true);
     }
 
     // Performs a solve for a single timestep
-    proc solve(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
-        ref wallclock_prev : real){
+    proc solve(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int){
         
-        //print and log function
-        //profiler start timer
+        //start timer
+        var wallclock = new stopwatch();
+        wallclock.start();
 
         // Calculate minimum timestep information
         var dt : real = setting_var.dt_init;
@@ -68,7 +68,7 @@ module diffuse{
                 
             }
         }
-        writeln("Conduction error : ", error, "\n");
+        writeln("Conduction error : ", error);
         // Perform solve finalisation tasks
         solve_finished_driver(chunk_var, setting_var);
         
@@ -76,6 +76,9 @@ module diffuse{
             field_summary_driver(chunk_var, setting_var, false);
         }
 
+        wallclock.stop();
+        writeln("Time elapsed for current timestep: ", wallclock.elapsed(), " seconds");
+        writeln("Avg. time per cell: ",  wallclock.elapsed()/ (setting_var.grid_x_cells * setting_var.grid_y_cells), " seconds \n");
         //profiler_end_timer(settings->wallclock_profile, "Wallclock");
         // var wallclock = setting_var.wallclock_profile.profiler_entries[0].time;
         // print_and_log(settings, "Wallclock: \t\t%.3lfs\n", wallclock);

@@ -68,7 +68,7 @@ module field_summary {
     proc get_checking_value (ref setting_var : settings.setting, inout checking_value : real){
         var counter : int;
         try {
-            var tea_prob = open (setting_var.test_problem_filename, iomode.r);
+            var tea_prob = open (setting_var.test_problem_filename, ioMode.r);
             var tea_prob_reader = tea_prob.reader();
             
             var x : int;
@@ -76,7 +76,7 @@ module field_summary {
             var num_steps: int;
             var line : string;
 
-            for line in tea_prob.lines(){
+            for line in tea_prob_reader.lines(){
                 tea_prob_reader.read(x, y, num_steps, checking_value);
                 counter += 1;
 
