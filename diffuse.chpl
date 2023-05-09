@@ -78,15 +78,8 @@ module diffuse{
 
         wallclock.stop();
         writeln("Time elapsed for current timestep: ", wallclock.elapsed(), " seconds");
-        writeln("Avg. time per cell: ",  wallclock.elapsed()/ (setting_var.grid_x_cells * setting_var.grid_y_cells), " seconds \n");
-        //profiler_end_timer(settings->wallclock_profile, "Wallclock");
-        // var wallclock = setting_var.wallclock_profile.profiler_entries[0].time;
-        // print_and_log(settings, "Wallclock: \t\t%.3lfs\n", wallclock);
-        // print_and_log(settings, "Avg. time per cell: \t%.6e\n", 
-        //     (wallclock-*wallclock_prev) /
-        //     (settings->grid_x_cells *
-        //     settings->grid_y_cells));
-        // print_and_log(settings, "Error: \t\t\t%.6e\n", error);
+        writeln("Avg. time per cell for current timestep:: ",  wallclock.elapsed()/ (setting_var.grid_x_cells * setting_var.grid_y_cells), " seconds \n");
+
     }
 
     proc calc_min_timestep (ref chunk_var : [?chunk_domain] chunks.Chunk, ref dt: real, const in chunks_per_task : int){

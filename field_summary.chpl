@@ -31,8 +31,6 @@ module field_summary {
                                 
             }
         }
-        // writeln("Mass Value : ", mass);
-        // writeln("Checking Value : ", temp);
     }
 
 /*
@@ -82,11 +80,9 @@ module field_summary {
 
                 if ( x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && num_steps == setting_var.end_step) {
                     // Found the problem in the file
-                    // writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value);
                     tea_prob.close();
                     return;
                 }
-                // writeln("checking values : ", x, " , " , y, " , " , num_steps, " , " ,checking_value, " value not found in problem.");
             }
             tea_prob.close();
         }
