@@ -64,21 +64,13 @@ module jacobi{
         var err: real;
 
         forall ij in Inner with (+ reduce err) {
-        // for  ij in Inner/10 {
-            
-            // r[ij] = u[ij];
-
 
             u[ij] = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
                 + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
             / (1.0 + ((kx[ij]+kx[ij + east]))
                     + ((ky[ij]+ky[ij + north])));
-            // u[i, j] = (u0[i, j] + ((kx[i, j+1]*r[i, j+1] + (kx[i, j]*r[i, j-1])))
-            //     + ((ky[i+1, j]*r[i+1, j] + ky[i, j]*r[i-1, j])))
-            //     / (1.0 + ((kx[i, j]+kx[i, j+1]))
-            //     + ((ky[i, j]+ky[i+1, j])));
 
-            // err += abs(r[ij]-u[ij]);
+            err += abs(r[ij]-u[ij]);
         }
 
         // u[Inner] = (u0[Inner] + ((kx[Inner_j_plus]*r[Inner_j_plus] + (kx[Inner]*r[Inner_j_minus])))
@@ -89,7 +81,7 @@ module jacobi{
         // forall (i, j) in Inner  with (+ reduce err) do {
         //     err += abs(r[i, j]-u[i, j]);
         // }
-        err += + reduce abs(r[Inner]-u[Inner]);
+        // err += + reduce abs(r[Inner]-u[Inner]);
         error = err;
     }
 }
