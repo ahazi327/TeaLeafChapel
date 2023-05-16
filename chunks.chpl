@@ -10,13 +10,13 @@ module chunks{
     var y: int;
     
     //Domains
-    var Domain : domain(2) = {0..<x, 0..<y};
+    var Domain : domain(2) = {0..<y, 0..<x};
     var x_domain : domain(1) = {0..<x};
     var y_domain : domain(1) = {0..<y};
     var x1_domain: domain(1)  = {0..<x+1};
     var y1_domain : domain(1) = {0..<y+1};
-    var x_area_domain : domain(2) = {0..<x+1, 0..<y};
-    var y_area_domain : domain(2) = {0..<x, 0..<y+1};
+    var x_area_domain : domain(2) = {0..<y, 0..<x+1};
+    var y_area_domain : domain(2) = {0..<y+1, 0..<x};
     var max_iter_domain : domain(1) = {0..<settings.max_iters};
 
     var left: int;
@@ -70,13 +70,13 @@ module chunks{
       this.y = y + halo_depth*2; 
       
       // Resize all domains to resize arrays
-      this.Domain = {0..<this.x, 0..<this.y};
+      this.Domain = {0..<this.y, 0..<this.x};
       this.x_domain = {0..<this.x};
       this.y_domain = {0..<this.y};
       this.x1_domain = {0..<this.x+1};
       this.y1_domain = {0..<this.y+1};
-      this.x_area_domain = {0..<this.x+1, 0..<this.y};
-      this.y_area_domain = {0..<this.x, 0..<this.y+1};
+      this.x_area_domain = {0..<this.y, 0..<this.x+1};
+      this.y_area_domain = {0..<this.y+1, 0..<this.x};
       this.dt_init = dt_init;
     }
     // int* neighbours; 

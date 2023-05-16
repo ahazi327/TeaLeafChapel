@@ -7,7 +7,7 @@ module jacobi{
     use Math;
 
     // Initialises the Jacobi solver
-    proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, ref rx: real, ref ry: real, 
+    proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, const in rx: real, const in ry: real, 
     ref u: [?Domain] real, ref u0: [Domain] real, ref energy: [Domain] real, ref density: [Domain] real,
     ref kx: [Domain] real, ref ky: [Domain] real){
         
@@ -50,8 +50,8 @@ module jacobi{
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
-    ref kx: [Domain] real, ref ky: [Domain] real, ref rx: real, ref ry: real){
+    ref u: [Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
+    ref kx: [Domain] real, ref ky: [Domain] real, const in Domain : domain(2) ){
         // TODO check which orientation i should keep the arrays for cache improvements 
 
         const outer_Domain = Domain[0..<y, 0..<x];
@@ -65,23 +65,15 @@ module jacobi{
 
         forall ij in Inner with (+ reduce err) {
 
-            u[ij] = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
+            const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
                 + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
             / (1.0 + ((kx[ij]+kx[ij + east]))
                     + ((ky[ij]+ky[ij + north])));
 
-            err += abs(r[ij]-u[ij]);
+            u[ij] = temp;
+            err += abs(r[ij]-temp);
         }
 
-        // u[Inner] = (u0[Inner] + ((kx[Inner_j_plus]*r[Inner_j_plus] + (kx[Inner]*r[Inner_j_minus])))
-        //     + ((ky[Inner_i_plus]*r[Inner_i_plus] + ky[Inner]*r[Inner_i_minus])))
-        // / (1.0 + ((kx[Inner]+kx[Inner_j_plus]))
-        //         + ((ky[Inner]+ky[Inner_i_plus])));
-
-        // forall (i, j) in Inner  with (+ reduce err) do {
-        //     err += abs(r[i, j]-u[i, j]);
-        // }
-        // err += + reduce abs(r[Inner]-u[Inner]);
         error = err;
     }
 }

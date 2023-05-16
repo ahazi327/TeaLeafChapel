@@ -12,7 +12,7 @@ ymax                = 10.0
 x_cells             = 512
 y_cells             = 512
 
-use_jacobi
+use_cg
 use_c_kernels
 check_result
 

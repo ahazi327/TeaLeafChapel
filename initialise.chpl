@@ -10,7 +10,7 @@ module initialise {
 
 
     // Initialise settings from input file
-    proc initialise_application (ref chunk_var :[?Domain] chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states]  state){ //TODO sort out how states works
+    proc initialise_application (ref chunk_var :[0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states]  state){ //TODO sort out how states works
         // read input files for state and setting information
         read_config(setting_var, states);
         

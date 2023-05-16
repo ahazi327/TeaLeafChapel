@@ -14,22 +14,22 @@ module field_summary {
     ref density: [Domain] real, ref energy0: [Domain] real, ref u: [Domain] real, ref vol: real,
     ref mass: real, ref ie: real, ref temp: real){
 
-        var inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
+        var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
-        for j in {halo_depth..<x-halo_depth} do { // TODO maybe make this into a forall loop
-            for i in {halo_depth..<y-halo_depth} do {
+        // for j in {halo_depth..<y-halo_depth} do { // TODO maybe make this into a forall loop
+        //     for i in {halo_depth..<x-halo_depth} do {
+            for (j, i) in inner do{ 
                 var cellVol : real;
-                cellVol = volume[i, j];
+                cellVol = volume[j, i];
 
                 var cellMass: real;
-                cellMass = cellVol * density[i, j];
+                cellMass = cellVol * density[j, i];
 
                 vol += cellVol;
                 mass += cellMass;
-                ie += cellMass * energy0[i, j];
-                temp += cellMass * u[i, j];
+                ie += cellMass * energy0[j, i];
+                temp += cellMass * u[j, i];
                                 
-            }
         }
     }
 
@@ -38,7 +38,7 @@ module field_summary {
  */	
 
     // Invokes the set chunk data kernel
-    proc field_summary_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting,
+    proc field_summary_driver(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting,
         in is_solve_finished: bool){
         
         var vol, ie, temp, mass : real = 0.0;
@@ -63,7 +63,7 @@ module field_summary {
     }
 
     // Fetches the checking value from the test problems file
-    proc get_checking_value (ref setting_var : settings.setting, inout checking_value : real){
+    proc get_checking_value (ref setting_var : settings.setting, ref checking_value : real){
         var counter : int;
         try {
             var tea_prob = open (setting_var.test_problem_filename, ioMode.r);

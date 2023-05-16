@@ -11,7 +11,7 @@ module diffuse{
     use cheby_driver;
 
     // The main timestep loop
-    proc diffuse(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
+    proc diffuse(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting){
         
         
         const end_step = setting_var.end_step : int;
@@ -26,7 +26,7 @@ module diffuse{
     }
 
     // Performs a solve for a single timestep
-    proc solve(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int){
+    proc solve(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, in tt : int){
         
         //start timer
         var wallclock = new stopwatch();

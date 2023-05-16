@@ -4,7 +4,7 @@ module solve_finish_driver {
     use solver_methods;
     use local_halos;
 
-    proc solve_finished_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
+    proc solve_finished_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting){
         // Calls all kernels that wrap up a solve regardless of solver
         var exact_error: real = 0.0;
 

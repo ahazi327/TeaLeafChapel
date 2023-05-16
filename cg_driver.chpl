@@ -38,11 +38,11 @@ module cg_driver {
         // var sharedrxry = (rx, ry);
         rro = 0.0;
 
-        for cc in {0..<setting_var.num_chunks_per_rank} do {
-            cg_init(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
-            chunk_var[cc].density, chunk_var[cc].energy, chunk_var[cc].u, chunk_var[cc].p, chunk_var[cc].r, chunk_var[cc].w,
-            chunk_var[cc].kx, chunk_var[cc].ky);
-        }
+        // for cc in {0..<setting_var.num_chunks_per_rank} do {
+        cg_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
+        chunk_var[0].density, chunk_var[0].energy, chunk_var[0].u, chunk_var[0].p, chunk_var[0].r, chunk_var[0].w,
+        chunk_var[0].kx, chunk_var[0].ky);
+        // }
 
         // Need to update for the matvec
         reset_fields_to_exchange(setting_var);
@@ -52,9 +52,9 @@ module cg_driver {
 
         //sum over ranks TODO This seems to be an MPI things, so ignore for now
 
-        for cc in {0..<setting_var.num_chunks_per_rank} do {
-            copy_u(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, chunk_var[cc].u, chunk_var[cc].u0);
-        }
+        // for cc in {0..<setting_var.num_chunks_per_rank} do {
+        copy_u(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0);
+        // }
 
     }
 
@@ -63,12 +63,12 @@ module cg_driver {
     ref rro: real, ref error: real){
         var pw: real = 0.0;
         
-        for cc in {0..<setting_var.num_chunks_per_rank} do {
+        // for cc in {0..<setting_var.num_chunks_per_rank} do {
             
-            cg_calc_w (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, pw, chunk_var[cc].p, chunk_var[cc].w, chunk_var[cc].kx,
-            chunk_var[cc].ky);
+        cg_calc_w (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx,
+        chunk_var[0].ky);
             
-        }
+        // }
         //MPI sum over ranks function
 
         var alpha : real = rro / pw;
@@ -76,20 +76,20 @@ module cg_driver {
         var rrn: real = 0.0;
     
 
-        for cc in {0..<setting_var.num_chunks_per_rank} do {
-            chunk_var[cc].cg_alphas[tt] = alpha;
+        // for cc in {0..<setting_var.num_chunks_per_rank} do {
+        chunk_var[0].cg_alphas[tt] = alpha;
 
-            cg_calc_ur(chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, alpha, rrn, chunk_var[cc].u, chunk_var[cc].p,
-            chunk_var[cc].r, chunk_var[cc].w);
-        }
+        cg_calc_ur(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, alpha, rrn, chunk_var[0].u, chunk_var[0].p,
+        chunk_var[0].r, chunk_var[0].w);
+        // }
 
         var beta : real = rrn / rro;
         
-        for cc in {0..<setting_var.num_chunks_per_rank} do {
-            chunk_var[cc].cg_betas[tt] = beta;
-            cg_calc_p (chunk_var[cc].x, chunk_var[cc].y, setting_var.halo_depth, beta, chunk_var[cc].p,
-            chunk_var[cc].r);
-        }
+        // for cc in {0..<setting_var.num_chunks_per_rank} do {
+        chunk_var[0].cg_betas[tt] = beta;
+        cg_calc_p (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p,
+        chunk_var[0].r);
+        // }
         
         error = rrn;
         rro = rrn;

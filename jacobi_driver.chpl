@@ -6,15 +6,16 @@ module jacobi_driver {
     use jacobi;
 
     // Performs a full solve with the Jacobi solver kernels
-    proc jacobi_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real, ref err: real){
+    proc jacobi_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    ref ry: real, ref err: real){
 
         jacobi_init_driver(chunk_var, setting_var, rx, ry);
         // Iterate till convergence
         var tt_prime : int;
+        var Domain = {0..<chunk_var[0].y, 0..<chunk_var[0].x};
         for tt in 0..<setting_var.max_iters do {
             
-            jacobi_main_step_driver(chunk_var, setting_var, tt, err, rx, ry);
+            jacobi_main_step_driver(chunk_var, setting_var, tt, err, Domain);
 
             halo_update_driver(chunk_var, setting_var, 1);
             if(abs(err) < setting_var.eps) then break;
@@ -24,8 +25,8 @@ module jacobi_driver {
     }
 
     // Invokes the CG initialisation kernels
-    proc jacobi_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real){
+    proc jacobi_init_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, const in rx: real,
+    const in ry: real){
 
         jacobi_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, setting_var.coefficient, rx, ry,
             chunk_var[0].u, chunk_var[0].u0, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].kx, chunk_var[0].ky);
@@ -38,10 +39,10 @@ module jacobi_driver {
     }
 
     // Invokes the main Jacobi solve kernels
-    proc jacobi_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
-    ref err: real, inout rx: real, inout ry: real){
+    proc jacobi_main_step_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
+    ref err: real, const in Domain : domain(2)){
         jacobi_iterate(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, 
-            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky, rx, ry);
+            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky, Domain);
 
         if tt % 50 == 0 {
             halo_update_driver(chunk_var, setting_var, 1);

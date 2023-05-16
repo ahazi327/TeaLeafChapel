@@ -33,7 +33,7 @@ module set_chunk_state{
 
             // writeln(" xmin and xmax values: " ,states[ss].x_min, "  ", states[ss].x_max);
             
-            for (jj, kk) in {0..<chunk_var.x, 0..<chunk_var.y} do {
+            for (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} do {
 
                 var apply_state: bool = false;
 
@@ -66,8 +66,8 @@ module set_chunk_state{
                 }
                 if apply_state 
                 {
-                    chunk_var.energy0[jj, kk] = states[ss].energy;  // Note: reversed kk and jj to match output from reference code
-                    chunk_var.density[jj, kk] = states[ss].density;
+                    chunk_var.energy0[kk, jj] = states[ss].energy;  // Note: reversed kk and jj to match output from reference code
+                    chunk_var.density[kk, jj] = states[ss].density;
                     // writeln(" when y and x are : ", jj, " ", kk);
                 }
             }
