@@ -5,6 +5,7 @@ module jacobi{
     use settings;
     use chunks;
     use Math;
+    use profile;
 
     // Initialises the Jacobi solver
     proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, const in rx: real, const in ry: real, 
@@ -14,11 +15,15 @@ module jacobi{
         const inner_Domain = Domain[1..<y-1, 1..<x-1];
         const Inner = Domain[halo_depth..<y - 1, halo_depth..<x - 1];
 
+        profiler.startTimer("jacobi_init");
+
         if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY
         {
             writeln("Coefficient ", coefficient, " is not valid.\n");
+            profiler.stopTimer("jacobi_init");
             exit(-1);
         }
+
         
         // u0[inner_Domain] = energy[inner_Domain] * density[inner_Domain];
         // u[inner_Domain] = u0[inner_Domain];
@@ -46,6 +51,8 @@ module jacobi{
             kx[i, j] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
             ky[i, j] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
         }
+
+        profiler.stopTimer("jacobi_init");
     }
 
     // The main Jacobi solve step
@@ -53,7 +60,7 @@ module jacobi{
     ref u: [Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
     ref kx: [Domain] real, ref ky: [Domain] real, const in Domain : domain(2) ){
         // TODO check which orientation i should keep the arrays for cache improvements 
-
+        profiler.startTimer("jacobi_iterate");
         const outer_Domain = Domain[0..<y, 0..<x];
         const Inner = Domain[halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)];
         
@@ -75,6 +82,9 @@ module jacobi{
         }
 
         error = err;
+        profiler.stopTimer("jacobi_iterate");
     }
+
+    
 }
 

@@ -5,6 +5,7 @@ module main {
     use diffuse;
     use parse_config;
     use initialise;
+    use profile;
     
 
     proc main (args: [] string){
@@ -35,26 +36,14 @@ module main {
         
         initialise_application(chunk_var, setting_var, states);
 
-        
-        //TODO fix argc and argv equivalent for chapel
-        // settings_overload(setting_var, argc, argv);
-
-        // Perform the solve using default or overloaded diffuse
-
-        
+        // Perform the solve using default or overloaded diffuse    
         diffuse(chunk_var, setting_var);
-        
-        // Print the kernel-level profiling results
-        // if(settings->rank == MASTER)
-        // {
-        // PRINT_PROFILING_RESULTS(settings->kernel_profile);
-        // }
-
-        // Finalise each individual chunk and application
-        //TODO free memory if needed in chapel using array = nil
 
         wallclock.stop();
         writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");
+
+        // Print the profile summary
+        profiler.report();
     }
 
     // after parsing input files, use it to set settings file //TODO maybe remove this

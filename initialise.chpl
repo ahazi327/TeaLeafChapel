@@ -6,11 +6,14 @@ module initialise {
     use local_halos;
     use store_energy;
     use parse_config;
+    use profile;
     param MY_MAX_REAL = 1e308;
 
 
     // Initialise settings from input file
     proc initialise_application (ref chunk_var :[0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states]  state){ //TODO sort out how states works
+        profiler.startTimer("initialise_application");
+        
         // read input files for state and setting information
         read_config(setting_var, states);
         
@@ -27,7 +30,7 @@ module initialise {
 
         store_energy_driver(chunk_var);
 
-        
+        profiler.stopTimer("initialise_application");
     }
 
     // Decomposes the field into multiple chunks

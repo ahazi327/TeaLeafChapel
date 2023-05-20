@@ -1,11 +1,13 @@
 module local_halos {
     use chunks;
     use settings;
+    use profile;
 
 
     // Invoke the halo update kernels using driver
     proc halo_update_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, const in depth: int){
     // Check that we actually have exchanges to perform
+        profiler.startTimer("halo_update_driver");
         if is_fields_to_exchange(setting_var) {
 
             // do remote halo driver first
@@ -15,6 +17,8 @@ module local_halos {
             chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].energy, chunk_var[0].u, chunk_var[0].p, chunk_var[0].sd);
             // }
         }
+
+        profiler.stopTimer("halo_update_driver");
     }
 
     // The kernel for updating halos locally

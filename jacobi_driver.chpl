@@ -10,7 +10,7 @@ module jacobi_driver {
     ref ry: real, ref err: real){
 
         jacobi_init_driver(chunk_var, setting_var, rx, ry);
-        // Iterate till convergence
+        // Iterate until convergence
         var tt_prime : int;
         var Domain = {0..<chunk_var[0].y, 0..<chunk_var[0].x};
         for tt in 0..<setting_var.max_iters do {

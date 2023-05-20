@@ -7,7 +7,7 @@ module cg_driver {
     //TODO ADD PROFILING
 
     // Performs a full solve with the CG solver kernels
-    proc cg_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    proc cg_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref error: real){
         //var tt: int;
         var rro : real = 0.0;
@@ -32,7 +32,7 @@ module cg_driver {
     }
 
     // Invokes the CG initialisation kernels
-    proc cg_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    proc cg_init_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref rro: real) {
 
         // var sharedrxry = (rx, ry);
@@ -59,7 +59,7 @@ module cg_driver {
     }
 
     // Invokes the main CG solve kernels
-    proc cg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
+    proc cg_main_step_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
     ref rro: real, ref error: real){
         var pw: real = 0.0;
         

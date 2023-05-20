@@ -1,10 +1,12 @@
 module store_energy {
     use chunks;
-
+    use profile;
+    
     // Store original energy state
     proc store_energy (in x: int, in y: int, ref energy0: [?energy_domain] real, ref energy: [energy_domain] real){
-        
+        profiler.startTimer("store_energy");
         energy = energy0;
+        profiler.stopTimer("store_energy");
     }
 
     // Invokes the store energy kernel
