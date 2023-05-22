@@ -43,8 +43,9 @@ module cg {
             w[i, j] = smvp;
             r[i,j] = u[i,j] - smvp;
             p[i,j] = r[i,j];
-            rro_temp += r[i,j]*p[i,j];   
+            rro_temp += p[i,j]**2;   
         }
+        
         rro += rro_temp;
         profiler.stopTimer("cg");
     }
@@ -79,8 +80,8 @@ module cg {
             u[i, j] += alpha * p[i, j];
             r[i, j] -= alpha * w[i, j];
             
-            // const temp: real = r[i, j];  // maybe make into var
-            rrn_temp += r[i, j] ** 2;
+            const temp: real = r[i, j];  // maybe make into var
+            rrn_temp += temp ** 2;
             
         }
         rrn += rrn_temp;
@@ -92,7 +93,12 @@ module cg {
     ref p: [?Domain] real, ref r: [Domain] real) {
         profiler.startTimer("cg_calc_p");
         const halo_dom = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
-        p[halo_dom] = beta * p[halo_dom] + r[halo_dom];
+
+        // p[halo_dom] = beta * p[halo_dom] + r[halo_dom];  // THIS IS MUCH SLOWER THAN A FORALL LOOP (10s slower on a 512x512 grid on this function alone)
+        
+        forall ij in halo_dom do {
+            p[ij] = beta * p[ij] + r[ij];
+        }
         profiler.stopTimer("cg_calc_p");
     }
 

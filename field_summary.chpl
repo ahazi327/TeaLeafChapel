@@ -83,6 +83,7 @@ module field_summary {
 
                 if ( x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && num_steps == setting_var.end_step) {
                     // Found the problem in the file
+                    writeln("   HERERERER    ");
                     tea_prob.close();
                     return;
                 }

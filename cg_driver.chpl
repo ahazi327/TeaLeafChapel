@@ -10,7 +10,7 @@ module cg_driver {
     proc cg_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref error: real){
         //var tt: int;
-        var rro : real = 0.0;
+        var rro : real;
         var t : int;
 
         // Perform CG initialisation
