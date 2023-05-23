@@ -4,13 +4,13 @@ module profile {
     
     class ProfileTracker {
         var timers: domain(string);
-        var timerVals: [timers] Timer;
+        var timerVals: [timers] stopwatch;
         var callCounts: [timers] int;
 
         proc startTimer(name: string) {
             if !timers.contains(name) { 
                 timers += name;
-                timerVals[name] = new Timer();
+                timerVals[name] = new stopwatch();
                 callCounts[name] = 0;
             }
             timerVals[name].start();

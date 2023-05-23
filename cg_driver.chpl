@@ -61,26 +61,26 @@ module cg_driver {
     // Invokes the main CG solve kernels
     proc cg_main_step_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
     ref rro: real, ref error: real){
-        var pw: real = 0.0;
+        var pw: real;
         
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
             
         cg_calc_w (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx,
-        chunk_var[0].ky);
+            chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
             
         // }
         //MPI sum over ranks function
 
         var alpha : real = rro / pw;
         
-        var rrn: real = 0.0;
+        var rrn: real;
     
 
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
         chunk_var[0].cg_alphas[tt] = alpha;
 
         cg_calc_ur(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, alpha, rrn, chunk_var[0].u, chunk_var[0].p,
-        chunk_var[0].r, chunk_var[0].w);
+            chunk_var[0].r, chunk_var[0].w, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
         // }
 
         var beta : real = rrn / rro;
@@ -88,7 +88,7 @@ module cg_driver {
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
         chunk_var[0].cg_betas[tt] = beta;
         cg_calc_p (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p,
-        chunk_var[0].r);
+            chunk_var[0].r, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
         // }
         
         error = rrn;

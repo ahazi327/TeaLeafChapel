@@ -73,13 +73,13 @@ module ppcg_driver{
     proc ppcg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rro: real, inout error: real) {
         var pw: real;
 
-        cg_calc_w(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx, chunk_var[0].ky);
+        cg_calc_w(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx, chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
 
         var alpha : real = rro / pw;
         var rrn : real = 0.0;
 
         cg_calc_ur (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, alpha, rrn, chunk_var[0].u, chunk_var[0].p,
-            chunk_var[0].r, chunk_var[0].w);
+            chunk_var[0].r, chunk_var[0].w, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
 
         // Perform the inner iterations
         ppcg_inner_iterations(chunk_var, setting_var);
@@ -90,7 +90,7 @@ module ppcg_driver{
 
         var beta : real = rrn / rro;
 
-        cg_calc_p(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p, chunk_var[0].r);
+        cg_calc_p(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p, chunk_var[0].r, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
 
         error = rrn;
         rro = rrn;

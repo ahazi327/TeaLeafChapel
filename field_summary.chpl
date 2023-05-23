@@ -76,17 +76,16 @@ module field_summary {
             var y : int;
             var num_steps: int;
             var line : string;
+            tea_prob_reader.read(x, y, num_steps, checking_value);
 
             for line in tea_prob_reader.lines(){
-                tea_prob_reader.read(x, y, num_steps, checking_value);
                 counter += 1;
-
                 if ( x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && num_steps == setting_var.end_step) {
                     // Found the problem in the file
-                    writeln("   HERERERER    ");
                     tea_prob.close();
                     return;
                 }
+                tea_prob_reader.read(x, y, num_steps, checking_value);
             }
             tea_prob.close();
         }
