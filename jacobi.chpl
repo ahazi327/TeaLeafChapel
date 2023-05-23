@@ -57,8 +57,8 @@ module jacobi{
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
-    ref kx: [Domain] real, ref ky: [Domain] real, const in Domain : domain(2) ){
+    ref u: [Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
+    const ref kx: [Domain] real, const ref ky: [Domain] real, const in Domain : domain(2) ){
         // TODO check which orientation i should keep the arrays for cache improvements 
         profiler.startTimer("jacobi_iterate");
         const outer_Domain = Domain[0..<y, 0..<x];

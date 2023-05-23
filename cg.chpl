@@ -10,7 +10,7 @@ module cg {
     ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  ref kx: [Domain] real,
      ref ky: [Domain] real){
 
-        profiler.start("cg_init");
+        profiler.startTimer("cg_init");
         //TODO implement die line here
         const halo_dom = {0..<x, 0..<y};
 
@@ -71,7 +71,7 @@ module cg {
     
     // Calculates u and r
     proc cg_calc_ur(const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, ref rrn: real, 
-    ref u: [Domain] real, ref p: [Domain] real, ref r: [Domain] real, ref w: [Domain] real, const in Domain : domain(2)){
+    ref u: [Domain] real, const ref p: [Domain] real, ref r: [Domain] real, const ref w: [Domain] real, const in Domain : domain(2)){
         profiler.startTimer("cg_calc_ur");
         var rrn_temp : real;
         const inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
@@ -90,7 +90,7 @@ module cg {
 
     // Calculates p
     proc cg_calc_p (const in x: int, const in y: int, const in halo_depth: int, const in beta: real,
-    ref p: [Domain] real, ref r: [Domain] real, const in Domain : domain(2)) {
+    ref p: [Domain] real, const ref r: [Domain] real, const in Domain : domain(2)) {
         profiler.startTimer("cg_calc_p");
         const halo_dom = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
