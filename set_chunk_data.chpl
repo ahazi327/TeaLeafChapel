@@ -5,16 +5,19 @@
 
 // Extended kernel for the chunk initialisation
 module set_chunk_data{
-	var x_min: real;
-	var y_min: real;
 	use settings;
 	use chunks;
+	use profile;
 
-	proc set_chunk_data(ref chunk_var: chunks.Chunk, ref setting_var : settings.setting){ 
+	proc set_chunk_data_driver(ref chunk_var: chunks.Chunk,  const ref setting_var : settings.setting){ 
+		profiler.startTimer("set_chunk_data");
+		
+		var x_min: real;
+		var y_min: real;
 		x_min = setting_var.grid_x_min + setting_var.dx * (chunk_var.left:real);
 		y_min = setting_var.grid_y_min + setting_var.dy * (chunk_var.bottom:real);
 
-		//as this is just set up, serial execution is used
+		// As this is just set up, serial execution is used
 		for ii in 0..chunk_var.x do { 
 			chunk_var.vertex_x[ii] = x_min + setting_var.dx * (ii - setting_var.halo_depth); 
 		}
@@ -34,15 +37,7 @@ module set_chunk_data{
 		chunk_var.volume = setting_var.dx * setting_var.dy;
 		chunk_var.x_area = setting_var.dy;
 		chunk_var.y_area = setting_var.dx;
+
+		profiler.stopTimer("set_chunk_data");
 	}
-
-/*
- * 		SET CHUNK DATA DRIVER
- */
-	// Invokes the set chunk data kernel
-	proc set_chunk_data_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
-
-		set_chunk_data(chunk_var[0], setting_var);
-	}
-
 }

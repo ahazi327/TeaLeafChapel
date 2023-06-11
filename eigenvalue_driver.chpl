@@ -2,16 +2,18 @@ module eigenvalue_driver {
     use settings;
     use chunks;
     use Math;
+    use profile;
     param MY_MAX_REAL = 1e308;
     param MY_MIN_REAL = -2e308;
     // Calculates the eigenvalues from cg_alphas and cg_betas
-    proc eigenvalue_driver_initialise(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, in num_cg_iters: int){
+    proc eigenvalue_driver_initialise(ref chunk_var : [?chunk_domain] chunks.Chunk, const ref setting_var : settings.setting, const in num_cg_iters: int){
         //chunks per rank for loop
+        profiler.startTimer("eigenvalue_driver_initialise");
         var diag : [0..<num_cg_iters] real;
         var offdiag : [0..<num_cg_iters] real;
 
          // Prepare matrix
-         for ii in 0..<num_cg_iters do {
+         foreach ii in 0..<num_cg_iters do {
             diag[ii] = 1.0 / chunk_var[0].cg_alphas[ii]; // using chunk var array as a single entry array for now
 
             if ii > 0 then 
@@ -41,21 +43,20 @@ module eigenvalue_driver {
         chunk_var[0].eigmin *= 0.95;
         chunk_var[0].eigmax *= 1.05;
 
+        profiler.stopTimer("eigenvalue_driver_initialise");
+        
         writeln("Min. eigenvalue: ", chunk_var[0].eigmin);
         writeln("Max. eigenvalue: ", chunk_var[0].eigmax);
     }
     
     // Function to implement the sign functionality
-    proc sign(a: real, b: real): real {
-    if b < 0 {
-        return -abs(a);
-    } else {
-        return abs(a);
-    }
+    proc sign(const a: real, const b: real): real {
+        if b < 0 then return -abs(a);
+        else return abs(a);
     }
 
-    proc tqli (ref d: [?d_domain], ref e: [?e_domain], inout n: int){
-
+    proc tqli (ref d: [0..<n], ref e: [0..<n], const ref n: int){
+        
         var m,l,iteration,i : int;
         var s,r,p,g,f,dd,c,b : real;
 
@@ -122,5 +123,6 @@ module eigenvalue_driver {
             } while (m != l);
             l += 1;
         }
+        
     }
 }

@@ -60,8 +60,6 @@ module settings{
     var dy: real;
   }
 
-  // record Profile  - TODO add this later when profiling
-
   record state {
     var defined: bool;
     var density: real;

@@ -41,7 +41,7 @@ module ppcg_driver{
             if num_ppcg_iters == 1{
                 // Initialise the eigenvalues and Chebyshev coefficients
                 eigenvalue_driver_initialise(chunk_var, setting_var, tt);
-                cheby_coef_driver(chunk_var, setting_var, setting_var.ppcg_inner_steps);
+                cheby_coef_driver(chunk_var, setting_var.ppcg_inner_steps);
 
                 ppcg_init_driver(chunk_var, setting_var, rro);
 
@@ -75,7 +75,7 @@ module ppcg_driver{
 
         cg_calc_w(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx, chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
 
-        var alpha : real = rro / pw;
+        const alpha : real = rro / pw;
         var rrn : real = 0.0;
 
         cg_calc_ur (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, alpha, rrn, chunk_var[0].u, chunk_var[0].p,
@@ -88,7 +88,7 @@ module ppcg_driver{
 
         calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].r, error);
 
-        var beta : real = rrn / rro;
+        const beta : real = rrn / rro;
 
         cg_calc_p(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p, chunk_var[0].r, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
 
@@ -98,7 +98,7 @@ module ppcg_driver{
 
     // Performs the inner iterations of the PPCG solver
     proc ppcg_inner_iterations(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting){
-        ppcg_init (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].theta, chunk_var[0].r, chunk_var[0].sd);
+        ppcg_init (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].theta, chunk_var[0].r, chunk_var[0].sd, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_SD] = true;
@@ -107,7 +107,7 @@ module ppcg_driver{
             halo_update_driver(chunk_var, setting_var, 1);
 
             ppcg_inner_iteration(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].cheby_alphas[pp], 
-            chunk_var[0].cheby_betas[pp], chunk_var[0].u, chunk_var[0].r, chunk_var[0].sd, chunk_var[0].kx, chunk_var[0].ky);
+            chunk_var[0].cheby_betas[pp], chunk_var[0].u, chunk_var[0].r, chunk_var[0].sd, chunk_var[0].kx, chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
         }
 
         reset_fields_to_exchange(setting_var);

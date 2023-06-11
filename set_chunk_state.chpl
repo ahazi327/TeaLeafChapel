@@ -7,16 +7,21 @@
 module set_chunk_state{
     import chunks;
     import settings;
-    proc set_chunk_state(ref states : [0..<setting_var.num_states]settings.state, ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){  //come back later and change args
-        // Set the initial state
-        chunk_var.energy0= states[0].energy;
-        chunk_var.density = states[0].density;
+    use profile;
 
+    proc set_chunk_state(ref states : [0..<setting_var.num_states]settings.state, ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting){  //come back later and change args
+        profiler.startTimer("set_chunk_state");
         
+        // Set the initial state
+        foreach ij in chunk_var.energy0.domain {
+            chunk_var.energy0[ij] = states[0].energy;
+            chunk_var.density[ij] = states[0].density;
+        }
+        
+        var Domain = {1..<chunk_var.x-1, 1..<chunk_var.y-1};
 
         // Apply all of the states in turn
-        for ss in 1..<setting_var.num_states do { // TODO try turning back into a single loop  // use a 3d domain for this one
-            // writeln(" xmins are : ", states[ss].x_min);
+        for ss in 1..<setting_var.num_states do {
 
             // If a state boundary falls exactly on a cell boundary
             // then round off can cause the state to be put one cell
@@ -30,9 +35,7 @@ module set_chunk_state{
             states[ss].y_min += (setting_var.dy/100.0);
             states[ss].x_max -= (setting_var.dx/100.0);
             states[ss].y_max -= (setting_var.dy/100.0);
-
-            // writeln(" xmin and xmax values: " ,states[ss].x_min, "  ", states[ss].x_max);
-            
+  
             for (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} do {
 
                 var apply_state: bool = false;
@@ -42,10 +45,9 @@ module set_chunk_state{
                     (chunk_var.vertex_x[jj] < states[ss].x_max) && 
                     (chunk_var.vertex_y[kk+1] >= states[ss].y_min) && 
                     (chunk_var.vertex_y[kk] < states[ss].y_max){
-                            apply_state = true;
-                        }
+                        apply_state = true;
+                    }
                 }
-                
                 else if states[ss].geometry == settings.Geometry.CIRCULAR {
                     var radius: real;
                     
@@ -62,27 +64,24 @@ module set_chunk_state{
                     chunk_var.vertex_y[kk] == states[ss].y_min {
                         apply_state = true;
                     }
-                        
                 }
                 if apply_state 
                 {
                     chunk_var.energy0[kk, jj] = states[ss].energy;  // Note: reversed kk and jj to match output from reference code
                     chunk_var.density[kk, jj] = states[ss].density;
-                    // writeln(" when y and x are : ", jj, " ", kk);
                 }
             }
         }
-            // writeln("current  density array : \n",  chunk_var.density);
 
-            var Domain = {1..<chunk_var.x-1, 1..<chunk_var.y-1};
-            chunk_var.u[Domain] = chunk_var.energy0[Domain] *chunk_var.density[Domain];
-            // writeln("current  u array : \n",  chunk_var.u);
+        foreach ij in Domain do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij]; // similar performance between foreach and forall
+        
+        profiler.stopTimer("set_chunk_state");
     }
 /*
  *      SET CHUNK STATE DRIVER
  */
     // Invokes the set chunk state kernel
-    proc set_chunk_state_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states] settings.state){
+    proc set_chunk_state_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, const ref setting_var : settings.setting, ref states : [0..<setting_var.num_states] settings.state){
         // Issue kernel to all local chunks
         set_chunk_state(states, chunk_var[0], setting_var);
     }

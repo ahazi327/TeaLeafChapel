@@ -11,16 +11,17 @@ module field_summary {
     * 		Calculates aggregates of values in field.
     */	
     // The field summary kernel
-    proc field_summary (in x: int, in y: int, in halo_depth: int, ref volume: [?Domain] real,
-    ref density: [Domain] real, ref energy0: [Domain] real, ref u: [Domain] real, ref vol: real,
-    ref mass: real, ref ie: real, ref temp: real){
+    proc field_summary (in x: int, in y: int, in halo_depth: int, const ref volume: [Domain] real,
+    const ref density: [Domain] real, const ref energy0: [Domain] real, const ref u: [Domain] real, ref vol: real,
+    ref mass: real, ref ie: real, ref temp: real, const in Domain : domain(2)){
 
         profiler.startTimer("field_summary");
+
         var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
         // for j in {halo_depth..<y-halo_depth} do { // TODO maybe make this into a forall loop
         //     for i in {halo_depth..<x-halo_depth} do {
-        for (j, i) in inner do{ 
+        foreach (j, i) in inner do{ 
             var cellVol : real;
             cellVol = volume[j, i];
 
@@ -42,13 +43,13 @@ module field_summary {
 
     // Invokes the set chunk data kernel
     proc field_summary_driver(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting,
-        in is_solve_finished: bool){
+        const in is_solve_finished: bool){
         
         var vol, ie, temp, mass : real = 0.0;
 
         // for cc in 0..<setting_var.num_chunks_per_rank do {
         field_summary(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].volume, 
-        chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp);
+        chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
         // }
 
         if(setting_var.check_result && is_solve_finished){ //  if settings->rank == MASTER && ...
@@ -66,7 +67,7 @@ module field_summary {
     }
 
     // Fetches the checking value from the test problems file
-    proc get_checking_value (ref setting_var : settings.setting, ref checking_value : real){
+    proc get_checking_value (const ref setting_var : settings.setting, ref checking_value : real){
         var counter : int;
         try {
             var tea_prob = open (setting_var.test_problem_filename, ioMode.r);

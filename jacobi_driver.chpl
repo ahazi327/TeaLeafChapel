@@ -9,10 +9,11 @@ module jacobi_driver {
     proc jacobi_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref err: real){
 
-        jacobi_init_driver(chunk_var, setting_var, rx, ry);
+        var Domain = {0..<chunk_var[0].y, 0..<chunk_var[0].x};
+        jacobi_init_driver(chunk_var, setting_var, rx, ry, Domain);
         // Iterate until convergence
         var tt_prime : int;
-        var Domain = {0..<chunk_var[0].y, 0..<chunk_var[0].x};
+        
         for tt in 0..<setting_var.max_iters do {
             
             jacobi_main_step_driver(chunk_var, setting_var, tt, err, Domain);
@@ -26,10 +27,10 @@ module jacobi_driver {
 
     // Invokes the CG initialisation kernels
     proc jacobi_init_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, const in rx: real,
-    const in ry: real){
+    const in ry: real, const in Domain : domain(2)){
 
         jacobi_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, setting_var.coefficient, rx, ry,
-            chunk_var[0].u, chunk_var[0].u0, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].kx, chunk_var[0].ky);
+            chunk_var[0].u, chunk_var[0].u0, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].kx, chunk_var[0].ky, Domain);
 
         copy_u(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0);
 

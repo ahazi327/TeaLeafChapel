@@ -82,12 +82,12 @@ module diffuse{
 
     }
 
-    proc calc_min_timestep (ref chunk_var : [?chunk_domain] chunks.Chunk, ref dt: real, const in chunks_per_task : int){
+    proc calc_min_timestep (const ref chunk_var : [?chunk_domain] chunks.Chunk, ref dt: real, const in chunks_per_task : int){
     //    for cc in 0..<chunks_per_task do {
 
             // Calculates a value for dt
             // Currently defaults to config provided value
-            var dtlp : real = chunk_var[0].dt_init;
+            const dtlp : real = chunk_var[0].dt_init;
             if(dtlp < dt) then dt = dtlp;
     //    } 
     }

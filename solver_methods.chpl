@@ -6,19 +6,21 @@ module solver_methods {
     
     // Copies the current u into u0
     proc copy_u (const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?u_domain] real, ref u0: [u_domain] real){
+    const ref u: [?u_domain] real, ref u0: [u_domain] real){
         profiler.startTimer("copy_u");
-        // whole array assignment instead of individually assigning
+
         var halo_domain = u_domain[halo_depth..< y - halo_depth, halo_depth..<x-halo_depth];
-        u0[halo_domain] = u[halo_domain]; 
+
+        foreach ij in halo_domain do u0[ij] = u[ij];
+        // u0[halo_domain] = u[halo_domain]; 
 
         profiler.stopTimer("copy_u");
     }
 
     // Calculates the current value of r
     proc calculate_residual(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?Domain] real, ref u0: [Domain] real, ref r: [Domain] real, ref kx: [Domain] real,
-    ref ky: [Domain] real){
+    const ref u: [?Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, const ref kx: [Domain] real,
+    const ref ky: [Domain] real){
         profiler.startTimer("calculate_residual");
         const inner = Domain[halo_depth..<y - halo_depth, halo_depth..<x - halo_depth];
         forall (i, j) in inner do {
@@ -34,7 +36,7 @@ module solver_methods {
 
     // Calculates the 2 norm of a given buffer
     proc calculate_2norm (const in x: int, const in y: int, const in halo_depth: int, 
-    ref buffer: [?buffer_domain] real, ref norm: real){
+    const ref buffer: [?buffer_domain] real, ref norm: real){
         profiler.startTimer("calculate_2norm");
         var norm_temp: real;
         const inner = buffer_domain[halo_depth..<y - halo_depth, halo_depth..<x-halo_depth];
@@ -50,11 +52,15 @@ module solver_methods {
 
     // Finalises the solution
     proc finalise (const in x: int, const in y: int, const in halo_depth: int, 
-    ref energy: [?Domain] real, ref density: [Domain] real, ref u: [Domain] real) {
+    ref energy: [?Domain] real, const ref density: [Domain] real, const ref u: [Domain] real) {
 
         profiler.startTimer("finalise");
         var halo_domain = Domain[halo_depth-1..< y - halo_depth, halo_depth-1..<x-halo_depth];
-        energy[halo_domain] = u[halo_domain] / density[halo_domain];
+
+        foreach ij in halo_domain do energy[ij] = u[ij] / density[ij];
+
+        // energy[halo_domain] = u[halo_domain] / density[halo_domain];
+
         profiler.stopTimer("finalise");
     }
 }

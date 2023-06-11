@@ -11,15 +11,21 @@ module cg {
      ref ky: [Domain] real){
 
         profiler.startTimer("cg_init");
-        //TODO implement die line here
-        const halo_dom = {0..<x, 0..<y};
+        if coefficient != CONDUCTIVITY && coefficient != RECIP_CONDUCTIVITY
+        {
+            writeln("Coefficient ", coefficient, " is not valid.\n");
+            profiler.stopTimer("jacobi_init");
+            exit(-1);
+        }
 
-        p[halo_dom] = 0.0;
-        r[halo_dom] = 0.0;
-        u[halo_dom] = energy[halo_dom] * density[halo_dom];
+        foreach ij in Domain {
+            p[ij] = 0;
+            r[ij] = 0;
+            u[ij] = energy[ij] *density[ij];
+        }
         
-        const inner = halo_dom[1..<y-1, 1..<x-1];
-        forall (i, j) in inner do {
+        const inner = Domain[1..<y-1, 1..<x-1];
+        foreach (i, j) in inner do {
             if (coefficient == CONDUCTIVITY) then
                 w[i,j] = density[i,j];
             else  
@@ -27,14 +33,14 @@ module cg {
             
         }
 
-        const inner_1 = halo_dom[halo_depth..<y-1, halo_depth..<x-1];
-        forall (i, j) in inner_1 do {
+        const inner_1 = Domain[halo_depth..<y-1, halo_depth..<x-1];
+        foreach (i, j) in inner_1 do {
             kx[i, j] = rx*(w[i-1, j]+w[i, j]) / (2.0*w[i-1, j]*w[i, j]);
             ky[i, j] = ry*(w[i, j-1]+w[i, j]) / (2.0*w[i, j-1]*w[i, j]);
         }
         
-        var rro_temp : real = 0.0; 
-        const inner_2 = halo_dom[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
+        var rro_temp : real; 
+        const inner_2 = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
         forall (i, j) in inner_2 with (+ reduce rro_temp) do {
             const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
@@ -76,11 +82,11 @@ module cg {
         var rrn_temp : real;
         const inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
         
-        forall (i, j) in inner with (+ reduce rrn_temp) do{ //with
+        forall (i, j) in inner with (+ reduce rrn_temp) do{
             u[i, j] += alpha * p[i, j];
             r[i, j] -= alpha * w[i, j];
             
-            const temp: real = r[i, j];  // maybe make into var
+            const temp: real = r[i, j];
             rrn_temp += temp ** 2;
             
         }
@@ -90,7 +96,7 @@ module cg {
 
     // Calculates p
     proc cg_calc_p (const in x: int, const in y: int, const in halo_depth: int, const in beta: real,
-    ref p: [Domain] real, const ref r: [Domain] real, const in Domain : domain(2)) {
+    ref p: [Domain] real, const ref r: [Domain] real, const in Domain : domain(2) ) {
         profiler.startTimer("cg_calc_p");
         const halo_dom = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
