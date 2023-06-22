@@ -18,14 +18,14 @@ module cg {
             exit(-1);
         }
 
-        foreach ij in Domain {
+        forall ij in Domain {
             p[ij] = 0;
             r[ij] = 0;
             u[ij] = energy[ij] *density[ij];
         }
         
         const inner = Domain[1..<y-1, 1..<x-1];
-        foreach (i, j) in inner do {
+        forall (i, j) in inner do {
             if (coefficient == CONDUCTIVITY) then
                 w[i,j] = density[i,j];
             else  
@@ -34,7 +34,7 @@ module cg {
         }
 
         const inner_1 = Domain[halo_depth..<y-1, halo_depth..<x-1];
-        foreach (i, j) in inner_1 do {
+        forall (i, j) in inner_1 do {
             kx[i, j] = rx*(w[i-1, j]+w[i, j]) / (2.0*w[i-1, j]*w[i, j]);
             ky[i, j] = ry*(w[i, j-1]+w[i, j]) / (2.0*w[i, j-1]*w[i, j]);
         }

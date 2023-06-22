@@ -11,7 +11,7 @@ module solver_methods {
 
         var halo_domain = u_domain[halo_depth..< y - halo_depth, halo_depth..<x-halo_depth];
 
-        foreach ij in halo_domain do u0[ij] = u[ij];
+        forall ij in halo_domain do u0[ij] = u[ij];
         // u0[halo_domain] = u[halo_domain]; 
 
         profiler.stopTimer("copy_u");
@@ -57,7 +57,7 @@ module solver_methods {
         profiler.startTimer("finalise");
         var halo_domain = Domain[halo_depth-1..< y - halo_depth, halo_depth-1..<x-halo_depth];
 
-        foreach ij in halo_domain do energy[ij] = u[ij] / density[ij];
+        forall ij in halo_domain do energy[ij] = u[ij] / density[ij];
 
         // energy[halo_domain] = u[halo_domain] / density[halo_domain];
 
