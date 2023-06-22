@@ -9,8 +9,8 @@ module ppcg_driver{
     use ppcg;
 
     // Performs a full solve with the PPCG solver
-    proc ppcg_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rx: real,
-    inout ry: real, ref error: real){
+    proc ppcg_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    ref ry: real, ref error: real){
         var tt_prime, num_ppcg_iters: int;
         var rro: real;
         var is_switch_to_ppcg : int;
@@ -59,7 +59,7 @@ module ppcg_driver{
     }
 
     // Invokes the PPCG initialisation kernels
-    proc ppcg_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rro: real){
+    proc ppcg_init_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rro: real){
         
         calculate_residual(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, chunk_var[0].r,
         chunk_var[0].kx, chunk_var[0].ky);
@@ -70,7 +70,7 @@ module ppcg_driver{
     }
 
     // Invokes the main PPCG solver kernels
-    proc ppcg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, inout rro: real, inout error: real) {
+    proc ppcg_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rro: real, ref error: real) {
         var pw: real;
 
         cg_calc_w(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx, chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});

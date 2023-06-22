@@ -19,20 +19,20 @@ module field_summary {
 
         var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
-        // for j in {halo_depth..<y-halo_depth} do { // TODO maybe make this into a forall loop
-        //     for i in {halo_depth..<x-halo_depth} do {
-        foreach (j, i) in inner do{ 
-            var cellVol : real;
-            cellVol = volume[j, i];
+        for j in {halo_depth..<y-halo_depth} do { // TODO maybe make this into a forall loop
+            for i in {halo_depth..<x-halo_depth} do {
+        // foreach (j, i) in inner do{ 
+                var cellVol : real;
+                cellVol = volume[j, i];
 
-            var cellMass: real;
-            cellMass = cellVol * density[j, i];
+                var cellMass: real;
+                cellMass = cellVol * density[j, i];
 
-            vol += cellVol;
-            mass += cellMass;
-            ie += cellMass * energy0[j, i];
-            temp += cellMass * u[j, i];
-                            
+                vol += cellVol;
+                mass += cellMass;
+                ie += cellMass * energy0[j, i];
+                temp += cellMass * u[j, i];
+            }
         }
         profiler.stopTimer("field_summary");
     }
