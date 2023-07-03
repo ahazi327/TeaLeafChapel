@@ -19,9 +19,8 @@ module field_summary {
 
         var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
-        for j in {halo_depth..<y-halo_depth} do { // TODO maybe make this into a forall loop
-            for i in {halo_depth..<x-halo_depth} do {
-        // foreach (j, i) in inner do{ 
+        for j in {halo_depth..<y-halo_depth} do {
+            foreach i in {halo_depth..<x-halo_depth} do {
                 var cellVol : real;
                 cellVol = volume[j, i];
 
