@@ -94,27 +94,25 @@ module test{
                     x = GRID_SMALL;
                     y = GRID_SMALL;
                     ITER = ITER_LONG;
-                    writeln("Grid size and depth values are ", GRID_SMALL, "x", GRID_SMALL);
                 }
                 when 3{
                     x = GRID_MEDIUM;
                     y = GRID_SMALL;
                     ITER = ITER_LONG;
-                    writeln("Grid size and depth values are ", GRID_MEDIUM, "x", GRID_SMALL);
                 }
                 when 2{
                     x = GRID_SMALL;
                     y = GRID_MEDIUM;
                     ITER = ITER_LONG;
-                    writeln("Grid size and depth values are ", GRID_SMALL, "x", GRID_MEDIUM);
                 }
                 when 1{
                     x = GRID_MEDIUM;
                     y = GRID_MEDIUM;
                     ITER = ITER_MEDIUM;
-                    writeln("Grid size and depth values are ", GRID_MEDIUM, "x", GRID_MEDIUM);
                 }
             }
+
+            writeln("Grid size and depth values are ", x, "x", y, "for ", ITER, " iterations");
 
             // call test functions many times
             for i in 1..ITER {
