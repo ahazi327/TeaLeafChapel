@@ -122,6 +122,7 @@ module test{
             profiler_mini.stopTimer("slice_to_slice_forall_loop");
         }
 
+        /*
         for i in 1..ITER {
             profiler_mini.startTimer("slice_to_constant_foreach_loop");
             test_sequence_3(x, y, buffer);
@@ -132,7 +133,7 @@ module test{
             profiler_mini.startTimer("slice_to_slice_foreach_loop");
             test_sequence_4(x, y, buffer, buffer2);
             profiler_mini.stopTimer("slice_to_slice_foreach_loop");
-        }
+        }*/
 
         for i in 1..ITER {
             profiler_mini.startTimer("slice_to_constant_for_loop");
