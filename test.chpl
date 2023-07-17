@@ -67,7 +67,7 @@ module test{
     }
     // no loop array to array
     proc test_sequence_8 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real, const ref buffer2: [0..<y, 0..<x] real){
-        buffer[0..<y/2, 0..<x] = buffer2[0..<y, 0..<x];
+        buffer[0..<y/2, 0..<x] = buffer2[0..<y/2, 0..<x];
     }
 
     //control group (no slicing) array=c
