@@ -1,10 +1,11 @@
 module test{
     use profile_mini;
     param ITER_SHORT : int = 100;
-    param ITER_MEDIUM : int = 5000;
-    param ITER_LONG : int = 50000;
-    var ITER : int = ITER_SHORT;
+    param ITER_MEDIUM : int = 1000;
+    param ITER_LONG : int = 10000;
+    var ITER : int = ITER_MEDIUM;
 
+    param runs: int = 15;
 
     param c : real = 0.05;
     param c2 : real = 0.03;
@@ -83,94 +84,97 @@ module test{
         }
     }
 
+    // number of runs for statistical backing
+    for run in 1..runs{
 
-    // vary the grid sizes
-    for size in 1..4 {
-        select(size){
-            when 4{
-                x = GRID_SMALL;
-                y = GRID_SMALL;
-                writeln("Grid size and depth values are ", GRID_SMALL, "x", GRID_SMALL);
+        // vary the grid sizes
+        for size in 1..4 {
+            select(size){
+                when 4{
+                    x = GRID_SMALL;
+                    y = GRID_SMALL;
+                    writeln("Grid size and depth values are ", GRID_SMALL, "x", GRID_SMALL);
+                }
+                when 3{
+                    x = GRID_MEDIUM;
+                    y = GRID_SMALL;
+                    writeln("Grid size and depth values are ", GRID_MEDIUM, "x", GRID_SMALL);
+                }
+                when 2{
+                    x = GRID_SMALL;
+                    y = GRID_MEDIUM;
+                    writeln("Grid size and depth values are ", GRID_SMALL, "x", GRID_MEDIUM);
+                }
+                when 1{
+                    x = GRID_MEDIUM;
+                    y = GRID_MEDIUM;
+                    writeln("Grid size and depth values are ", GRID_MEDIUM, "x", GRID_MEDIUM);
+                }
             }
-            when 3{
-                x = GRID_MEDIUM;
-                y = GRID_SMALL;
-                writeln("Grid size and depth values are ", GRID_MEDIUM, "x", GRID_SMALL);
+
+            // call test functions many times
+            for i in 1..ITER {
+            profiler_mini.startTimer("slice_to_constant_forall_loop");
+            test_sequence_1(x, y, buffer);
+            profiler_mini.stopTimer("slice_to_constant_forall_loop");
             }
-            when 2{
-                x = GRID_SMALL;
-                y = GRID_MEDIUM;
-                writeln("Grid size and depth values are ", GRID_SMALL, "x", GRID_MEDIUM);
+
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_slice_forall_loop");
+                test_sequence_2(x, y, buffer, buffer2);
+                profiler_mini.stopTimer("slice_to_slice_forall_loop");
             }
-            when 1{
-                x = GRID_MEDIUM;
-                y = GRID_MEDIUM;
-                writeln("Grid size and depth values are ", GRID_MEDIUM, "x", GRID_MEDIUM);
+
+            /*
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_constant_foreach_loop");
+                test_sequence_3(x, y, buffer);
+                profiler_mini.stopTimer("slice_to_constant_foreach_loop");
             }
-        }
 
-        // call test functions many times
-        for i in 1..ITER {
-        profiler_mini.startTimer("slice_to_constant_forall_loop");
-        test_sequence_1(x, y, buffer);
-        profiler_mini.stopTimer("slice_to_constant_forall_loop");
-        }
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_slice_foreach_loop");
+                test_sequence_4(x, y, buffer, buffer2);
+                profiler_mini.stopTimer("slice_to_slice_foreach_loop");
+            }*/
 
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_slice_forall_loop");
-            test_sequence_2(x, y, buffer, buffer2);
-            profiler_mini.stopTimer("slice_to_slice_forall_loop");
-        }
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_constant_for_loop");
+                test_sequence_5(x, y, buffer);
+                profiler_mini.stopTimer("slice_to_constant_for_loop");
+            }
 
-        /*
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_constant_foreach_loop");
-            test_sequence_3(x, y, buffer);
-            profiler_mini.stopTimer("slice_to_constant_foreach_loop");
-        }
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_slice_for_loop");
+                test_sequence_6(x, y, buffer, buffer2);
+                profiler_mini.stopTimer("slice_to_slice_for_loop");
+            }
 
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_slice_foreach_loop");
-            test_sequence_4(x, y, buffer, buffer2);
-            profiler_mini.stopTimer("slice_to_slice_foreach_loop");
-        }*/
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_constant_no_loop");
+                test_sequence_7(x, y, buffer);
+                profiler_mini.stopTimer("slice_to_constant_no_loop");
+            }
 
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_constant_for_loop");
-            test_sequence_5(x, y, buffer);
-            profiler_mini.stopTimer("slice_to_constant_for_loop");
-        }
+            for i in 1..ITER {
+                profiler_mini.startTimer("slice_to_slice_no_loop");
+                test_sequence_8(x, y, buffer, buffer2);
+                profiler_mini.stopTimer("slice_to_slice_no_loop");
+            }
 
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_slice_for_loop");
-            test_sequence_6(x, y, buffer, buffer2);
-            profiler_mini.stopTimer("slice_to_slice_for_loop");
-        }
+            for i in 1..ITER {
+                profiler_mini.startTimer("control_group_array_to_const");
+                test_sequence_9(x, y, buffer);
+                profiler_mini.stopTimer("control_group_array_to_const");
+            }
+            for i in 1..ITER {
+                profiler_mini.startTimer("control_group_array_to_array");
+                test_sequence_10(x, y, buffer, buffer2);
+                profiler_mini.stopTimer("control_group_array_to_array");
+            }
 
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_constant_no_loop");
-            test_sequence_7(x, y, buffer);
-            profiler_mini.stopTimer("slice_to_constant_no_loop");
+            profiler_mini.report();
         }
-
-        for i in 1..ITER {
-            profiler_mini.startTimer("slice_to_slice_no_loop");
-            test_sequence_8(x, y, buffer, buffer2);
-            profiler_mini.stopTimer("slice_to_slice_no_loop");
-        }
-
-        for i in 1..ITER {
-            profiler_mini.startTimer("control_group_array_to_const");
-            test_sequence_9(x, y, buffer);
-            profiler_mini.stopTimer("control_group_array_to_const");
-        }
-        for i in 1..ITER {
-            profiler_mini.startTimer("control_group_array_to_array");
-            test_sequence_10(x, y, buffer, buffer2);
-            profiler_mini.stopTimer("control_group_array_to_array");
-        }
-
-        profiler_mini.report();
     }
 }
 
