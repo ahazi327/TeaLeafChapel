@@ -60,6 +60,16 @@ module test{
         }
     }
 
+    // no loop array to const
+    proc test_sequence_7 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real){
+        buffer[0..<y, 0..<x] = c;
+    }
+    // no loop array to array
+    proc test_sequence_8 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real, const ref buffer2: [0..<y, 0..<x] real){
+        buffer[0..<y, 0..<x] = buffer2[0..<y, 0..<x];
+    }
+
+
     // vary the grid sizes
     for size in 1..4 {
         select(size){
@@ -120,6 +130,18 @@ module test{
             profiler_mini.startTimer("slice_to_slice_for_loop");
             test_sequence_6(x, y, buffer, buffer2);
             profiler_mini.stopTimer("slice_to_slice_for_loop");
+        }
+
+        for i in 1..ITER {
+            profiler_mini.startTimer("slice_to_constant_no_loop");
+            test_sequence_7(x, y, buffer);
+            profiler_mini.stopTimer("slice_to_constant_no_loop");
+        }
+
+        for i in 1..ITER {
+            profiler_mini.startTimer("slice_to_slice_no_loop");
+            test_sequence_8(x, y, buffer, buffer2);
+            profiler_mini.stopTimer("slice_to_slice_no_loop");
         }
 
         profiler_mini.report();
