@@ -11,8 +11,8 @@ module test{
 
     param GRID_SMALL : int = 512;
     param GRID_MEDIUM : int = 5120;
-    var x : int = GRID_SMALL; // this will affect the number of assignments taking place in an iteration
-    var y : int = GRID_SMALL;
+    var x : int = GRID_MEDIUM; // this will affect the number of assignments taking place in an iteration
+    var y : int = GRID_MEDIUM;
 
     var buffer : [0..<y, 0..<x] real = c2;
     var buffer2 : [0..<y, 0..<x] real = c;
