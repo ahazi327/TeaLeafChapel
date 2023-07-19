@@ -69,11 +69,11 @@ module local_halos {
         // foreach i in 0..<depth do {
         //     buffer[halo_depth-i-1, halo_depth..<x-halo_depth] = buffer[i + halo_depth, halo_depth..<x-halo_depth]; 
         // }
-        [i in 0..<depth] buffer[halo_depth-i-1, halo_depth..<x-halo_depth] = c;  //0.067s
+        // [i in 0..<depth] buffer[halo_depth-i-1, halo_depth..<x-halo_depth] = c;  //0.067s
 
-        // forall i in 0..<depth do {
-        //     buffer[halo_depth-depth-1, halo_depth..<x-halo_depth] = buffer[i + halo_depth, halo_depth..<x-halo_depth]; 
-        // }
+        forall i in 0..<depth do {
+            buffer[halo_depth-depth-1, halo_depth..<x-halo_depth] = buffer[i + halo_depth, halo_depth..<x-halo_depth]; 
+        }
 
 
     }
@@ -89,14 +89,14 @@ module local_halos {
         //     buffer [x-halo_depth + i, halo_depth..<x-halo_depth] = buffer[x-halo_depth-(i + 1), halo_depth..<x-halo_depth];
         // }
 
-        // forall (jj, kk) in {halo_depth..<y-halo_depth, 0..<depth} do{
-        //     buffer [(x-halo_depth + kk), jj] = buffer [((x-halo_depth)-(kk + 1)), jj];
-        // }
+        forall (jj, kk) in {halo_depth..<y-halo_depth, 0..<depth} do{
+            buffer [(x-halo_depth + kk), jj] = buffer [((x-halo_depth)-(kk + 1)), jj];
+        }
 
         // ref buffer_local = buffer[buffer.localSubdomain()];
         // [i in 0..<depth] buffer_local [x-halo_depth + i, halo_depth..<x-halo_depth] = buffer_local[x-halo_depth-(i + 1), halo_depth..<x-halo_depth];
 
-        [i in 0..<depth] buffer[x-halo_depth + i, halo_depth..<x-halo_depth] = c;
+        // [i in 0..<depth] buffer[x-halo_depth + i, halo_depth..<x-halo_depth] = c;
 
         // // forall i in 0..<depth do {
         //     buffer [x-halo_depth + depth, halo_depth..<x-halo_depth] = c;
@@ -109,15 +109,15 @@ module local_halos {
         //         buffer[kk, ((y - halo_depth) + jj)] = buffer[kk, ((y - halo_depth) - (jj + 1))];
         // }    
 
-        // forall (kk, jj) in  {halo_depth..<x-halo_depth, 0..<depth} do{
-        //         buffer[kk, ((y - halo_depth) + jj)] = buffer[kk, ((y - halo_depth) - (jj + 1))];
-        // }   
+        forall (kk, jj) in  {halo_depth..<x-halo_depth, 0..<depth} do{
+                buffer[kk, ((y - halo_depth) + jj)] = buffer[kk, ((y - halo_depth) - (jj + 1))];
+        }   
 
         // ref buffer_local = buffer[buffer.localSubdomain()];
         // foreach i in 0..<depth do {
         //     buffer[halo_depth..<y-halo_depth, y - halo_depth + i] = buffer[halo_depth..<y-halo_depth, y - halo_depth - (i + 1)];
         // }
-        [i in 0..<depth] buffer[halo_depth..<y-halo_depth, y - halo_depth + i] = c;
+        // [i in 0..<depth] buffer[halo_depth..<y-halo_depth, y - halo_depth + i] = c;
 
         // // forall i in 0..<depth do {
         //     buffer[halo_depth..<y-halo_depth, y - halo_depth + depth] = c;
@@ -130,15 +130,15 @@ module local_halos {
         //         buffer[kk, (halo_depth - jj - 1)] = buffer[kk, (halo_depth+jj)];
         // }
 
-        // forall (kk, jj) in  {halo_depth..<x-halo_depth, 0..<depth} do{
-        //         buffer[kk, (halo_depth - jj - 1)] = buffer[kk, (halo_depth+jj)];
-        // }
+        forall (kk, jj) in  {halo_depth..<x-halo_depth, 0..<depth} do{
+                buffer[kk, (halo_depth - jj - 1)] = buffer[kk, (halo_depth+jj)];
+        }
 
         // ref buffer_local = buffer[buffer.localSubdomain()];
         // foreach i in 0..<depth do {
         //     buffer[halo_depth..<y-halo_depth, halo_depth - i - 1] = buffer[halo_depth..<y-halo_depth, halo_depth + i];
         // }
-        [i in 0..<depth] buffer[halo_depth..<y-halo_depth, halo_depth - i - 1] = c;
+        // [i in 0..<depth] buffer[halo_depth..<y-halo_depth, halo_depth - i - 1] = c;
 
         // // forall i in 0..<depth do {
         //     buffer[halo_depth..<y-halo_depth, halo_depth - depth - 1] = c;
