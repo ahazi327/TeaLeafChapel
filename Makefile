@@ -1,8 +1,9 @@
 CC = chpl
 CFLAGS = --fast --debug
 TARGET = tealeaf
-TEST = test
+TEST = ./tests/test
 MAIN_MODULE = --main-module
+TEST_MOD = test
 
 # Collect all the source files with a .chpl extension
 SRCS = $(wildcard *.chpl)
@@ -18,7 +19,7 @@ run: $(TARGET)
 
 # Test rule
 test: $(TEST_SRC)
-	$(CC) $(CFLAGS) $(MAIN_MODULE) $(TEST) -o $(TEST) $(TEST_SRC)
+	$(CC) $(CFLAGS) $(MAIN_MODULE) $(TEST_MOD) -o $(TEST) $(TEST_SRC)
 	./$(TEST)
 
 # Record/report rule
