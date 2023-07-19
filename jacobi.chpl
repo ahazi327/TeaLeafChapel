@@ -62,7 +62,7 @@ module jacobi{
         const Inner = Domain[halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)];
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
 
-        foreach ij in outer_Domain {
+        foreach ij in outer_Domain { // check
             r[ij] = u[ij];
         }
 

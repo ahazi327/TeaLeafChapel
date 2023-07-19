@@ -7,7 +7,7 @@ module test{
 
     param runs: int = 15;
 
-    param c : real = 0.05;
+    param c : real = 0.05; // some number
     param c2 : real = 0.03;
 
     param GRID_SMALL : int = 512;
@@ -83,18 +83,25 @@ module test{
             buffer[ij] = buffer2[ij];
         }
     }
+    //control group (no slicing) array=c sequential
+    proc test_sequence_11 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real){
+        for ij in {0..<y/2, 0..<x} {
+            buffer[ij] = c;
+        }
+    }
+    //control group (no slicing) array=array sequential
+    proc test_sequence_12 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real, const ref buffer2: [0..<y, 0..<x] real){
+        for ij in {0..<y/2, 0..<x} {
+            buffer[ij] = buffer2[ij];
+        }
+    }
 
     // number of runs for statistical backing
     for run in 1..runs{
 
         // vary the grid sizes
-        for size in 1..4 {
+        for size in 1..3 {
             select(size){
-                when 4{
-                    x = GRID_SMALL;
-                    y = GRID_SMALL;
-                    ITER = ITER_LONG;
-                }
                 when 3{
                     x = GRID_MEDIUM;
                     y = GRID_SMALL;
@@ -173,6 +180,16 @@ module test{
                 profiler_mini.startTimer("control_group_array_to_array");
                 test_sequence_10(x, y, buffer, buffer2);
                 profiler_mini.stopTimer("control_group_array_to_array");
+            }
+            for i in 1..ITER {
+                profiler_mini.startTimer("control_group_array_to_const_sequentia");
+                test_sequence_11(x, y, buffer);
+                profiler_mini.stopTimer("control_group_array_to_const_sequentia");
+            }
+            for i in 1..ITER {
+                profiler_mini.startTimer("control_group_array_to_array_sequential");
+                test_sequence_12(x, y, buffer, buffer2);
+                profiler_mini.stopTimer("control_group_array_to_array_sequential");
             }
 
             profiler_mini.report();
