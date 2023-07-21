@@ -31,23 +31,24 @@ module ppcg_driver{
             else
                 is_switch_to_ppcg = (tt > setting_var.presteps) & (error < ERROR_SWITCH_MAX);
 
-            // writeln ("what is is_switch_to_ppcg : ", is_switch_to_ppcg, "\n");
             if is_switch_to_ppcg == 0 then
                 // Perform a CG iteration
                 cg_main_step_driver(chunk_var, setting_var, tt, rro, error);
-            else num_ppcg_iters += 1;
+            else {
+            
+                num_ppcg_iters += 1;
 
-            // If first step perform initialisation
-            if num_ppcg_iters == 1{
-                // Initialise the eigenvalues and Chebyshev coefficients
-                eigenvalue_driver_initialise(chunk_var, setting_var, tt);
-                cheby_coef_driver(chunk_var, setting_var.ppcg_inner_steps);
+                // If first step perform initialisation
+                if num_ppcg_iters == 1{
+                    // Initialise the eigenvalues and Chebyshev coefficients
+                    eigenvalue_driver_initialise(chunk_var, setting_var, tt);
+                    cheby_coef_driver(chunk_var, setting_var.ppcg_inner_steps);
 
-                ppcg_init_driver(chunk_var, setting_var, rro);
-
+                    ppcg_init_driver(chunk_var, setting_var, rro);
+                }
                 // Perform the main step
                 ppcg_main_step_driver(chunk_var, setting_var, rro, error);
-            }
+                }
         
             halo_update_driver(chunk_var, setting_var, 1);
             if(abs(error) < setting_var.eps) then break;
@@ -86,7 +87,7 @@ module ppcg_driver{
 
         rrn = 0.0;
 
-        calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].r, error);
+        calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].r, rrn);
 
         const beta : real = rrn / rro;
 

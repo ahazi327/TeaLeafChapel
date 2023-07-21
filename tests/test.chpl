@@ -18,6 +18,26 @@ module test{
     var buffer : [0..<y, 0..<x] real = c2;
     var buffer2 : [0..<y, 0..<x] real = c;
     
+    proc simple_array_test (){
+        var A : [1..512000, 1..512] real;
+        profiler_mini.startTimer("test1");
+        for i in 1..512000 by 2 do
+            A[i, ..] = 1;
+        profiler_mini.stopTimer("test1");
+
+        var B : [1..512000, 1..512] real;
+        profiler_mini.startTimer("test2");
+        for i in 1..512000 by 2 {
+            for j in 1..512 do
+                B[i, j] = 1;
+        }
+        profiler_mini.stopTimer("test2");
+        profiler_mini.report();
+    }
+
+    
+
+    
 
     // assigning to array slices a constant value with forall loop
     proc test_sequence_1 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real){
@@ -119,7 +139,7 @@ module test{
                 }
             }
 
-            writeln("Grid size and depth values are ", x, "x", y, "for ", ITER, " iterations");
+            writeln("Grid size and depth values are ", x, "x", y, " for ", ITER, " iterations");
 
             // call test functions many times
             for i in 1..ITER {

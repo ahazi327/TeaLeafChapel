@@ -31,7 +31,7 @@ module ppcg{
             u[i, j] += sd[i, j];
         }
 
-        forall ij in inner do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
+        forall ij in inner do sd[ij] = (alpha * sd[ij]) + (beta * r[ij]); // TODO check implicit version
 
         profiler.stopTimer("ppcg_inner_iteration");
     }
