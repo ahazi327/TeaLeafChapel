@@ -14,13 +14,12 @@ TEST_SRC = $(TEST).chpl
 $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
 
+# Compile without running
+comp: $(TARGET)
+
 # Run rule
 run: $(TARGET)
 	./$(TARGET) 
-
-# Run rule
-multi: $(TARGET)
-	./$(TARGET) -nl $(MULTI)
 
 # Test rule
 test: $(TEST_SRC)

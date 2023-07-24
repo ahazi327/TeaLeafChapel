@@ -73,7 +73,7 @@ module set_chunk_state{
             }
         }
 
-        foreach ij in Domain do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij]; // similar performance between foreach and forall
+        foreach ij in chunk_var.energy0.domain do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
         
         profiler.stopTimer("set_chunk_state");
     }
@@ -81,9 +81,9 @@ module set_chunk_state{
  *      SET CHUNK STATE DRIVER
  */
     // Invokes the set chunk state kernel
-    proc set_chunk_state_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, const ref setting_var : settings.setting, ref states : [0..<setting_var.num_states] settings.state){
+    proc set_chunk_state_driver (ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, ref states : [0..<setting_var.num_states] settings.state){
         // Issue kernel to all local chunks
-        set_chunk_state(states, chunk_var[0], setting_var);
+        set_chunk_state(states, chunk_var, setting_var);
     }
 
 

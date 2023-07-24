@@ -21,24 +21,17 @@ module ppcg{
         profiler.startTimer("ppcg_inner_iteration");
         
         const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner {
-            // Prefetch kx and ky values
-            const kx_next = kx[i+1, j];
-            const kx_current = kx[i, j];
-            const ky_next = ky[i, j+1];
-            const ky_current = ky[i, j];
-
-            // Use prefetched values
-            const smvp : real = (1.0 + (kx_next + kx_current)
-                    + (ky_next + ky_current))*sd[i, j]
-                    - (kx_next*sd[i+1, j] + kx_current*sd[i-1, j])
-                    - (ky_next*sd[i, j+1] + ky_current*sd[i, j-1]);
+        forall (i, j) in inner do {
+            const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
+                + (ky[i, j+1]+ky[i, j]))*sd[i, j]
+                - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
+                - (ky[i, j+1]*sd[i, j+1]+ky[i, j]*sd[i, j-1]);
 
             r[i, j] -= smvp;
             u[i, j] += sd[i, j];
         }
 
-        forall ij in inner do sd[ij] = (alpha * sd[ij]) + (beta * r[ij]);
+        foreach ij in inner do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
 
         profiler.stopTimer("ppcg_inner_iteration");
     }

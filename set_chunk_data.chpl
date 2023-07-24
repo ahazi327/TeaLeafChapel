@@ -17,26 +17,30 @@ module set_chunk_data{
 		x_min = setting_var.grid_x_min + setting_var.dx * (chunk_var.left:real);
 		y_min = setting_var.grid_y_min + setting_var.dy * (chunk_var.bottom:real);
 
-		// As this is just set up, serial execution is used
-		for ii in 0..chunk_var.x do { 
+		// As this is just set up, serial execution is used 
+		// TODO look into multi locale execution and parallelism for this
+		for ii in chunk_var.vertex_x.domain do { 
 			chunk_var.vertex_x[ii] = x_min + setting_var.dx * (ii - setting_var.halo_depth); 
 		}
 
-		for ii in 0..chunk_var.y do {
+		for ii in chunk_var.vertex_y.domain do {
 			chunk_var.vertex_y[ii] = y_min + setting_var.dy * (ii - setting_var.halo_depth);  
 		}
 		
-		for ii in 0..<chunk_var.x do {
+		for ii in chunk_var.cell_x.domain do {
 			chunk_var.cell_x[ii] = 0.5 * (chunk_var.vertex_x[ii] + chunk_var.vertex_x[ii+1]);
 
 		}
-		for ii in 0..<chunk_var.y do {
+		for ii in chunk_var.cell_x.domain do {
 			chunk_var.cell_y[ii] = 0.5 * (chunk_var.vertex_y[ii] + chunk_var.vertex_y[ii+1]);
 
 		}
-		chunk_var.volume = setting_var.dx * setting_var.dy;
-		chunk_var.x_area = setting_var.dy;
-		chunk_var.y_area = setting_var.dx;
+		for ii in chunk_var.volume.domain do {
+			chunk_var.volume[ii] = setting_var.dx * setting_var.dy;
+			chunk_var.x_area[ii] = setting_var.dy;
+			chunk_var.y_area[ii] = setting_var.dx;
+		}
+		
 
 		profiler.stopTimer("set_chunk_data");
 	}

@@ -202,10 +202,6 @@ module parse_config {
                     var value = line.split('=')[1..];
                     setting_var.eps = value[1] : real;
                     continue;
-                } else if line.find("num_chunks_per_rank", 0..) != -1 {
-                    var value = line.split('=')[1..];
-                    setting_var.num_chunks_per_rank = value[1] : int;
-                    continue;
                 } else if line.find("halo_depth", 0..) != -1 {
                     var value = line.split('=')[1..];
                     setting_var.halo_depth = value[1] : int;

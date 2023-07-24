@@ -6,7 +6,7 @@ module eigenvalue_driver {
     param MY_MAX_REAL = 1e308;
     param MY_MIN_REAL = -2e308;
     // Calculates the eigenvalues from cg_alphas and cg_betas
-    proc eigenvalue_driver_initialise(ref chunk_var : [?chunk_domain] chunks.Chunk, const ref setting_var : settings.setting, const in num_cg_iters: int){
+    proc eigenvalue_driver_initialise(ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, const in num_cg_iters: int){
         //chunks per rank for loop
         profiler.startTimer("eigenvalue_driver_initialise");
         var diag : [0..<num_cg_iters] real;
@@ -14,39 +14,39 @@ module eigenvalue_driver {
 
          // Prepare matrix
          foreach ii in 0..<num_cg_iters do {
-            diag[ii] = 1.0 / chunk_var[0].cg_alphas[ii]; // using chunk var array as a single entry array for now
+            diag[ii] = 1.0 / chunk_var.cg_alphas[ii]; // using chunk var array as a single entry array for now
 
             if ii > 0 then 
-                 diag[ii] += chunk_var[0].cg_betas[ii-1] / chunk_var[0].cg_alphas[ii-1];
+                 diag[ii] += chunk_var.cg_betas[ii-1] / chunk_var.cg_alphas[ii-1];
             if(ii < num_cg_iters-1) then
-                offdiag[ii+1] = sqrt(chunk_var[0].cg_betas[ii]) / chunk_var[0].cg_alphas[ii];
+                offdiag[ii+1] = sqrt(chunk_var.cg_betas[ii]) / chunk_var.cg_alphas[ii];
          }
 
         // Calculate the eigenvalues (ignore eigenvectors)
         tqli(diag, offdiag, num_cg_iters);
 
-        chunk_var[0].eigmin = MY_MAX_REAL; // some large positive number
-        chunk_var[0].eigmax = MY_MIN_REAL; // some large negative number
+        chunk_var.eigmin = MY_MAX_REAL; // some large positive number
+        chunk_var.eigmax = MY_MIN_REAL; // some large negative number
 
         // Get minimum and maximum eigenvalues
         for ii in 0..<num_cg_iters do {
-            chunk_var[0].eigmin = min(chunk_var[0].eigmin, diag[ii]);
-            chunk_var[0].eigmax = max(chunk_var[0].eigmax, diag[ii]);
+            chunk_var.eigmin = min(chunk_var.eigmin, diag[ii]);
+            chunk_var.eigmax = max(chunk_var.eigmax, diag[ii]);
         }
 
-        if(chunk_var[0].eigmin < 0.0 || chunk_var[0].eigmax < 0.0)
+        if(chunk_var.eigmin < 0.0 || chunk_var.eigmax < 0.0)
         {
             writeln("ERROR: Calculated negative eigenvalues.\n");
             exit(-1);
         }
 
-        chunk_var[0].eigmin *= 0.95;
-        chunk_var[0].eigmax *= 1.05;
+        chunk_var.eigmin *= 0.95;
+        chunk_var.eigmax *= 1.05;
 
         profiler.stopTimer("eigenvalue_driver_initialise");
         
-        writeln("Min. eigenvalue: ", chunk_var[0].eigmin);
-        writeln("Max. eigenvalue: ", chunk_var[0].eigmax);
+        writeln("Min. eigenvalue: ", chunk_var.eigmin);
+        writeln("Max. eigenvalue: ", chunk_var.eigmax);
     }
     
     // Function to implement the sign functionality

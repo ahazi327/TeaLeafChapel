@@ -12,8 +12,8 @@ module store_energy {
     }
 
     // Invokes the store energy kernel
-    proc store_energy_driver (ref chunk_var : [?chunk_domain] chunks.Chunk){
-        store_energy(chunk_var[0].energy0, chunk_var[0].energy, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+    proc store_energy_driver (ref chunk_var : chunks.Chunk){
+        store_energy(chunk_var.energy0, chunk_var.energy, {0..<chunk_var.y, 0..<chunk_var.x});
     }
 
 

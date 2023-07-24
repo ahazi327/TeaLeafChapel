@@ -11,7 +11,7 @@ module diffuse{
     use cheby_driver;
 
     // The main timestep loop
-    proc diffuse(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting){
+    proc diffuse(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
         
         
         const end_step = setting_var.end_step : int;
@@ -26,19 +26,17 @@ module diffuse{
     }
 
     // Performs a solve for a single timestep
-    proc solve(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, in tt : int){
+    proc solve(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, in tt : int){
         
         //start timer
         var wallclock = new stopwatch();
         wallclock.start();
 
         // Calculate minimum timestep information
-        var dt : real = setting_var.dt_init;
-        // calc_min_timestep(chunk_var, dt, setting_var.num_chunks_per_rank);
+        const dt : real = setting_var.dt_init;
+        // calc_min_timestep(chunk_var, dt);
 
         // Pick the smallest timestep across all ranks
-        // TODO min_over_ranks
-
         var rx : real = dt / (setting_var.dx * setting_var.dx);
         var ry : real = dt / (setting_var.dy * setting_var.dy);
        
@@ -57,15 +55,12 @@ module diffuse{
             }
             when Solver.CG_SOLVER{
                 cg_driver(chunk_var, setting_var, rx, ry, error);
-
             }
             when Solver.CHEBY_SOLVER{
                 cheby_driver(chunk_var, setting_var, rx, ry, error);
             }
             when Solver.PPCG_SOLVER{
                 ppcg_driver(chunk_var, setting_var, rx, ry, error);
-                
-                
             }
         }
         writeln("Conduction error : ", error);
@@ -81,16 +76,4 @@ module diffuse{
         writeln("Avg. time per cell for current timestep:: ",  wallclock.elapsed()/ (setting_var.grid_x_cells * setting_var.grid_y_cells), " seconds \n");
 
     }
-
-    proc calc_min_timestep (const ref chunk_var : [?chunk_domain] chunks.Chunk, ref dt: real, const in chunks_per_task : int){
-    //    for cc in 0..<chunks_per_task do {
-
-            // Calculates a value for dt
-            // Currently defaults to config provided value
-            const dtlp : real = chunk_var[0].dt_init;
-            if(dtlp < dt) then dt = dtlp;
-    //    } 
-    }
-
-
 }

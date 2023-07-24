@@ -9,7 +9,7 @@ module cheby_driver{
     // param epsilon = 0.00001; 
     param epsilon = 1e-16; // some really small positive number
 
-    proc cheby_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    proc cheby_driver(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref error: real){
 
         var est_iterations, is_switch_to_cheby, num_cheby_iters: int;
@@ -69,17 +69,17 @@ module cheby_driver{
         writeln("Cheby iterations : ", num_cheby_iters, " (", est_iterations, " estimated)");
     }
 
-    proc cheby_init_driver(ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, const in num_cg_iters: int,
+    proc cheby_init_driver(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in num_cg_iters: int,
     ref bb: real){
 
         eigenvalue_driver_initialise(chunk_var, setting_var, num_cg_iters);
         cheby_coef_driver(chunk_var, setting_var.max_iters - num_cg_iters);
 
         // chunks per rank loop
-        calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, bb);
+        calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, bb);
 
-        cheby.cheby_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].theta, chunk_var[0].u, chunk_var[0].u0,
-        chunk_var[0].p, chunk_var[0].r, chunk_var[0].w, chunk_var[0].kx, chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+        cheby.cheby_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.u, chunk_var.u0,
+        chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
@@ -89,26 +89,26 @@ module cheby_driver{
     }
 
     // Performs the main iteration step
-    proc cheby_main_step_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, ref setting_var : settings.setting, const in num_cheby_iters: int,
+    proc cheby_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in num_cheby_iters: int,
     const in is_calc_2norm: bool, ref error: real){
         // chunks per rank loop
-        cheby.cheby_iterate (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].cheby_alphas[num_cheby_iters],
-        chunk_var[0].cheby_betas[num_cheby_iters], chunk_var[0].u, chunk_var[0].u0,
-        chunk_var[0].p, chunk_var[0].r, chunk_var[0].w, chunk_var[0].kx, chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+        cheby.cheby_iterate (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[num_cheby_iters],
+        chunk_var.cheby_betas[num_cheby_iters], chunk_var.u, chunk_var.u0,
+        chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
 
         if is_calc_2norm then
         {
             error = 0.0;
 
-            calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].r, error);
+            calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, error);
         }
     }
 
     // Calculates the estimated iterations for Chebyshev solver
-    proc cheby_calc_est_iterations (const ref chunk_var : [?chunk_domain] chunks.Chunk, const in error: real, const in bb: real, ref est_iterations: int){ 
+    proc cheby_calc_est_iterations (const ref chunk_var : chunks.Chunk, const in error: real, const in bb: real, ref est_iterations: int){ 
 
          // Condition number is identical in all chunks/ranks
-        const condition_number: real = chunk_var[0].eigmax / chunk_var[0].eigmin;
+        const condition_number: real = chunk_var.eigmax / chunk_var.eigmin;
 
         // Calculate estimated iteration count
         const it_alpha : real = epsilon*bb / (4.0*error);
@@ -122,18 +122,18 @@ module cheby_driver{
     }
 
     // Calculates the Chebyshev coefficients for the chunk
-    proc cheby_coef_driver (ref chunk_var : [?chunk_domain] chunks.Chunk, const in max_iters: int){
-        chunk_var[0].theta = (chunk_var[0].eigmax + chunk_var[0].eigmin) / 2.0;
-        const delta : real = (chunk_var[0].eigmax - chunk_var[0].eigmin) / 2.0;
-        const sigma : real = chunk_var[0].theta / delta;
+    proc cheby_coef_driver (ref chunk_var : chunks.Chunk, const in max_iters: int){
+        chunk_var.theta = (chunk_var.eigmax + chunk_var.eigmin) / 2.0;
+        const delta : real = (chunk_var.eigmax - chunk_var.eigmin) / 2.0;
+        const sigma : real = chunk_var.theta / delta;
         var rho_old : real = 1.0 / sigma;
 
         for ii in 0..<max_iters do{
             const rho_new : real = 1.0 / (2.0*sigma - rho_old);
             const cur_alpha : real = rho_new*rho_old;
             const cur_beta : real = 2.0*rho_new / delta;
-            chunk_var[0].cheby_alphas[ii] = cur_alpha;
-            chunk_var[0].cheby_betas[ii] = cur_beta;
+            chunk_var.cheby_alphas[ii] = cur_alpha;
+            chunk_var.cheby_betas[ii] = cur_beta;
             rho_old = rho_new;
         }
     }

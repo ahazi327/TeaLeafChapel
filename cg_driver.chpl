@@ -7,7 +7,7 @@ module cg_driver {
     //TODO ADD PROFILING
 
     // Performs a full solve with the CG solver kernels
-    proc cg_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    proc cg_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref error: real){
         //var tt: int;
         var rro : real;
@@ -32,16 +32,16 @@ module cg_driver {
     }
 
     // Invokes the CG initialisation kernels
-    proc cg_init_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    proc cg_init_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref rro: real) {
 
         // var sharedrxry = (rx, ry);
         rro = 0.0;
 
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
-        cg_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
-        chunk_var[0].density, chunk_var[0].energy, chunk_var[0].u, chunk_var[0].p, chunk_var[0].r, chunk_var[0].w,
-        chunk_var[0].kx, chunk_var[0].ky);
+        cg_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
+        chunk_var.density, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.r, chunk_var.w,
+        chunk_var.kx, chunk_var.ky);
         // }
 
         // Need to update for the matvec
@@ -53,20 +53,20 @@ module cg_driver {
         //sum over ranks TODO This seems to be an MPI things, so ignore for now
 
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
-        copy_u(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0);
+        copy_u(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0);
         // }
 
     }
 
     // Invokes the main CG solve kernels
-    proc cg_main_step_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, in tt : int,
+    proc cg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, in tt : int,
     ref rro: real, ref error: real){
         var pw: real;
         
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
             
-        cg_calc_w (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, pw, chunk_var[0].p, chunk_var[0].w, chunk_var[0].kx,
-            chunk_var[0].ky, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+        cg_calc_w (chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx,
+            chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
             
         // }
         //MPI sum over ranks function
@@ -77,18 +77,18 @@ module cg_driver {
     
 
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
-        chunk_var[0].cg_alphas[tt] = alpha;
+        chunk_var.cg_alphas[tt] = alpha;
 
-        cg_calc_ur(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, alpha, rrn, chunk_var[0].u, chunk_var[0].p,
-            chunk_var[0].r, chunk_var[0].w, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+        cg_calc_ur(chunk_var.x, chunk_var.y, setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p,
+            chunk_var.r, chunk_var.w, {0..<chunk_var.y, 0..<chunk_var.x});
         // }
 
         var beta : real = rrn / rro;
         
         // for cc in {0..<setting_var.num_chunks_per_rank} do {
-        chunk_var[0].cg_betas[tt] = beta;
-        cg_calc_p (chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, beta, chunk_var[0].p,
-            chunk_var[0].r, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+        chunk_var.cg_betas[tt] = beta;
+        cg_calc_p (chunk_var.x, chunk_var.y, setting_var.halo_depth, beta, chunk_var.p,
+            chunk_var.r, {0..<chunk_var.y, 0..<chunk_var.x});
         // }
         
         error = rrn;

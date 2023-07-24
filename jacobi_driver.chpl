@@ -6,10 +6,10 @@ module jacobi_driver {
     use jacobi;
 
     // Performs a full solve with the Jacobi solver kernels
-    proc jacobi_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
+    proc jacobi_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref err: real){
 
-        var Domain = {0..<chunk_var[0].y, 0..<chunk_var[0].x};
+        var Domain = {0..<chunk_var.y, 0..<chunk_var.x};
         jacobi_init_driver(chunk_var, setting_var, rx, ry, Domain);
         // Iterate until convergence
         var tt_prime : int;
@@ -26,13 +26,13 @@ module jacobi_driver {
     }
 
     // Invokes the CG initialisation kernels
-    proc jacobi_init_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, const in rx: real,
+    proc jacobi_init_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in rx: real,
     const in ry: real, const in Domain : domain(2)){
 
-        jacobi_init(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, setting_var.coefficient, rx, ry,
-            chunk_var[0].u, chunk_var[0].u0, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].kx, chunk_var[0].ky, Domain);
+        jacobi_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, setting_var.coefficient, rx, ry,
+            chunk_var.u, chunk_var.u0, chunk_var.energy, chunk_var.density, chunk_var.kx, chunk_var.ky, Domain);
 
-        copy_u(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0);
+        copy_u(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0);
 
         // Need to update for the matvec
         reset_fields_to_exchange(setting_var);
@@ -40,18 +40,18 @@ module jacobi_driver {
     }
 
     // Invokes the main Jacobi solve kernels
-    proc jacobi_main_step_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
+    proc jacobi_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
     ref err: real, const in Domain : domain(2)){
-        jacobi_iterate(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, 
-            chunk_var[0].r, err, chunk_var[0].kx, chunk_var[0].ky, Domain);
+        jacobi_iterate(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
+            chunk_var.r, err, chunk_var.kx, chunk_var.ky, Domain);
 
         if tt % 50 == 0 {
             halo_update_driver(chunk_var, setting_var, 1);
 
-            calculate_residual(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, chunk_var[0].r,
-                chunk_var[0].kx, chunk_var[0].ky);
+            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
+                chunk_var.kx, chunk_var.ky);
             
-            calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].r, err);
+            calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, err);
         }
     }
 

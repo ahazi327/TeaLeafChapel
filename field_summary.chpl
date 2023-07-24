@@ -41,18 +41,18 @@ module field_summary {
  */	
 
     // Invokes the set chunk data kernel
-    proc field_summary_driver(ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting,
+    proc field_summary_driver(ref chunk_var :chunks.Chunk, ref setting_var : settings.setting,
         const in is_solve_finished: bool){
         
         var vol, ie, temp, mass : real = 0.0;
 
         // for cc in 0..<setting_var.num_chunks_per_rank do {
-        field_summary(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].volume, 
-        chunk_var[0].density, chunk_var[0].energy0, chunk_var[0].u, vol, mass, ie, temp, {0..<chunk_var[0].y, 0..<chunk_var[0].x});
+        field_summary(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.volume, 
+        chunk_var.density, chunk_var.energy0, chunk_var.u, vol, mass, ie, temp, {0..<chunk_var.y, 0..<chunk_var.x});
         // }
 
-        if(setting_var.check_result && is_solve_finished){ //  if settings->rank == MASTER && ...
-            var checking_value : real = 1.0;
+        if(here.id == 0 && setting_var.check_result && is_solve_finished){ 
+            var checking_value : real;
             get_checking_value(setting_var, checking_value);
 
             writeln("Expected: \n", checking_value);

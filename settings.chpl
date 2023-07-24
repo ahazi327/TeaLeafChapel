@@ -49,9 +49,9 @@ module settings{
     var ppcg_inner_steps: int;
     var preconditioner: bool;
     var num_states: int;
-    var num_chunks: int;
-    var num_chunks_per_rank: int;
-    var num_ranks: int;
+    // var num_chunks: int;
+    // var num_chunks_per_rank: int;
+    // var num_ranks: int;
     var halo_depth: int;
     var is_offload: bool;
     var fields_to_exchange: [0..<NUM_FIELDS] bool;
@@ -101,9 +101,9 @@ module settings{
     setting_var.ppcg_inner_steps = 10;
     setting_var.preconditioner = false;
     setting_var.num_states = 0;
-    setting_var.num_chunks = 1;
-    setting_var.num_chunks_per_rank = 1;
-    setting_var.num_ranks = 1;
+    // setting_var.num_chunks = 1;
+    // setting_var.num_chunks_per_rank = 1;
+    // setting_var.num_ranks = 1;
     setting_var.halo_depth = 2;
     setting_var.is_offload = false;
 

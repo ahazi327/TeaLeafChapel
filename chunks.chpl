@@ -1,6 +1,7 @@
 // Initialise the chunk
 module chunks{
   use settings;
+  use BlockDist;
 
   const num_face_domain = {-1..<NUM_FACES, -1..<NUM_FACES};
 
@@ -9,15 +10,26 @@ module chunks{
     var x: int;
     var y: int;
     
-    //Domains
-    var Domain : domain(2) = {0..<y, 0..<x};
-    var x_domain : domain(1) = {0..<x};
-    var y_domain : domain(1) = {0..<y};
-    var x1_domain: domain(1)  = {0..<x+1};
-    var y1_domain : domain(1) = {0..<y+1};
-    var x_area_domain : domain(2) = {0..<y, 0..<x+1};
-    var y_area_domain : domain(2) = {0..<y+1, 0..<x};
-    var max_iter_domain : domain(1) = {0..<settings.max_iters};
+    // Domains
+    // Local domains
+    var local_Domain : domain(2) = {0..<y, 0..<x};
+    var local_x_domain : domain(1) = {0..<x};
+    var local_y_domain : domain(1) = {0..<y};
+    var local_x1_domain: domain(1)  = {0..<x+1};
+    var local_y1_domain : domain(1) = {0..<y+1};
+    var local_x_area_domain : domain(2) = {0..<y, 0..<x+1};
+    var local_y_area_domain : domain(2) = {0..<y+1, 0..<x};
+    var local_max_iter_domain : domain(1) = {0..<settings.max_iters};
+
+    // Multi locale domains
+    var Domain = local_Domain dmapped Block(local_Domain);
+    var x_domain = local_x_domain dmapped Block(local_x_domain) ;
+    var y_domain = local_y_domain dmapped Block(local_y_domain);
+    var x1_domain = local_x1_domain dmapped Block(local_x1_domain);
+    var y1_domain = local_y1_domain dmapped Block(local_y1_domain);
+    var x_area_domain = local_x_area_domain dmapped Block(local_x_area_domain);
+    var y_area_domain = local_y_area_domain dmapped Block(local_y_area_domain);
+    var max_iter_domain = local_max_iter_domain dmapped Block(local_max_iter_domain);
 
     var left: int;
     var right: int;
@@ -69,16 +81,14 @@ module chunks{
       this.x = x + halo_depth*2;
       this.y = y + halo_depth*2; 
       
-      // Resize all domains to resize arrays
-      this.Domain = {0..<this.y, 0..<this.x};
-      this.x_domain = {0..<this.x};
-      this.y_domain = {0..<this.y};
-      this.x1_domain = {0..<this.x+1};
-      this.y1_domain = {0..<this.y+1};
-      this.x_area_domain = {0..<this.y, 0..<this.x+1};
-      this.y_area_domain = {0..<this.y+1, 0..<this.x};
-      this.dt_init = dt_init;
+      // Resize all domains + blocks to resize arrays
+      this.Domain = {0..<this.y, 0..<this.x} dmapped Block({0..<this.y, 0..<this.x});
+      this.x_domain = {0..<this.x} dmapped Block({0..<this.x});
+      this.y_domain = {0..<this.y} dmapped Block({0..<this.y});
+      this.x1_domain = {0..<this.x+1} dmapped Block({0..<this.x+1});
+      this.y1_domain = {0..<this.y+1} dmapped Block({0..<this.y+1});
+      this.x_area_domain = {0..<this.y, 0..<this.x+1} dmapped Block({0..<this.y, 0..<this.x+1});
+      this.y_area_domain = {0..<this.y+1, 0..<this.x} dmapped Block({0..<this.y+1, 0..<this.x});
     }
-    // int* neighbours; 
   }
 }

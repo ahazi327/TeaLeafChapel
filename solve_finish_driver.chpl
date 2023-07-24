@@ -4,19 +4,19 @@ module solve_finish_driver {
     use solver_methods;
     use local_halos;
 
-    proc solve_finished_driver (ref chunk_var : [0..<setting_var.num_chunks] chunks.Chunk, ref setting_var : settings.setting){
+    proc solve_finished_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
         // Calls all kernels that wrap up a solve regardless of solver
         var exact_error: real = 0.0;
 
         if setting_var.check_result {
-            calculate_residual(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].u, chunk_var[0].u0, chunk_var[0].r,
-                chunk_var[0].kx, chunk_var[0].ky);
+            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
+                chunk_var.kx, chunk_var.ky);
 
-            calculate_2norm(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].r, exact_error);
+            calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, exact_error);
             
         }
 
-        finalise(chunk_var[0].x, chunk_var[0].y, setting_var.halo_depth, chunk_var[0].energy, chunk_var[0].density, chunk_var[0].u);
+        finalise(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.energy, chunk_var.density, chunk_var.u);
 
 
         reset_fields_to_exchange(setting_var);
