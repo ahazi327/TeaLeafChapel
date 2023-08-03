@@ -24,7 +24,15 @@ module initialise {
         setting_var.fields_to_exchange[FIELD_ENERGY1]=true;
         halo_update_driver (chunk_var, setting_var, 2);
 
+        // writeln(" init BEFIORE U ARRAY: \n", chunk_var.u);
+        // writeln(" init: energy0 \n", chunk_var.energy0);
+        // writeln(" init: energy \n", chunk_var.energy);
+
         store_energy_driver(chunk_var);
+
+        // writeln(" init AFTER U ARRAY: \n", chunk_var.u);
+        // writeln(" init: energy0 \n", chunk_var.energy0);
+        // writeln(" init: energy \n", chunk_var.energy);
 
         profiler.stopTimer("initialise_application");
     }

@@ -55,37 +55,41 @@ module jacobi{
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
     ref u: [Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
-    const ref kx: [Domain] real, const ref ky: [Domain] real, ref D: [Domain] int, const in Domain : domain(2)){
+    const ref kx: [Domain] real, const ref ky: [Domain] real, ref D: [?Dom] int, const in Domain : domain(2)){
         profiler.startTimer("jacobi_iterate");
 
         
 
-        coforall loc in Locales {
-            on loc {
-                const indices = D.domain.localSubdomain();
-                forall ij in indices{
-                    r[ij] = u[ij];
-                }
-            }
+        // coforall loc in Locales {
+        //     on loc {
+        // const indices = D.domain.localSubdomain();
+        forall ij in r.domain{
+            r[ij] = u[ij];
+        // r=u;
         }
+        //     }
+        // }
 
-        coforall loc in Locales with (ref error) {
-            on loc {
-                var err: real;
-                const indices = D.domain.localSubdomain();
-                const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
-                forall ij in indices[halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)] with (+ reduce err) {
-                    const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
-                        + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
-                    / (1.0 + ((kx[ij]+kx[ij + east]))
-                            + ((ky[ij]+ky[ij + north])));
+        // coforall loc in Locales with (ref error) {
+        //     on loc {
+                // writeln(" on this loc", loc, " domain is :", D.domain.localSubdomain());
+        var err: real;
+        // const indices = D.domain.localSubdomain();
+        const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
+        forall ij in {halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)} with (+ reduce err) {
+            const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
+                + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
+            / (1.0 + ((kx[ij]+kx[ij + east]))
+                    + ((ky[ij]+ky[ij + north])));
 
-                    u[ij] = temp;
-                    err += abs(r[ij]-temp);
-                }
-                error = err;
-            }
+            u[ij] = temp;
+            err += abs(r[ij]-temp);
         }
+        error = err;
+        //     }
+        // }
+
+        // writeln(" here iter is done");
         
         profiler.stopTimer("jacobi_iterate");
     }

@@ -18,9 +18,8 @@ module field_summary {
         profiler.startTimer("field_summary");
 
         var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
-
         for j in {halo_depth..<y-halo_depth} do {
-            foreach i in {halo_depth..<x-halo_depth} do {
+            for i in {halo_depth..<x-halo_depth} do {
                 var cellVol : real;
                 cellVol = volume[j, i];
 
@@ -31,6 +30,7 @@ module field_summary {
                 mass += cellMass;
                 ie += cellMass * energy0[j, i];
                 temp += cellMass * u[j, i];
+                
             }
         }
         profiler.stopTimer("field_summary");
@@ -46,12 +46,10 @@ module field_summary {
         
         var vol, ie, temp, mass : real = 0.0;
 
-        // for cc in 0..<setting_var.num_chunks_per_rank do {
         field_summary(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.volume, 
         chunk_var.density, chunk_var.energy0, chunk_var.u, vol, mass, ie, temp, {0..<chunk_var.y, 0..<chunk_var.x});
-        // }
 
-        if(here.id == 0 && setting_var.check_result && is_solve_finished){ 
+        if(setting_var.check_result && is_solve_finished){ 
             var checking_value : real;
             get_checking_value(setting_var, checking_value);
 

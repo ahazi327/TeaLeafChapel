@@ -18,6 +18,7 @@ module jacobi_driver {
             
             jacobi_main_step_driver(chunk_var, setting_var, tt, err, Domain);
 
+            // chunk_var.u.updateFluff();
             halo_update_driver(chunk_var, setting_var, 1);
             if(abs(err) < setting_var.eps) then break;
             tt_prime += 1;
