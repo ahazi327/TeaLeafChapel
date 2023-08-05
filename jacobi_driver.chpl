@@ -9,7 +9,7 @@ module jacobi_driver {
     proc jacobi_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref err: real){
 
-        var Domain = {0..<chunk_var.y, 0..<chunk_var.x};
+        var Domain : domain(2) = {0..<chunk_var.y, 0..<chunk_var.x};
         jacobi_init_driver(chunk_var, setting_var, rx, ry, Domain);
         // Iterate until convergence
         var tt_prime : int;

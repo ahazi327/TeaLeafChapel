@@ -64,7 +64,7 @@ module jacobi{
         //     on loc {
         // const indices = D.domain.localSubdomain();
         forall ij in r.domain{
-            r[ij] = u[ij];
+        r[ij] = u[ij];
         // r=u;
         }
         //     }
@@ -74,7 +74,7 @@ module jacobi{
         //     on loc {
                 // writeln(" on this loc", loc, " domain is :", D.domain.localSubdomain());
         var err: real;
-        // const indices = D.domain.localSubdomain();
+        const indices = D.domain.localSubdomain();
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         forall ij in {halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)} with (+ reduce err) {
             const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
@@ -86,8 +86,7 @@ module jacobi{
             err += abs(r[ij]-temp);
         }
         error = err;
-        //     }
-        // }
+
 
         // writeln(" here iter is done");
         

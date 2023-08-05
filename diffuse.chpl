@@ -16,11 +16,12 @@ module diffuse{
         
         const end_step = setting_var.end_step : int;
         writeln("Using the ", setting_var.solver : string, "\n");
-        
+        // writeln(" init BEFIORE U ARRAY: \n", chunk_var.r);
         for tt in 0..<end_step do{
             writeln("Timestep ", tt + 1);
             solve(chunk_var, setting_var, tt);
         } 
+        // writeln(" init AFTER U ARRAY: \n", chunk_var.r);
 
         field_summary_driver(chunk_var, setting_var, true);
     }
