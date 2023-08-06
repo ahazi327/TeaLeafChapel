@@ -6,7 +6,7 @@ module cheby_driver{
     use cg_driver;
     use solver_methods;
     use cheby;
-    // param epsilon = 0.00001; 
+    use Math;
     param epsilon = 1e-16; // some really small positive number
 
     proc cheby_driver(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
