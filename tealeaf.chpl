@@ -28,8 +28,9 @@ module main {
         // read input files for state and setting information
         read_config(setting_var, states);
         
-        // Create array of records of chunks and initialise temporarily
-        var chunk_var: chunks.Chunk = new Chunk (setting_var.halo_depth, setting_var.grid_x_cells, setting_var.grid_y_cells, setting_var.dt_init);
+        // Create array of records of chunks and initialise
+        set_var(setting_var);
+        var chunk_var: chunks.Chunk = new Chunk ();
         
         initialise_application(chunk_var, setting_var, states);
 

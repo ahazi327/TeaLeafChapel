@@ -1,5 +1,7 @@
 module test{
     use profile_mini;
+    use StencilDist;
+    use BlockDist;
     param ITER_SHORT : int = 100;
     param ITER_MEDIUM : int = 1000;
     param ITER_LONG : int = 10000;
@@ -35,9 +37,62 @@ module test{
         profiler_mini.report();
     }
 
-    
 
-    
+    proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [0..<y, 0..<x] real){
+        // buffer.updateFluff();
+        for i in {0..<depth} {
+            for j in halo_depth..<x-halo_depth {
+                // buffer.updateFluff();
+                buffer[j, halo_depth-i-1] = buffer[j, i + halo_depth];
+                // buffer.updateFluff();
+                buffer[j, x-halo_depth + i] = buffer[j, x-halo_depth-(i + 1)];
+                // buffer.updateFluff();
+            }
+        }
+        for i in halo_depth..<y-halo_depth {
+            for j in {0..<depth} {
+                // buffer.updateFluff();
+                buffer[y - halo_depth + j, i] = buffer[y - halo_depth - (j + 1), i];
+                // buffer.updateFluff();
+                
+                buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
+                // buffer.updateFluff();
+            }
+        }
+        // buffer.updateFluff();
+    }
+    proc distributedTest (){
+        const x_inner : int = 8;
+        const y_inner : int = 8;
+        const halo_depth : int = 2;
+        const local_Domain : domain(2) = {0..<y_inner+(halo_depth*2), 0..<x_inner + (halo_depth*2)};
+        var DDomain = local_Domain dmapped Stencil(local_Domain, fluff=(1,1));
+
+        var u: [DDomain] real = 1.1;    
+        var u0: [DDomain] real; 
+        const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
+
+        for 1..10 {       
+            u.updateFluff();  
+            update_face(x_inner+(halo_depth*2), y_inner+(halo_depth*2), halo_depth, 2, u);
+            u.updateFluff();     
+            forall ij in {halo_depth..<y_inner+halo_depth, halo_depth..<(x_inner + halo_depth)} {
+                u0[ij] = u[ij] + u[ij + north] + u[ij + west] + u[ij + east] + u[ij + south];
+            }
+            u0.updateFluff();  
+            update_face(x_inner+(halo_depth*2), y_inner+(halo_depth*2), halo_depth, 2, u0);
+            u0.updateFluff();  
+            u = u0;
+            u.updateFluff(); 
+        }
+        var sum = + reduce u;
+        writeln("u array \n", u);
+        writeln("sum = ", sum);
+        // writeln("u0 array \n", u0);
+
+    }
+
+    distributedTest(); 
 
     // assigning to array slices a constant value with forall loop
     proc test_sequence_1 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real){
@@ -161,7 +216,7 @@ module test{
         //         }
         //     }
 
-            writeln("Grid size and depth values are ", x, "x", y, " for ", ITER, " iterations");
+            // writeln("Grid size and depth values are ", x, "x", y, " for ", ITER, " iterations");
 
             // call test functions many times
             // for i in 1..ITER {
@@ -234,20 +289,20 @@ module test{
             //     strided_array_original(x, y);
             //     profiler_mini.stopTimer("strided_array_original");
             // }
-            for i in 1..ITER {
-                profiler_mini.startTimer("halo_update_code_1");
-                halo_update_code_1(x, y, 20, buffer, buffer2);
-                profiler_mini.stopTimer("halo_update_code_1");
-            }
+        //     for i in 1..ITER {
+        //         profiler_mini.startTimer("halo_update_code_1");
+        //         halo_update_code_1(x, y, 20, buffer, buffer2);
+        //         profiler_mini.stopTimer("halo_update_code_1");
+        //     }
 
-            for i in 1..ITER {
-                profiler_mini.startTimer("halo_update_code_2");
-                halo_update_code_2(x, y, 20, buffer, buffer2);
-                profiler_mini.stopTimer("halo_update_code_2");
-            }
+        //     for i in 1..ITER {
+        //         profiler_mini.startTimer("halo_update_code_2");
+        //         halo_update_code_2(x, y, 20, buffer, buffer2);
+        //         profiler_mini.stopTimer("halo_update_code_2");
+        //     }
 
-            profiler_mini.report();
-        // }
+        //     profiler_mini.report();
+        // // }
     }
 }
 

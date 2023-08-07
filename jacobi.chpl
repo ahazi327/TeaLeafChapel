@@ -9,13 +9,13 @@ module jacobi{
 
     // Initialises the Jacobi solver
     proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, const in rx: real, const in ry: real, 
-    ref u: [Domain] real, ref u0: [Domain] real, const ref energy: [Domain] real, const ref density: [Domain] real,
-    ref kx: [Domain] real, ref ky: [Domain] real, const in Domain : domain(2)){
+    ref u: [?DDomain] real, ref u0: [?Domain] real, const ref energy: [Domain] real, const ref density: [Domain] real,
+    ref kx: [Domain] real, ref ky: [Domain] real){
         
         profiler.startTimer("jacobi_init");
 
-        const inner_Domain = Domain[1..<y-1, 1..<x-1];
-        const Inner = Domain[halo_depth..<y - 1, halo_depth..<x - 1];
+        const inner_Domain = {1..<y-1, 1..<x-1};
+        const Inner = {halo_depth..<y - 1, halo_depth..<x - 1};
 
         if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY
         {
@@ -54,41 +54,48 @@ module jacobi{
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
-    const ref kx: [Domain] real, const ref ky: [Domain] real, ref D: [?Dom] int, const in Domain : domain(2)){
+    ref u: [?DDomain] real, const ref u0: [?Domain] real, ref r: [Domain] real, ref error: real,
+    const ref kx: [Domain] real, const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
-
         
-
-        // coforall loc in Locales {
-        //     on loc {
-        // const indices = D.domain.localSubdomain();
         forall ij in r.domain{
-        r[ij] = u[ij];
-        // r=u;
+            r[ij] = u[ij];
         }
-        //     }
-        // }
-
-        // coforall loc in Locales with (ref error) {
-        //     on loc {
-                // writeln(" on this loc", loc, " domain is :", D.domain.localSubdomain());
-        var err: real;
-        const indices = D.domain.localSubdomain();
+        
+        
+        
+        // u0.updateFluff();
+        // r.updateFluff();
+        if useStencilDist then r.updateFluff();
+        // r.updateFluff();
+        // kx.updateFluff();
+        // ky.updateFluff();
+        // writeln("r before: \n", r);
+        
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
-        forall ij in {halo_depth..<(y - halo_depth), halo_depth..<(x - halo_depth)} with (+ reduce err) {
+        // TODO find out why ghost cells give nan results
+        var err: real = 0.0;
+        forall ij in {halo_depth..<y-halo_depth-1, halo_depth..<(x - halo_depth-1)} with (+ reduce err) {
             const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
                 + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
             / (1.0 + ((kx[ij]+kx[ij + east]))
                     + ((ky[ij]+ky[ij + north])));
 
             u[ij] = temp;
-            err += abs(r[ij]-temp);
+            // u.updateFluff();
+            // writeln("error calc u, r, err =", u[ij], " , ", r[ij]," , " ,err, " at coordinates :", ij);
+            err += abs(temp - r[ij]);
         }
+        // writeln("r after : \n", r);
+        // writeln("u fluff, ", u[-1,1]);
+
+        // u0.updateFluff();
+        // r.updateFluff();
+        // u.updateFluff();
+        // kx.updateFluff();
+        // ky.updateFluff();
+        
         error = err;
-
-
-        // writeln(" here iter is done");
         
         profiler.stopTimer("jacobi_iterate");
     }

@@ -4,12 +4,6 @@ module settings{
   param MASTER: int = 0;
   param NUM_FACES: int = 4;
 
-  const CHUNK_LEFT: (int, int) = (0, 0);
-  const CHUNK_RIGHT: (int, int) = (1, 1);
-  const CHUNK_BOTTOM: (int, int) = (2, 2);
-  const CHUNK_TOP: (int, int) = (3, 3);
-  const EXTERNAL_FACE: (int, int) = (-1, -1);
-
   param FIELD_DENSITY: int = 0;
   param FIELD_ENERGY0: int = 1;
   param FIELD_ENERGY1: int = 2;
@@ -49,9 +43,6 @@ module settings{
     var ppcg_inner_steps: int;
     var preconditioner: bool;
     var num_states: int;
-    // var num_chunks: int;
-    // var num_chunks_per_rank: int;
-    // var num_ranks: int;
     var halo_depth: int;
     var is_offload: bool;
     var fields_to_exchange: [0..<NUM_FIELDS] bool;

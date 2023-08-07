@@ -5,106 +5,60 @@ module chunks{
 
   const num_face_domain = {-1..<NUM_FACES, -1..<NUM_FACES};
 
-  record Chunk{
+  // Set as True if using multilocale
+  config param useStencilDist = true;
+  config var global_x = 512;
+  config var global_y = 512;
+  config var global_halo_depth = 2;
+  config var global_dt_init = 0.0;
 
-    var x: int;
-    var y: int;
+  proc set_var (const ref setting_var : settings.setting){
+    global_halo_depth = setting_var.halo_depth;
+    global_x = setting_var.grid_x_cells;
+    global_y = setting_var.grid_y_cells;
+    global_dt_init = setting_var.dt_init;
+
+  }
+
+  record Chunk{
     
+    var halo_depth: int = global_halo_depth;
+    var x_inner: int = global_x;
+    var y_inner: int = global_y;
+
+    var x: int = x_inner + halo_depth * 2;
+    var y: int = y_inner + halo_depth * 2;
     
     // Domains
     // Local domains
     const local_Domain : domain(2) = {0..<y, 0..<x};
-    const local_x_domain : domain(1) = {0..<x};
-    const local_y_domain : domain(1) = {0..<y};
-    const local_x1_domain: domain(1)  = {0..<x+1};
-    const local_y1_domain : domain(1) = {0..<y+1};
-    const local_x_area_domain : domain(2) = {0..<y, 0..<x+1};
-    const local_y_area_domain : domain(2) = {0..<y+1, 0..<x};
-    const local_max_iter_domain : domain(1) = {0..<settings.max_iters};
+    // var local_Domain = inner_Space;
+    const x_domain : domain(1) = {0..<x};
+    const y_domain : domain(1) = {0..<y};
+    const x1_domain: domain(1)  = {0..<x+1};
+    const y1_domain : domain(1) = {0..<y+1};
+    const x_area_domain : domain(2) = {0..<y, 0..<x+1};
+    const y_area_domain : domain(2) = {0..<y+1, 0..<x};
+    const max_iter_domain : domain(1) = {0..<settings.max_iters};
 
-    // // Multi locale domains
-    var Domain = local_Domain dmapped Stencil(local_Domain);
-    var x_domain = local_x_domain dmapped Stencil({0..<x}) ;
-    var y_domain = local_y_domain dmapped Stencil({0..<y});
-    var x1_domain = local_x1_domain dmapped Stencil({0..<x+1});
-    var y1_domain = local_y1_domain dmapped Stencil({0..<y+1});
-    var x_area_domain = local_x_area_domain dmapped Stencil({0..<y, 0..<x+1});
-    var y_area_domain = local_y_area_domain dmapped Stencil({0..<y+1, 0..<x});
-    var max_iter_domain = local_max_iter_domain dmapped Stencil({0..<settings.max_iters});
-
-    // // TYPE 1
-    // var D : [local_Domain] int = noinit;
-    // var x_D : [local_x_domain] int = noinit;
-    // var y_D : [local_y_domain] int = noinit;
-    // var x_1_D : [local_x1_domain] int = noinit;
-    // var y_1_D : [local_y1_domain] int = noinit;
-    // var x_a_D : [local_x_area_domain] int = noinit;
-    // var y_a_D : [local_y_area_domain] int = noinit;
-    // var m_i_D : [local_max_iter_domain] int = noinit;
-
-    // var left: int;
-    // var right: int;
-    // var bottom: int;
-    // var top: int;
-
-    // var dt_init: real;
-    // var neighbours: [num_face_domain] (int, int) = noinit;
-    // var density: [local_Domain] real = noinit; 
-    // var density0: [local_Domain] real = noinit;
-    // var energy: [local_Domain] real = noinit;
-    // var energy0: [local_Domain] real = noinit;
-
-    // var u: [local_Domain] real = noinit;
-    // var u0: [local_Domain] real = noinit;
-    // var p: [local_Domain] real = noinit;
-    // var r: [local_Domain] real = noinit;
-    // var mi: [local_Domain] real = noinit;
-    // var w: [local_Domain] real = noinit;
-    // var kx: [local_Domain] real = noinit;
-    // var ky: [local_Domain] real = noinit;
-    // var sd: [local_Domain] real = noinit;
-
-    // var cell_x: [local_x_domain] real = noinit;
-    // var cell_dx: [local_x_domain] real = noinit;
-    // var cell_y: [local_y_domain] real = noinit;
-    // var cell_dy: [local_y_domain] real = noinit;
-
-    // var vertex_x: [local_x1_domain] real = noinit;
-    // var vertex_dx: [local_x1_domain] real = noinit;
-    // var vertex_y: [local_y1_domain] real = noinit;
-    // var vertex_dy: [local_y1_domain] real = noinit;
-
-    // var volume: [local_Domain] real = noinit;
-    // var x_area: [local_x_area_domain] real = noinit;
-    // var y_area: [local_y_area_domain] real = noinit;
-
-    // // Cheby and PPCG  
-    // var theta: real;
-    // var eigmin: real;
-    // var eigmax: real;
-
-    // var cg_alphas: [local_max_iter_domain] real = noinit;
-    // var cg_betas: [local_max_iter_domain] real = noinit;
-    // var cheby_alphas: [local_max_iter_domain] real = noinit;
-    // var cheby_betas: [local_max_iter_domain] real = noinit;
-
-
-    // locale subdomain indicies
-    var D : [Domain] int = noinit;
-    var x_D : [x_domain] int = noinit;
-    var y_D : [y_domain] int = noinit;
-    var x_1_D : [x1_domain] int = noinit;
-    var y_1_D : [y1_domain] int = noinit;
-    var x_a_D : [x_area_domain] int = noinit;
-    var y_a_D : [y_area_domain] int = noinit;
-    var m_i_D : [max_iter_domain] int = noinit;
+    // Define the bounds of the arrays
+    var Domain = if useStencilDist then local_Domain dmapped Stencil(local_Domain, fluff=(1, 1))
+                else local_Domain;
+    
+    //TODO set up condition to make sure number of locales is only so big compared to grid size
+    // if numLocales < x
+    //     {
+    //         writeln("Coefficient ", coefficient, " is not valid.\n");
+    //         profiler.stopTimer("jacobi_init");
+    //         exit(-1);
+    //     }
 
     var left: int;
     var right: int;
     var bottom: int;
     var top: int;
     
-    var dt_init: real;
+    var dt_init: real = global_dt_init;
     var neighbours: [num_face_domain] (int, int) = noinit;
     var density: [Domain] real = noinit; 
     var density0: [Domain] real = noinit;
@@ -135,7 +89,7 @@ module chunks{
     var x_area: [x_area_domain] real = noinit;
     var y_area: [y_area_domain] real = noinit;
 
-    // Cheby and PPCG  
+    // Cheby and PPCG arrays
     var theta: real;
     var eigmin: real;
     var eigmax: real;
@@ -145,28 +99,5 @@ module chunks{
     var cheby_alphas: [max_iter_domain] real = noinit;
     var cheby_betas: [max_iter_domain] real = noinit;
 
-    proc init (const in halo_depth: int, const in x: int, const in y : int, const in dt_init : real) {
-      // Set new x and y
-      this.x = x + halo_depth*2;
-      this.y = y + halo_depth*2; 
-
-      // Resize Domains
-      const local_Domain = {0..<this.y, 0..<this.x};
-      const local_x_domain = {0..<this.x};
-      const local_y_domain = {0..<this.y};
-      const local_x1_domain = {0..<this.x+1};
-      const local_y1_domain = {0..<this.y+1};
-      const local_x_area_domain = {0..<this.y, 0..<this.x+1};
-      const local_y_area_domain = {0..<this.y+1, 0..<this.x};
-      
-      // Resize Stencils
-      this.Domain = local_Domain dmapped Stencil(local_Domain);
-      this.x_domain = local_x_domain dmapped Stencil({0..<this.x});
-      this.y_domain = local_y_domain dmapped Stencil({0..<this.y});
-      this.x1_domain = local_x1_domain dmapped Stencil({0..<this.x+1});
-      this.y1_domain = local_y1_domain dmapped Stencil({0..<this.y+1});
-      this.x_area_domain = local_x_area_domain dmapped Stencil({0..<this.y, 0..<this.x+1});
-      this.y_area_domain = local_y_area_domain dmapped Stencil({0..<this.y+1, 0..<this.x});
-    }
   }
 }

@@ -40,6 +40,7 @@ module set_chunk_data{
 			chunk_var.x_area[ii] = setting_var.dy;
 			chunk_var.y_area[ii] = setting_var.dx;
 		}
+		chunk_var.volume.updateFluff();
 		
 
 		profiler.stopTimer("set_chunk_data");

@@ -17,6 +17,20 @@ module diffuse{
         const end_step = setting_var.end_step : int;
         writeln("Using the ", setting_var.solver : string, "\n");
         // writeln(" init BEFIORE U ARRAY: \n", chunk_var.r);
+        chunk_var.u0.updateFluff();
+        chunk_var.r.updateFluff();
+        chunk_var.u.updateFluff();
+        chunk_var.kx.updateFluff();
+        chunk_var.ky.updateFluff();
+        chunk_var.p.updateFluff();
+        chunk_var.mi.updateFluff();
+        chunk_var.w.updateFluff();
+        chunk_var.sd.updateFluff();
+        chunk_var.energy0.updateFluff();
+        chunk_var.energy.updateFluff();
+        chunk_var.density0.updateFluff();
+        chunk_var.density.updateFluff();
+
         for tt in 0..<end_step do{
             writeln("Timestep ", tt + 1);
             solve(chunk_var, setting_var, tt);

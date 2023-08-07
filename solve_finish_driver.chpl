@@ -11,6 +11,7 @@ module solve_finish_driver {
         if setting_var.check_result {
             calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
                 chunk_var.kx, chunk_var.ky);
+            chunk_var.r.updateFluff();
 
             calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, exact_error);
             

@@ -50,7 +50,7 @@ module eigenvalue_driver {
     }
     
     // Function to implement the sign functionality
-    proc sign(const a: real, const b: real): real {
+    inline proc sign(const a: real, const b: real): real {
         if b < 0 then return -abs(a);
         else return abs(a);
     }
