@@ -62,18 +62,13 @@ module jacobi{
             r[ij] = u[ij];
         }
         
-        
-        
-        // u0.updateFluff();
-        // r.updateFluff();
-        if useStencilDist then r.updateFluff();
-        // r.updateFluff();
-        // kx.updateFluff();
-        // ky.updateFluff();
-        // writeln("r before: \n", r);
+        if useStencilDist {
+            profiler.startTimer("comms");
+            r.updateFluff();
+            profiler.stopTimer("comms");
+        } 
         
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
-        // TODO find out why ghost cells give nan results
         var err: real = 0.0;
         forall ij in {halo_depth..<y-halo_depth-1, halo_depth..<(x - halo_depth-1)} with (+ reduce err) {
             const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
@@ -82,19 +77,8 @@ module jacobi{
                     + ((ky[ij]+ky[ij + north])));
 
             u[ij] = temp;
-            // u.updateFluff();
-            // writeln("error calc u, r, err =", u[ij], " , ", r[ij]," , " ,err, " at coordinates :", ij);
             err += abs(temp - r[ij]);
-        }
-        // writeln("r after : \n", r);
-        // writeln("u fluff, ", u[-1,1]);
-
-        // u0.updateFluff();
-        // r.updateFluff();
-        // u.updateFluff();
-        // kx.updateFluff();
-        // ky.updateFluff();
-        
+        }    
         error = err;
         
         profiler.stopTimer("jacobi_iterate");

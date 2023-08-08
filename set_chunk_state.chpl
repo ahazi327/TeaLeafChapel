@@ -17,8 +17,6 @@ module set_chunk_state{
             chunk_var.energy0[ij] = states[0].energy;
             chunk_var.density[ij] = states[0].density;
         }
-        chunk_var.energy0.updateFluff();
-        chunk_var.density.updateFluff();
         
         var Domain = {1..<chunk_var.x-1, 1..<chunk_var.y-1};
 

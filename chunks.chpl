@@ -2,11 +2,14 @@
 module chunks{
   use settings;
   use StencilDist;
+  use BlockDist;
 
   const num_face_domain = {-1..<NUM_FACES, -1..<NUM_FACES};
 
   // Set as True if using multilocale
-  config param useStencilDist = true;
+  config param useStencilDist = false;
+  config param useBlockDist = true;
+  
   config var global_x = 512;
   config var global_y = 512;
   config var global_halo_depth = 2;
@@ -43,7 +46,9 @@ module chunks{
 
     // Define the bounds of the arrays
     var Domain = if useStencilDist then local_Domain dmapped Stencil(local_Domain, fluff=(1, 1))
+                else if useBlockDist then local_Domain dmapped Block(local_Domain)
                 else local_Domain;
+    
     
     //TODO set up condition to make sure number of locales is only so big compared to grid size
     // if numLocales < x
