@@ -7,8 +7,8 @@ module chunks{
   const num_face_domain = {-1..<NUM_FACES, -1..<NUM_FACES};
 
   // Set as True if using multilocale
-  config param useStencilDist = false;
-  config param useBlockDist = true;
+  config param useStencilDist = true;
+  config param useBlockDist = false;
   
   config var global_x = 512;
   config var global_y = 512;
@@ -24,7 +24,6 @@ module chunks{
   }
 
   record Chunk{
-    
     var halo_depth: int = global_halo_depth;
     var x_inner: int = global_x;
     var y_inner: int = global_y;
@@ -35,7 +34,6 @@ module chunks{
     // Domains
     // Local domains
     const local_Domain : domain(2) = {0..<y, 0..<x};
-    // var local_Domain = inner_Space;
     const x_domain : domain(1) = {0..<x};
     const y_domain : domain(1) = {0..<y};
     const x1_domain: domain(1)  = {0..<x+1};
