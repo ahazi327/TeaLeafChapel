@@ -14,7 +14,7 @@ module eigenvalue_driver {
 
          // Prepare matrix
          foreach ii in 0..<num_cg_iters do {
-            diag[ii] = 1.0 / chunk_var.cg_alphas[ii]; // using chunk var array as a single entry array for now
+            diag[ii] = 1.0 / chunk_var.cg_alphas[ii];
 
             if ii > 0 then 
                  diag[ii] += chunk_var.cg_betas[ii-1] / chunk_var.cg_alphas[ii-1];

@@ -18,23 +18,35 @@ module diffuse{
         const end_step = setting_var.end_step : int;
         writeln("Using the ", setting_var.solver : string, "\n");
         // Make sure all arrays are up to date before starting solve method
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.u0.updateFluff();
-            chunk_var.r.updateFluff();
-            chunk_var.u.updateFluff();
-            chunk_var.kx.updateFluff();
-            chunk_var.ky.updateFluff();
-            chunk_var.p.updateFluff();
-            chunk_var.mi.updateFluff();
-            chunk_var.w.updateFluff();
-            chunk_var.sd.updateFluff();
-            chunk_var.energy0.updateFluff();
-            chunk_var.energy.updateFluff();
-            chunk_var.density0.updateFluff();
-            chunk_var.density.updateFluff();
-            chunk_var.volume.updateFluff();
-            profiler.stopTimer("comms");
+    
+        //     chunk_var.p.updateFluff();
+        //     chunk_var.mi.updateFluff();
+        //     chunk_var.w.updateFluff();
+        //     chunk_var.sd.updateFluff();
+        //     chunk_var.energy0.updateFluff();
+        //     chunk_var.energy.updateFluff();
+        //     chunk_var.density0.updateFluff();
+        //     chunk_var.density.updateFluff();
+        //     chunk_var.volume.updateFluff();
+
+        select (setting_var.solver){
+            when Solver.JACOBI_SOLVER{
+                if useStencilDist {
+                    profiler.startTimer("comms");
+                    chunk_var.density.updateFluff();
+                    chunk_var.volume.updateFluff();
+                    profiler.stopTimer("comms");
+                }
+            }
+            // when Solver.CG_SOLVER{
+                
+            // }
+            // when Solver.CHEBY_SOLVER{
+                
+            // }
+            // when Solver.PPCG_SOLVER{
+                
+            // }
         }
 
         for tt in 0..<end_step do{

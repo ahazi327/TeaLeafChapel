@@ -14,11 +14,6 @@ module store_energy {
     // Invokes the store energy kernel
     proc store_energy_driver (ref chunk_var : chunks.Chunk){
         store_energy(chunk_var.energy0, chunk_var.energy);
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.energy.updateFluff();
-            profiler.stopTimer("comms");
-        }
     }
 
 

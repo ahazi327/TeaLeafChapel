@@ -10,11 +10,10 @@ module jacobi_driver {
     proc jacobi_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
     ref ry: real, ref err: real){
 
-        var Domain : domain(2) = {0..<chunk_var.y, 0..<chunk_var.x};
         jacobi_init_driver(chunk_var, setting_var, rx, ry);
+
         // Iterate until convergence
         var tt_prime : int;
-        
         for tt in 0..<setting_var.max_iters do {
             jacobi_main_step_driver(chunk_var, setting_var, tt, err);
 
@@ -34,8 +33,6 @@ module jacobi_driver {
         
         if useStencilDist {
             profiler.startTimer("comms");
-            chunk_var.u.updateFluff();
-            chunk_var.u0.updateFluff();
             chunk_var.kx.updateFluff();
             chunk_var.ky.updateFluff();
             profiler.stopTimer("comms");
@@ -56,25 +53,17 @@ module jacobi_driver {
     // Invokes the main Jacobi solve kernels
     proc jacobi_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
     ref err: real){
+
         jacobi_iterate(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
             chunk_var.r, err, chunk_var.kx, chunk_var.ky);
-
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.u.updateFluff();
-            profiler.stopTimer("comms");
-        } 
-
+        
         if tt % 50 == 0 {
+                        
             halo_update_driver(chunk_var, setting_var, 1);
-
+            
             calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
                 chunk_var.kx, chunk_var.ky);
-            if useStencilDist {
-                profiler.startTimer("comms");
-                chunk_var.r.updateFluff();
-                profiler.stopTimer("comms");
-            } 
+
             calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, err);
         }
     }

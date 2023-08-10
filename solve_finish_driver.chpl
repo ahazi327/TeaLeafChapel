@@ -24,11 +24,6 @@ module solve_finish_driver {
         }
 
         finalise(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.energy, chunk_var.density, chunk_var.u);
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.energy.updateFluff();
-            profiler.stopTimer("comms");
-        } 
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;

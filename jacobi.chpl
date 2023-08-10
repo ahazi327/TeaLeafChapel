@@ -26,7 +26,7 @@ module jacobi{
 
         forall (i, j) in Inner do{ 
             const temp : real = energy[i, j] * density[i, j];
-            u0[i, j] = temp;
+            // u0[i, j] = temp; //Maybe not needed
             u[i, j] = temp;
 
             var densityCentre: real;
@@ -54,27 +54,29 @@ module jacobi{
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?DDomain] real, const ref u0: [?Domain] real, ref r: [Domain] real, ref error: real,
+    ref u: [?Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
     const ref kx: [Domain] real, const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
-        
-        forall ij in r.domain{
+
+        forall ij in r.domain {
             r[ij] = u[ij];
         }
-        
+
         if useStencilDist {
             profiler.startTimer("comms");
-            r.updateFluff();
+            r.updateFluff(); // this could be avoided, if I could write using the fluff from the u array locally
             profiler.stopTimer("comms");
         } 
         
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         var err: real = 0.0;
         forall ij in {halo_depth..<y-halo_depth-1, halo_depth..<(x - halo_depth-1)} with (+ reduce err) {
-            const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
-                + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
-            / (1.0 + ((kx[ij]+kx[ij + east]))
-                    + ((ky[ij]+ky[ij + north])));
+            const kx_temp : real = kx[ij];
+            const ky_temp : real = ky[ij];
+            const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx_temp*r[ij + west])))
+                + ((ky[ij + north]*r[ij + north] + ky_temp*r[ij + south])))
+            / (1.0 + ((kx_temp+kx[ij + east]))
+                    + ((ky_temp+ky[ij + north])));
 
             u[ij] = temp;
             err += abs(temp - r[ij]);

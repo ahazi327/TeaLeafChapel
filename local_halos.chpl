@@ -16,8 +16,8 @@ module local_halos {
 
     // The kernel for updating halos locally
     proc local_halos(const in x: int, const in y: int, const in depth: int, const in halo_depth: int,
-    const ref fields_to_exchange: [0..<NUM_FIELDS] bool, ref density: [D] real, ref energy0: [D] real,
-    ref energy: [D] real, ref u: [D] real, ref p: [D] real, ref sd: [?D] real){
+    const ref fields_to_exchange: [0..<NUM_FIELDS] bool, ref density: [?D] real, ref energy0: [D] real,
+    ref energy: [D] real, ref u: [D] real, ref p: [D] real, ref sd: [D] real){
         
         if fields_to_exchange[FIELD_DENSITY] then update_face(x, y, halo_depth, depth, density);
 
@@ -42,9 +42,10 @@ module local_halos {
             buffer[y - halo_depth + j, i] = buffer[y - halo_depth - (j + 1), i];
             buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
         }
+
         if useStencilDist {
             profiler.startTimer("comms");
-            buffer.updateFluff();
+            buffer.updateFluff(); // Without this it gets really slow, test on whale ....
             profiler.stopTimer("comms");
         } 
 
