@@ -14,12 +14,17 @@ module chunks{
   config var global_y = 512;
   config var global_halo_depth = 2;
   config var global_dt_init = 0.0;
+  // var global_Domain : domain(2) = {0..<global_y, 0..<global_x};
+  // var g_dom = global_Domain;
 
   proc set_var (const ref setting_var : settings.setting){
     global_halo_depth = setting_var.halo_depth;
     global_x = setting_var.grid_x_cells;
     global_y = setting_var.grid_y_cells;
     global_dt_init = setting_var.dt_init;
+
+    // global_Domain = {0..<global_y, 0..<global_x};
+    // var g_dom = global_Domain dmapped Stencil(global_Domain, fluff=(1, 1));
 
   }
 

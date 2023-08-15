@@ -1,4 +1,5 @@
 module ppcg_driver{
+    use profile;
     use chunks;
     use settings;
     use cg_driver;
@@ -7,7 +8,7 @@ module ppcg_driver{
     use eigenvalue_driver;
     use solver_methods;
     use ppcg;
-    use profile;
+    
 
     // Performs a full solve with the PPCG solver
     proc ppcg_driver(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
@@ -129,7 +130,7 @@ module ppcg_driver{
             halo_update_driver(chunk_var, setting_var, 1);
 
             ppcg_inner_iteration(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[pp], 
-                                    chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky);
+                                    chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky, chunk_var.Domain);
         }
 
         reset_fields_to_exchange(setting_var);

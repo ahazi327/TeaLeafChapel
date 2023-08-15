@@ -36,7 +36,54 @@ module test{
         profiler_mini.stopTimer("test2");
         profiler_mini.report();
     }
+    proc distributed_stencil(){
+        const x_inner: int = 64;
+        const y_inner: int = 64;
+        const local_Domain : domain(2) = {0..<y, 0..<x};
+        var Domain = local_Domain dmapped Block(local_Domain);
+        var u0: [Domain] real; 
+        var e0: [Domain] real = 1.1; 
+        var e1: [Domain] real = 5.7; 
+        var u:  [local_Domain] real; 
+        var d0: [local_Domain] real = 1.1; 
+        var d1: [local_Domain] real = 5.7; 
 
+        profiler_mini.startTimer("test1");
+        for 1..<300 {
+            forall ij in Domain {
+                // do math
+                u0[ij] = e1[ij] + e0[ij];
+            }
+        }
+        
+        profiler_mini.stopTimer("test1");
+
+        profiler_mini.startTimer("test3");
+        coforall loc in Locales {
+            on loc {
+                const localIndices = u0.localSubdomain();
+                for 1..<300 {
+                    forall ij in localIndices {
+                        // do math
+                        u0[ij] = e1[ij] + e0[ij];
+                    }
+                }
+            }
+        }
+        profiler_mini.stopTimer("test3");
+
+        profiler_mini.startTimer("test2");
+        for 1..<300 {   
+            forall ij in local_Domain {
+            // do math
+            u[ij] = d1[ij] + d0[ij];
+            }
+        }
+        profiler_mini.stopTimer("test2");
+    }
+
+    distributed_stencil();
+    profiler_mini.report();
 
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [0..<y, 0..<x] real){
         // buffer.updateFluff();
@@ -92,7 +139,7 @@ module test{
 
     }
 
-    distributedTest(); 
+    // distributedTest(); 
 
     // assigning to array slices a constant value with forall loop
     proc test_sequence_1 (const in x: int, const in y: int, ref buffer: [0..<y, 0..<x] real){

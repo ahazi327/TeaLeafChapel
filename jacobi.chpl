@@ -63,7 +63,7 @@ module jacobi{
 
         if useStencilDist {
             profiler.startTimer("comms");
-            r.updateFluff();
+            r.updateFluff(); // this could be avoided, if I could write using the fluff from the u array locally
             profiler.stopTimer("comms");
         } 
         
