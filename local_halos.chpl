@@ -43,12 +43,6 @@ module local_halos {
             buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
         }
 
-        if useStencilDist {
-            profiler.startTimer("comms");
-            buffer.updateFluff(); // Without this it gets really slow, test on whale ....
-            profiler.stopTimer("comms");
-        } 
-
         // coforall 1..1 {  // Single iteration coforall loop to create a new task
         //     begin update_left(x, y, halo_depth, depth, buffer);
         //     begin update_right(x, y, halo_depth, depth, buffer);

@@ -26,7 +26,6 @@ module jacobi{
 
         forall (i, j) in Inner do{ 
             const temp : real = energy[i, j] * density[i, j];
-            // u0[i, j] = temp; //Maybe not needed
             u[i, j] = temp;
 
             var densityCentre: real;
@@ -64,7 +63,7 @@ module jacobi{
 
         if useStencilDist {
             profiler.startTimer("comms");
-            r.updateFluff(); // this could be avoided, if I could write using the fluff from the u array locally
+            r.updateFluff();
             profiler.stopTimer("comms");
         } 
         

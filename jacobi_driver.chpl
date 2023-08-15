@@ -39,6 +39,7 @@ module jacobi_driver {
         }
 
         copy_u(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0);
+        
         if useStencilDist {
             profiler.startTimer("comms");
             chunk_var.u0.updateFluff();
@@ -56,6 +57,12 @@ module jacobi_driver {
 
         jacobi_iterate(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
             chunk_var.r, err, chunk_var.kx, chunk_var.ky);
+
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.u.updateFluff();
+            profiler.stopTimer("comms");
+        } 
         
         if tt % 50 == 0 {
                         

@@ -38,15 +38,26 @@ module diffuse{
                     profiler.stopTimer("comms");
                 }
             }
-            // when Solver.CG_SOLVER{
-                
-            // }
+            when Solver.CG_SOLVER{
+                if useStencilDist {
+                    profiler.startTimer("comms");
+                    chunk_var.density.updateFluff();
+                    chunk_var.volume.updateFluff();
+                    chunk_var.sd.updateFluff();
+                    profiler.stopTimer("comms");
+                }
+            }
             // when Solver.CHEBY_SOLVER{
                 
             // }
-            // when Solver.PPCG_SOLVER{
-                
-            // }
+            when Solver.PPCG_SOLVER{
+                if useStencilDist {
+                    profiler.startTimer("comms");
+                    chunk_var.density.updateFluff();
+                    chunk_var.volume.updateFluff();
+                    profiler.stopTimer("comms");
+                }
+            }
         }
 
         for tt in 0..<end_step do{
@@ -76,6 +87,13 @@ module diffuse{
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;
         setting_var.fields_to_exchange[FIELD_DENSITY] = true;
         halo_update_driver(chunk_var, setting_var, 2);
+
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.density.updateFluff();
+            chunk_var.energy.updateFluff();
+            profiler.stopTimer("comms");
+        }
 
         var error : real = 0;
 

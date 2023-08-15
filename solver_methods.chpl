@@ -16,7 +16,7 @@ module solver_methods {
 
     // Calculates the current value of r
     proc calculate_residual(const in x: int, const in y: int, const in halo_depth: int, 
-    const ref u: [?DDomain] real, const ref u0: [?Domain] real, ref r: [Domain] real, const ref kx: [Domain] real,
+    const ref u: [?Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, const ref kx: [Domain] real,
     const ref ky: [Domain] real){
         profiler.startTimer("calculate_residual");
         const inner = Domain[halo_depth..<y - halo_depth, halo_depth..<x - halo_depth];

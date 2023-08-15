@@ -78,7 +78,7 @@ module cheby_driver{
         // chunks per rank loop
         calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, bb);
 
-        cheby.cheby_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.u, chunk_var.u0,
+        cheby_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.u, chunk_var.u0,
         chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
 
         reset_fields_to_exchange(setting_var);
@@ -92,7 +92,7 @@ module cheby_driver{
     proc cheby_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in num_cheby_iters: int,
     const in is_calc_2norm: bool, ref error: real){
         // chunks per rank loop
-        cheby.cheby_iterate (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[num_cheby_iters],
+        cheby_iterate (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[num_cheby_iters],
         chunk_var.cheby_betas[num_cheby_iters], chunk_var.u, chunk_var.u0,
         chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
 

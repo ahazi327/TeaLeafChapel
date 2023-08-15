@@ -7,6 +7,7 @@ module ppcg_driver{
     use eigenvalue_driver;
     use solver_methods;
     use ppcg;
+    use profile;
 
     // Performs a full solve with the PPCG solver
     proc ppcg_driver(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
@@ -45,6 +46,12 @@ module ppcg_driver{
                     cheby_coef_driver(chunk_var, setting_var.ppcg_inner_steps);
 
                     ppcg_init_driver(chunk_var, setting_var, rro);
+
+                    if useStencilDist {
+                        profiler.startTimer("comms");
+                        chunk_var.r.updateFluff();
+                        profiler.stopTimer("comms");
+                    }
                 }
                 // Perform the main step
                 ppcg_main_step_driver(chunk_var, setting_var, rro, error);
@@ -63,27 +70,35 @@ module ppcg_driver{
     proc ppcg_init_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real){
         
         calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
-        chunk_var.kx, chunk_var.ky);
+                            chunk_var.kx, chunk_var.ky);
+
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_P] = true;
         halo_update_driver(chunk_var, setting_var, 1);
-
     }
 
     // Invokes the main PPCG solver kernels
     proc ppcg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real, ref error: real) {
         var pw: real;
 
-        cg_calc_w(chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
+        cg_calc_w(chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, chunk_var.ky);
+
+        
 
         const alpha : real = rro / pw;
         var rrn : real = 0.0;
 
         cg_calc_ur (chunk_var.x, chunk_var.y, setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p,
-            chunk_var.r, chunk_var.w, {0..<chunk_var.y, 0..<chunk_var.x});
+                    chunk_var.r, chunk_var.w);
 
         // Perform the inner iterations
         ppcg_inner_iterations(chunk_var, setting_var);
+
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.r.updateFluff();
+            profiler.stopTimer("comms");
+        }
 
         rrn = 0.0;
 
@@ -91,7 +106,7 @@ module ppcg_driver{
 
         const beta : real = rrn / rro;
 
-        cg_calc_p(chunk_var.x, chunk_var.y, setting_var.halo_depth, beta, chunk_var.p, chunk_var.r, {0..<chunk_var.y, 0..<chunk_var.x});
+        cg_calc_p(chunk_var.x, chunk_var.y, setting_var.halo_depth, beta, chunk_var.p, chunk_var.r);
 
         error = rrn;
         rro = rrn;
@@ -99,16 +114,22 @@ module ppcg_driver{
 
     // Performs the inner iterations of the PPCG solver
     proc ppcg_inner_iterations(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
-        ppcg_init (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd, {0..<chunk_var.y, 0..<chunk_var.x});
+        ppcg_init (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_SD] = true;
 
         for pp in 0..<setting_var.ppcg_inner_steps do {
+            if useStencilDist {
+                profiler.startTimer("comms");
+                chunk_var.sd.updateFluff();
+                profiler.stopTimer("comms");
+            }   
+
             halo_update_driver(chunk_var, setting_var, 1);
 
             ppcg_inner_iteration(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[pp], 
-            chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky, {0..<chunk_var.y, 0..<chunk_var.x});
+                                    chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky);
         }
 
         reset_fields_to_exchange(setting_var);

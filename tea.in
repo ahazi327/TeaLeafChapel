@@ -12,7 +12,7 @@ ymax                = 10.0
 x_cells             = 64
 y_cells             = 64
 
-use_jacobi
+use_ppcg
 use_c_kernels
 check_result
 
