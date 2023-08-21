@@ -52,34 +52,11 @@ module test{
         for 1..<300 {
             forall ij in Domain {
                 // do math
-                u0[ij] = e1[ij] + e0[ij];
+                u0[ij] = e1[ij];
             }
         }
         
         profiler_mini.stopTimer("test1");
-
-        profiler_mini.startTimer("test3");
-        coforall loc in Locales {
-            on loc {
-                const localIndices = u0.localSubdomain();
-                for 1..<300 {
-                    forall ij in localIndices {
-                        // do math
-                        u0[ij] = e1[ij] + e0[ij];
-                    }
-                }
-            }
-        }
-        profiler_mini.stopTimer("test3");
-
-        profiler_mini.startTimer("test2");
-        for 1..<300 {   
-            forall ij in local_Domain {
-            // do math
-            u[ij] = d1[ij] + d0[ij];
-            }
-        }
-        profiler_mini.stopTimer("test2");
     }
 
     distributed_stencil();
