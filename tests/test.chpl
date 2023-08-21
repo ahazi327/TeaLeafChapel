@@ -39,8 +39,9 @@ module test{
     proc distributed_stencil(){
         const x_inner: int = 64;
         const y_inner: int = 64;
+        var test : real;
         const local_Domain : domain(2) = {0..<y, 0..<x};
-        var Domain = local_Domain dmapped Block(local_Domain);
+        var Domain = local_Domain dmapped Stencil(local_Domain);
         var u0: [Domain] real; 
         var e0: [Domain] real = 1.1; 
         var e1: [Domain] real = 5.7; 
@@ -49,12 +50,14 @@ module test{
         var d1: [local_Domain] real = 5.7; 
 
         profiler_mini.startTimer("test1");
+        sqrt(u0[0]);
         for 1..<300 {
             forall ij in Domain {
                 // do math
                 u0[ij] = e1[ij];
             }
         }
+        sqrt(u0[0]);
         
         profiler_mini.stopTimer("test1");
     }
