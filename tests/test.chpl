@@ -50,14 +50,14 @@ module test{
         var d1: [local_Domain] real = 5.7; 
 
         profiler_mini.startTimer("test1");
-        sqrt(u0[0]);
-        for 1..<300 {
+        test = sqrt(y_inner);
+        for 1..<5 {
             forall ij in Domain {
                 // do math
                 u0[ij] = e1[ij];
             }
         }
-        sqrt(u0[0]);
+        test = sqrt(y_inner);
         
         profiler_mini.stopTimer("test1");
     }
