@@ -7,8 +7,8 @@ module chunks{
   const num_face_domain = {-1..<NUM_FACES, -1..<NUM_FACES};
 
   // Set as True if using multilocale
-  config param useStencilDist = true;
-  config param useBlockDist = false;
+  config param useStencilDist = false;
+  config param useBlockDist = true;
   
   config var global_x = 512;
   config var global_y = 512;

@@ -19,55 +19,21 @@ module ppcg{
     proc ppcg_inner_iteration (const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, const in beta: real,
     ref u: [?Domain] real, ref r: [Domain] real, ref sd: [Domain] real,
     const ref kx: [Domain] real, const ref ky: [Domain] real, ref local_Domain : domain){
-        // startVerboseComm();
-        // profiler.startTimer("ppcg_inner_iteration");
+        profiler.startTimer("ppcg_inner_iteration");
         
-        // const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-        // forall (i, j) in inner do {
-        //     // writeln(" locale id is: ", here.id, " index is, ", i, " ", j);
-        //     const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
-        //         + (ky[i, j+1]+ky[i, j]))*sd[i, j]
-        //         - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
-        //         - (ky[i, j+1]*sd[i, j+1]+ky[i, j]*sd[i, j-1]);
+        const inner = {halo_depth..< x - halo_depth, halo_depth..<y-halo_depth};
+        forall (i, j) in inner do {
+            const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
+                + (ky[i, j+1]+ky[i, j]))*sd[i, j]
+                - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
+                - (ky[i, j+1]*sd[i, j+1]+ky[i, j]*sd[i, j-1]);
 
-        //     r[i, j] -= smvp;
-        //     u[i, j] += sd[i, j];
-        // }
-
-        // forall ij in inner do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
-
-        // profiler.stopTimer("ppcg_inner_iteration");
-
-                profiler.startTimer("ppcg_inner_iteration");
-        // startVerboseComm();
-        // const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-        coforall loc in Locales {
-            on loc {
-                const localIndices = u.localSubdomain();
-                const inner = localIndices[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-                forall (i, j) in inner do {
-                    // writeln(" locale id is: ", here.id, " index is, ", i, " ", j);
-                    const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
-                        + (ky[i, j+1]+ky[i, j]))*sd[i, j]
-                        - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
-                        - (ky[i, j+1]*sd[i, j+1]+ky[i, j]*sd[i, j-1]);
-
-                    r[i, j] -= smvp;
-                    u[i, j] += sd[i, j];
-                }
-            }
+            r[i, j] -= smvp;
+            u[i, j] += sd[i, j];
         }
 
-        coforall loc in Locales {
-            on loc {
-                // writeln( "id : ", loc);
-                const localIndices = sd.localSubdomain();
-                const inner = localIndices[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
-                forall ij in inner do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
-                }
-        }
+        forall ij in inner do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
         profiler.stopTimer("ppcg_inner_iteration");
-        // stopVerboseComm();
     }
 
 }

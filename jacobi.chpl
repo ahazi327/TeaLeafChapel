@@ -57,7 +57,7 @@ module jacobi{
     const ref kx: [Domain] real, const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
 
-        forall ij in r.domain {
+        forall ij in {0..<y, 0..<x} {
             r[ij] = u[ij];
         }
 

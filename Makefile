@@ -1,5 +1,5 @@
 CC = chpl
-CFLAGS = --debug
+CFLAGS = --fast --debug
 TARGET_DIR = ./objects
 TARGET = $(TARGET_DIR)/tealeaf
 TEST_DIR = ./tests

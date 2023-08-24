@@ -42,6 +42,7 @@ module test{
         var test : real;
         const local_Domain : domain(2) = {0..<y, 0..<x};
         var Domain = local_Domain dmapped Stencil(local_Domain);
+        var inner = Domain[2..<y-2, 2..<x-2];
         var u0: [Domain] real; 
         var e0: [Domain] real = 1.1; 
         var e1: [Domain] real = 5.7; 
@@ -51,7 +52,7 @@ module test{
 
         profiler_mini.startTimer("test1");
         test = sqrt(y_inner);
-        for 1..<5 {
+        for param i in 1..<300 {
             forall ij in Domain {
                 // do math
                 u0[ij] = e1[ij];

@@ -18,17 +18,7 @@ module diffuse{
         const end_step = setting_var.end_step : int;
         writeln("Using the ", setting_var.solver : string, "\n");
         // Make sure all arrays are up to date before starting solve method
-    
-        //     chunk_var.p.updateFluff();
-        //     chunk_var.mi.updateFluff();
-        //     chunk_var.w.updateFluff();
-        //     chunk_var.sd.updateFluff();
-        //     chunk_var.energy0.updateFluff();
-        //     chunk_var.energy.updateFluff();
-        //     chunk_var.density0.updateFluff();
-        //     chunk_var.density.updateFluff();
-        //     chunk_var.volume.updateFluff();
-
+        
         select (setting_var.solver){
             when Solver.JACOBI_SOLVER{
                 if useStencilDist {
