@@ -14,11 +14,11 @@ module jacobi_driver {
 
         // Iterate until convergence
         var tt_prime : int;
-        for tt in 0..<setting_var.max_iters do {
+        for tt in 0..<211 do {
             jacobi_main_step_driver(chunk_var, setting_var, tt, err);
 
             halo_update_driver(chunk_var, setting_var, 1);
-            if(abs(err) < setting_var.eps) then break;
+            // if(abs(err) < setting_var.eps) then break;
             tt_prime += 1;
         }
         writeln("Jacobi iterations : ", tt_prime);
