@@ -58,14 +58,14 @@ module jacobi{
         profiler.startTimer("jacobi_iterate");
 
         coforall l in Locales do on l {
-            forall ij in Domain.localSubdomain() {
+            forall ij in Domain {
                 r[ij] = u[ij];
             }
         }
 
         if useStencilDist {
             profiler.startTimer("comms");
-            r.updateFluff(); // this could be avoided, if I could write using the fluff from the u array locally
+            r.updateFluff();
             profiler.stopTimer("comms");
         } 
         
@@ -73,13 +73,11 @@ module jacobi{
         var err: real = 0.0;
 
         coforall l in Locales with (+ reduce err) do on l {
-            forall ij in Domain.localSubdomain().expand(-halo_depth) with (+ reduce err) {
-                const kx_temp : real = kx[ij];
-                const ky_temp : real = ky[ij];
-                const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx_temp*r[ij + west])))
-                    + ((ky[ij + north]*r[ij + north] + ky_temp*r[ij + south])))
-                / (1.0 + ((kx_temp+kx[ij + east]))
-                        + ((ky_temp+ky[ij + north])));
+            forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+                const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
+                    + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
+                / (1.0 + ((kx[ij]+kx[ij + east]))
+                        + ((ky[ij]+ky[ij + north])));
 
                 u[ij] = temp;
                 err += abs(temp - r[ij]);
