@@ -76,7 +76,8 @@ module field_summary {
 
             for line in tea_prob_reader.lines(){
                 counter += 1;
-                if ( x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && num_steps == setting_var.end_step) {
+                if (x == setting_var.grid_x_cells && y == setting_var.grid_y_cells && 
+                    num_steps == setting_var.end_step) {
                     // Found the problem in the file
                     tea_prob.close();
                     return;

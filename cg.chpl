@@ -7,9 +7,9 @@ module cg {
     use profile;
     use chunks;
     proc cg_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: int,
-    in rx: real, in ry: real, ref rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
-    ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  ref kx: [Domain] real,
-     ref ky: [Domain] real){
+                in rx: real, in ry: real, ref rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
+                ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  
+                ref kx: [Domain] real, ref ky: [Domain] real){
 
         profiler.startTimer("cg_init");
         if coefficient != CONDUCTIVITY && coefficient != RECIP_CONDUCTIVITY
@@ -72,8 +72,10 @@ module cg {
     }
 
     // Calculates w
-    proc cg_calc_w (const in x: int, const in y: int, const in halo_depth: int, ref pw: real, const ref p: [?Domain] real,
-    ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real){
+    proc cg_calc_w (const in x: int, const in y: int, const in halo_depth: int, ref pw: real, 
+                    const ref p: [?Domain] real, ref w: [Domain] real, const ref kx: [Domain] real, 
+                    const ref ky: [Domain] real){
+
         profiler.startTimer("cg_calc_w");
         var pw_temp : real;
         const inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
@@ -93,7 +95,8 @@ module cg {
     
     // Calculates u and r
     proc cg_calc_ur(const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, ref rrn: real, 
-    ref u: [?Domain] real, const ref p: [Domain] real, ref r: [Domain] real, const ref w: [Domain] real){
+                    ref u: [?Domain] real, const ref p: [Domain] real, ref r: [Domain] real, 
+                    const ref w: [Domain] real){
         profiler.startTimer("cg_calc_ur");
         var rrn_temp : real;
         const inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
@@ -116,7 +119,8 @@ module cg {
         profiler.startTimer("cg_calc_p");
         const halo_dom = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
-        // p[halo_dom] = beta * p[halo_dom] + r[halo_dom];  // THIS IS MUCH SLOWER THAN A FORALL LOOP (10s slower on a 512x512 grid on this function alone)
+        // p[halo_dom] = beta * p[halo_dom] + r[halo_dom];  
+        // THIS IS MUCH SLOWER THAN A FORALL LOOP (10s slower on a 512x512 grid on this function alone)
         
         forall ij in halo_dom do {
             p[ij] = beta * p[ij] + r[ij];

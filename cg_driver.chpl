@@ -8,7 +8,7 @@ module cg_driver {
 
     // Performs a full solve with the CG solver kernels
     proc cg_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
-    ref ry: real, ref error: real){
+                    ref ry: real, ref error: real, ref interation_count : int){
         //var tt: int;
         var rro : real;
         var t : int;
@@ -30,17 +30,18 @@ module cg_driver {
 
             tt_prime += 1;
         }
+        interation_count = tt_prime;
         writeln("CG iterations : ", tt_prime);
     }
 
     // Invokes the CG initialisation kernels
     proc cg_init_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
-    ref ry: real, ref rro: real) {
+                        ref ry: real, ref rro: real) {
         rro = 0.0;
 
         cg_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, setting_var.coefficient, rx, ry, rro,
-        chunk_var.density, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.r, chunk_var.w,
-        chunk_var.kx, chunk_var.ky);
+                chunk_var.density, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.r, chunk_var.w,
+                chunk_var.kx, chunk_var.ky);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
@@ -52,11 +53,11 @@ module cg_driver {
 
     // Invokes the main CG solve kernels
     proc cg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, in tt : int,
-    ref rro: real, ref error: real){
+                                ref rro: real, ref error: real){
         var pw: real;
 
         cg_calc_w (chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx,
-            chunk_var.ky);
+                    chunk_var.ky);
 
         var alpha : real = rro / pw;
         
@@ -65,13 +66,13 @@ module cg_driver {
         chunk_var.cg_alphas[tt] = alpha;
 
         cg_calc_ur(chunk_var.x, chunk_var.y, setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p,
-            chunk_var.r, chunk_var.w);
+                    chunk_var.r, chunk_var.w);
 
         var beta : real = rrn / rro;
         
         chunk_var.cg_betas[tt] = beta;
         cg_calc_p (chunk_var.x, chunk_var.y, setting_var.halo_depth, beta, chunk_var.p,
-            chunk_var.r);
+                    chunk_var.r);
         error = rrn;
         rro = rrn;
         

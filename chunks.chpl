@@ -8,7 +8,7 @@ module chunks{
 
   // Set as True if using multilocale
   config param useStencilDist = false;
-  config param useBlockDist = true;
+  config param useBlockDist = false;
   
   config var global_x = 512;
   config var global_y = 512;
@@ -31,7 +31,6 @@ module chunks{
     var y: int = y_inner + halo_depth * 2;
     
     // Domains
-    // Local domains
     const local_Domain : domain(2) = {0..<y, 0..<x};
     const x_domain : domain(1) = {0..<x};
     const y_domain : domain(1) = {0..<y};
@@ -48,12 +47,11 @@ module chunks{
     
     
     //TODO set up condition to make sure number of locales is only so big compared to grid size
-    // if numLocales < x
-    //     {
-    //         writeln("Coefficient ", coefficient, " is not valid.\n");
-    //         profiler.stopTimer("jacobi_init");
-    //         exit(-1);
-    //     }
+    // if numLocales > (x * y) 
+    // {
+    //   writeln("Too few locales for grid size :", x,"x", y);
+    //   exit(-1);
+    // }
 
     var left: int;
     var right: int;

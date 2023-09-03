@@ -7,13 +7,13 @@ module initialise {
     use store_energy;
     use parse_config;
     use profile;
-    param MY_MAX_REAL = 1e308;
     use MemDiagnostics; // for physicalMemory()
-    config const printLocaleInfo = true;  // permit testing to turn this off
-
+    param MY_MAX_REAL = 1e308;
+    config param printLocaleInfo = false;
 
     // Initialise settings from input file
-    proc initialise_application (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref states : [0..<setting_var.num_states]  state){ 
+    proc initialise_application (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, 
+                                ref states : [0..<setting_var.num_states]  state){ 
         profiler.startTimer("initialise_application");
         
         if printLocaleInfo then

@@ -8,20 +8,23 @@ module jacobi_driver {
 
     // Performs a full solve with the Jacobi solver kernels
     proc jacobi_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
-    ref ry: real, ref err: real){
+    ref ry: real, ref err: real, ref interation_count : int){
 
         jacobi_init_driver(chunk_var, setting_var, rx, ry);
 
         // Iterate until convergence
         var tt_prime : int;
         for tt in 0..<setting_var.max_iters do {
+
             jacobi_main_step_driver(chunk_var, setting_var, tt, err);
 
             halo_update_driver(chunk_var, setting_var, 1);
             if(abs(err) < setting_var.eps) then break;
             tt_prime += 1;
         }
+        interation_count = tt_prime;
         writeln("Jacobi iterations : ", tt_prime);
+        
     }
 
     // Invokes the CG initialisation kernels
@@ -52,8 +55,8 @@ module jacobi_driver {
     }
 
     // Invokes the main Jacobi solve kernels
-    proc jacobi_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in tt: int,
-    ref err: real){
+    proc jacobi_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, 
+                                    const in tt: int, ref err: real){
 
         jacobi_iterate(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
             chunk_var.r, err, chunk_var.kx, chunk_var.ky);
@@ -68,8 +71,8 @@ module jacobi_driver {
                         
             halo_update_driver(chunk_var, setting_var, 1);
             
-            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
-                chunk_var.kx, chunk_var.ky);
+            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
+                                chunk_var.r, chunk_var.kx, chunk_var.ky);
 
             calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, err);
         }

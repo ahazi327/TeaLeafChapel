@@ -9,10 +9,10 @@ module ppcg_driver{
     use solver_methods;
     use ppcg;
     
-
     // Performs a full solve with the PPCG solver
     proc ppcg_driver(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rx: real,
-    ref ry: real, ref error: real){
+                        ref ry: real, ref error: real, ref interation_count : int, 
+                        ref interation_count_prime : int, ref inner_steps : int){
         var tt_prime, num_ppcg_iters: int;
         var rro: real;
         var is_switch_to_ppcg : int;
@@ -62,7 +62,9 @@ module ppcg_driver{
             if(abs(error) < setting_var.eps) then break;
             tt_prime += 1;
         }
-
+        interation_count = tt_prime-num_ppcg_iters+1;
+        interation_count_prime = num_ppcg_iters;
+        inner_steps = setting_var.ppcg_inner_steps;
         writeln("CG iterations:   ",  tt_prime-num_ppcg_iters+1, " ");
         writeln("PPCG iterations: ",  num_ppcg_iters, " (", setting_var.ppcg_inner_steps," inner iterations per)");
     }
@@ -79,12 +81,12 @@ module ppcg_driver{
     }
 
     // Invokes the main PPCG solver kernels
-    proc ppcg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real, ref error: real) {
+    proc ppcg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real, 
+                                ref error: real) {
+
         var pw: real;
-
-        cg_calc_w(chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, chunk_var.ky);
-
-        
+        cg_calc_w(chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, 
+                    chunk_var.kx, chunk_var.ky);
 
         const alpha : real = rro / pw;
         var rrn : real = 0.0;
@@ -115,6 +117,7 @@ module ppcg_driver{
 
     // Performs the inner iterations of the PPCG solver
     proc ppcg_inner_iterations(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
+        
         ppcg_init (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd);
 
         reset_fields_to_exchange(setting_var);
@@ -130,7 +133,8 @@ module ppcg_driver{
             halo_update_driver(chunk_var, setting_var, 1);
 
             ppcg_inner_iteration(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[pp], 
-                                    chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky, chunk_var.Domain);
+                                    chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, 
+                                    chunk_var.ky, chunk_var.Domain);
         }
 
         reset_fields_to_exchange(setting_var);

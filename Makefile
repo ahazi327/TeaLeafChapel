@@ -1,12 +1,17 @@
 CC = chpl
-CFLAGS = --fast --debug
+CFLAGS = --fast --debug $(VERBOSE) $(LOCALEINFO)
 TARGET_DIR = ./objects
 TARGET = $(TARGET_DIR)/tealeaf
 TEST_DIR = ./tests
 TEST = $(TEST_DIR)/test
 MAIN_MODULE = --main-module
 TEST_MOD = test
-MULTI = 4 # Number of locales to use 
+
+# config params
+BLOCK = -s useBlockDist=true
+STENCIL = -s useStencilDist=true
+VERBOSE = -s verbose=false
+LOCALEINFO = -s printLocaleInfo=false
 
 # Collect all the source files with a .chpl extension
 SRCS = $(wildcard *.chpl)
@@ -15,17 +20,18 @@ TEST_SRC = $(TEST).chpl
 # Create the target directory if it doesn't exist
 $(shell mkdir -p $(TARGET_DIR))
 
-# Compilation rule
+# Compilation rule for local version
 $(TARGET): $(SRCS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
 
-# Compile without running
-comp: $(TARGET)
+# Compile the block distribution version
+block: $(SRCS)
+	$(CC) $(CFLAGS) $(BLOCK) -o $(TARGET) $(SRCS)
 
-# Run rule
-run: $(TARGET)
-	$(TARGET)
-
+# Compile the stencil distribution version
+stencil: $(SRCS)
+	$(CC) $(CFLAGS) $(STENCIL) -o $(TARGET) $(SRCS)
+	
 # Test rule
 test: $(TEST_SRC)
 	$(CC) $(CFLAGS) $(MAIN_MODULE) $(TEST_MOD) -o $(TEST) $(TEST_SRC)

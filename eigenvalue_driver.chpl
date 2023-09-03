@@ -6,7 +6,8 @@ module eigenvalue_driver {
     param MY_MAX_REAL = 1e308;
     param MY_MIN_REAL = -2e308;
     // Calculates the eigenvalues from cg_alphas and cg_betas
-    proc eigenvalue_driver_initialise(ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, const in num_cg_iters: int){
+    proc eigenvalue_driver_initialise(ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, 
+                                        const in num_cg_iters: int){
         //chunks per rank for loop
         profiler.startTimer("eigenvalue_driver_initialise");
         var diag : [0..<num_cg_iters] real;

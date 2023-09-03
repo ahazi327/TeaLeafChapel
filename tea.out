@@ -1,0 +1,65 @@
+Solution Parameters:
+	dt_init = 0.004
+	end_time = 100.0
+	end_step = 1.0
+	grid_x_min = 0.0
+	grid_y_min = 0.0
+	grid_x_max = 10.0
+	grid_y_max = 10.0
+	grid_x_cells = 512
+	grid_y_cells = 512
+	presteps = 20
+	ppcg_inner_steps = 350
+	eps_lim = 0.0001
+	max_iters = 5000
+	eps = 1e-15
+	halo_depth = 2
+	check_result = true
+	coefficient = 1
+	num_chunks_per_rank = LOCALE0
+	summary_frequency = 10
+	
+state 0
+	density = 100.0
+	energy= 0.0001
+	
+state 1
+	density = 0.1
+	energy= 25.0
+	x_min = 0.000195313
+	y_min = 1.0002
+	x_max = 0.999805
+	y_max = 1.9998
+	radius = 0.0
+	geometry = RECTANGULAR
+	
+state 2
+	density = 0.1
+	energy= 0.1
+	x_min = 1.0002
+	y_min = 1.0002
+	x_max = 5.9998
+	y_max = 1.9998
+	radius = 0.0
+	geometry = RECTANGULAR
+	
+state 3
+	density = 0.1
+	energy= 0.1
+	x_min = 5.0002
+	y_min = 1.0002
+	x_max = 5.9998
+	y_max = 7.9998
+	radius = 0.0
+	geometry = RECTANGULAR
+	
+state 4
+	density = 0.1
+	energy= 0.1
+	x_min = 5.0002
+	y_min = 7.0002
+	x_max = 9.9998
+	y_max = 7.9998
+	radius = 0.0
+	geometry = RECTANGULAR
+CTANGULAR

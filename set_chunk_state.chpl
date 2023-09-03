@@ -9,7 +9,8 @@ module set_chunk_state{
     import settings;
     use profile;
 
-    proc set_chunk_state(ref states : [0..<setting_var.num_states]settings.state, ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting){  //come back later and change args
+    proc set_chunk_state(ref states : [0..<setting_var.num_states]settings.state, ref chunk_var : chunks.Chunk, 
+                        const ref setting_var : settings.setting){ 
         profiler.startTimer("set_chunk_state");
         
         // Set the initial state
@@ -67,7 +68,8 @@ module set_chunk_state{
                 }
                 if apply_state 
                 {
-                    chunk_var.energy0[kk, jj] = states[ss].energy;  // Note: reversed kk and jj to match output from reference code
+                    // Note: reversed kk and jj to match output from reference code
+                    chunk_var.energy0[kk, jj] = states[ss].energy;  
                     chunk_var.density[kk, jj] = states[ss].density;
                 }
             }
@@ -81,7 +83,8 @@ module set_chunk_state{
  *      SET CHUNK STATE DRIVER
  */
     // Invokes the set chunk state kernel
-    proc set_chunk_state_driver (ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, ref states : [0..<setting_var.num_states] settings.state){
+    proc set_chunk_state_driver (ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, 
+                                ref states : [0..<setting_var.num_states] settings.state){
         // Issue kernel to all local chunks
         set_chunk_state(states, chunk_var, setting_var);
     }

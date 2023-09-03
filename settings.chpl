@@ -17,11 +17,11 @@ module settings{
 
   enum Solver {JACOBI_SOLVER, CG_SOLVER, CHEBY_SOLVER, PPCG_SOLVER}
   enum Geometry {RECTANGULAR, CIRCULAR, POINT}
+
   class setting {   
     var test_problem_filename: string;
     var tea_in_filename: string;
     var tea_out_filename: string;
-    var tea_out_fps: nothing;
     var grid_x_min: real;
     var grid_y_min: real;
     var grid_x_max: real;
@@ -63,6 +63,17 @@ module settings{
     var geometry: Geometry;
   }
 
+  // Used for output to file
+  record TimestepInfo {
+        var step: int;
+        var iterations: int;
+        var iterations_prime: int;
+        var inner_steps: int;
+        var conductionError: real;
+        var elapsedTime: real;
+        var avgTimePerCell: real;
+  }
+
   var max_iters: int;
 
   proc set_default_settings(ref setting_var : setting)
@@ -70,7 +81,6 @@ module settings{
     setting_var.test_problem_filename = "tea.problems";
     setting_var.tea_in_filename = "tea.in";
     setting_var.tea_out_filename = "tea.out";
-    // setting_var.tea_out_fp = nothing;
     setting_var.grid_x_min = 0.0;
     setting_var.grid_y_min = 0.0;
     setting_var.grid_x_max = 100.0;
@@ -92,9 +102,6 @@ module settings{
     setting_var.ppcg_inner_steps = 10;
     setting_var.preconditioner = false;
     setting_var.num_states = 0;
-    // setting_var.num_chunks = 1;
-    // setting_var.num_chunks_per_rank = 1;
-    // setting_var.num_ranks = 1;
     setting_var.halo_depth = 2;
     setting_var.is_offload = false;
 

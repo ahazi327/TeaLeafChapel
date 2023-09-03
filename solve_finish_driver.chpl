@@ -10,8 +10,8 @@ module solve_finish_driver {
         var exact_error: real = 0.0;
 
         if setting_var.check_result {
-            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
-                chunk_var.kx, chunk_var.ky);
+            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
+                                chunk_var.r, chunk_var.kx, chunk_var.ky);
                 
             if useStencilDist {
                 profiler.startTimer("comms");

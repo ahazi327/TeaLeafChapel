@@ -7,6 +7,13 @@ module main {
     use initialise;
     use profile;
     
+    /* 
+        This repository is a translation in to Chapel from C 
+        of the TeaLeaf mini-app from the University of Bristol
+        https://github.com/UoB-HPC/TeaLeaf 
+    */
+
+    config param verbose = false;
 
     proc main (args: [] string){
         // Time full program elapsed time
@@ -19,19 +26,18 @@ module main {
         
         set_default_settings(setting_var);
 
-        // initialise states
+        // Initialise states
         find_num_states(setting_var); 
-        var states_domain = {0..<setting_var.num_states};
+        const states_domain = {0..<setting_var.num_states};
         var states: [states_domain] settings.state;
         states = new settings.state();
 
-        // read input files for state and setting information
+        // Read input files for state and setting information
         read_config(setting_var, states);
         
         // Create array of records of chunks and initialise
         set_var(setting_var);
         var chunk_var: chunks.Chunk = new Chunk ();
-        
         initialise_application(chunk_var, setting_var, states);
 
         // Perform the solve using default or overloaded diffuse    
@@ -40,7 +46,11 @@ module main {
         wallclock.stop();
         writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");
 
-        // Print the profile summary
-        profiler.report();
+        // Print the verbose profile summary
+        if verbose then profiler.report();
+        writeln("\n                                                                End of Run\n");
+
+        // Write output
+        write_file(setting_var.tea_out_filename, chunk_var, setting_var, states);
     }
 }

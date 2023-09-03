@@ -6,8 +6,8 @@ module ppcg{
     use CommDiagnostics;
 
     // Initialises the PPCG solver
-    proc ppcg_init(const in x: int, const in y: int, const in halo_depth: int, const in theta: real, const ref r: [?Domain] real,
-    ref sd: [Domain] real) {
+    proc ppcg_init(const in x: int, const in y: int, const in halo_depth: int, const in theta: real, 
+                    const ref r: [?Domain] real, ref sd: [Domain] real) {
         profiler.startTimer("ppcg_init");
         const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
         
@@ -16,9 +16,10 @@ module ppcg{
     }
 
     // The PPCG inner iteration
-    proc ppcg_inner_iteration (const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, const in beta: real,
-    ref u: [?Domain] real, ref r: [Domain] real, ref sd: [Domain] real,
-    const ref kx: [Domain] real, const ref ky: [Domain] real, ref local_Domain : domain){
+    proc ppcg_inner_iteration (const in x: int, const in y: int, const in halo_depth: int, const in alpha: real, 
+                                const in beta: real, ref u: [?Domain] real, ref r: [Domain] real, 
+                                ref sd: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, 
+                                ref local_Domain : domain){
         profiler.startTimer("ppcg_inner_iteration");
         
         const inner = {halo_depth..< x - halo_depth, halo_depth..<y-halo_depth};

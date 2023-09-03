@@ -1,6 +1,9 @@
 module parse_config {
     use settings;
+    use chunks;
     use IO;
+
+    
 
     proc find_num_states (ref setting_var : setting){
         var counter : int;
@@ -215,5 +218,91 @@ module parse_config {
         } catch {
             // writeln("Warning: unrecognized line error ");
         }
+    }
+
+    proc write_file(filename: string, ref chunk_var : chunks.Chunk, ref settings : setting, ref states : [0..<settings.num_states] state){
+        try {
+            // Open the file for writing
+            var file = open(filename, ioMode.rw);
+
+            // Create a writer for the file
+            var writer = file.writer();
+
+            // Write settings data
+            writer.writeln("Solution Parameters:");
+            writer.writeln("\tdt_init = ", settings.dt_init);
+            writer.writeln("\tend_time = ", settings.end_time);
+            writer.writeln("\tend_step = ", settings.end_step);
+            writer.writeln("\tgrid_x_min = ", settings.grid_x_min);
+            writer.writeln("\tgrid_y_min = ", settings.grid_y_min);
+            writer.writeln("\tgrid_x_max = ", settings.grid_x_max);
+            writer.writeln("\tgrid_y_max = ", settings.grid_y_max);
+            writer.writeln("\tgrid_x_cells = ", settings.grid_x_cells);
+            writer.writeln("\tgrid_y_cells = ", settings.grid_y_cells);
+            writer.writeln("\tpresteps = ", settings.presteps);
+            writer.writeln("\tppcg_inner_steps = ", settings.ppcg_inner_steps);
+            writer.writeln("\teps_lim = ", settings.eps_lim);
+            writer.writeln("\tmax_iters = ", settings.max_iters);
+            writer.writeln("\teps = ", settings.eps);
+            writer.writeln("\thalo_depth = ", settings.halo_depth);
+            writer.writeln("\tcheck_result = ", settings.check_result);
+            writer.writeln("\tcoefficient = ", settings.coefficient);
+            writer.writeln("\tnum_chunks_per_rank = ", Locales);
+            writer.writeln("\tsummary_frequency = ", settings.summary_frequency);
+
+            // Write state data
+            for ss in 0..settings.num_states-1 {
+                writer.writeln("\t\nstate ", ss);
+                writer.writeln("\tdensity = ", states[ss].density);
+                writer.writeln("\tenergy= ", states[ss].energy);
+                if ss > 0 {
+                    writer.writeln("\tx_min = ", states[ss].x_min);
+                    writer.writeln("\ty_min = ", states[ss].y_min);
+                    writer.writeln("\tx_max = ", states[ss].x_max);
+                    writer.writeln("\ty_max = ", states[ss].y_max);
+                    writer.writeln("\tradius = ", states[ss].radius);
+                    writer.writeln("\tgeometry = ", states[ss].geometry);
+                }
+            }
+
+            writer.close();
+            file.close();
+        } catch e: Error {
+            writeln("  Error :", e);
+        }
+    }
+
+    proc write_timestep(filename: string, ref chunk_var : chunks.Chunk, iteration, iteration_prime, 
+                        inner, solver, timestep, err, wallclock, average){
+        try{
+            // Open the file for writing
+            var file = open(filename, ioMode.rw);
+
+            // Create a writer for the file
+            var writer = file.writer();
+
+            writer.writeln("\tSolver = ", solver);
+
+            writer.writeln("\tTimestep ", timestep);
+            writer.writeln("\tIterations = ", iteration);
+            
+            if solver == Solver.CHEBY_SOLVER {
+                writer.writeln("\tCHEBY iterations = ", iteration_prime);
+                writer.writeln("\t", iteration_prime, " estimated" );
+            } else if solver == Solver.PPCG_SOLVER {
+                writer.writeln("\tPPCG iterations = ", iteration_prime);
+                writer.writeln("\t", iteration_prime, " PPCG inner iterations " );
+            }
+
+            writer.writeln("\tConduction error = ", err);
+            writer.writeln("\tTime elapsed for current timestep = ", wallclock);
+            writer.writeln("\tAvg. time per cell for current timestep = ", average);
+            
+            writer.close();
+            file.close();
+        } catch e: Error {
+            writeln("  Error :", e);
+        }
+
     }
 }

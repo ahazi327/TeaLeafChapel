@@ -8,9 +8,10 @@ module jacobi{
     use profile;
 
     // Initialises the Jacobi solver
-    proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, const in rx: real, const in ry: real, 
-    ref u: [?DDomain] real, ref u0: [?Domain] real, const ref energy: [Domain] real, const ref density: [Domain] real,
-    ref kx: [Domain] real, ref ky: [Domain] real){
+    proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, 
+                    const in rx: real, const in ry: real, ref u: [?Domain] real, ref u0: [Domain] real, 
+                    const ref energy: [Domain] real, const ref density: [Domain] real, ref kx: [Domain] real, 
+                    ref ky: [Domain] real){
         
         profiler.startTimer("jacobi_init");
 
@@ -58,7 +59,7 @@ module jacobi{
         profiler.startTimer("jacobi_iterate");
 
         coforall l in Locales do on l {
-            forall ij in Domain {
+            forall ij in Domain.localSubdomain() {
                 r[ij] = u[ij];
             }
         }
@@ -73,7 +74,7 @@ module jacobi{
         var err: real = 0.0;
 
         coforall l in Locales with (+ reduce err) do on l {
-            forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+            forall ij in Domain.expand(-halo_depth).localSubdomain() with (+ reduce err) {
                 const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
                     + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
                 / (1.0 + ((kx[ij]+kx[ij + east]))

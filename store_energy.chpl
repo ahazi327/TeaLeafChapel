@@ -6,7 +6,7 @@ module store_energy {
     proc store_energy (const ref energy0: [?E_Dom] real, ref energy: [E_Dom] real){
         profiler.startTimer("store_energy");
 
-        forall ij in energy.domain do energy[ij] = energy0[ij];
+        forall ij in E_Dom do energy[ij] = energy0[ij];
 
         profiler.stopTimer("store_energy");
     }

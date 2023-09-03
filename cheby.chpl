@@ -7,7 +7,7 @@ module cheby {
     use profile;
 
     proc cheby_calc_u (const in x: int, const in y: int, const in halo_depth: int, ref u: [Domain] real,
-    const ref p: [Domain] real, const in Domain : domain(2)){
+                        const ref p: [Domain] real, const in Domain : domain(2)){
         profiler.startTimer("cheby_calc_u");
         const halo_dom = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
         forall ij in halo_dom do{
@@ -18,8 +18,9 @@ module cheby {
 
     // Initialises the Chebyshev solver
     proc cheby_init (const in x: int, const in y: int, const in halo_depth: int, const in theta: real,
-    ref u: [Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
-    ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, const in Domain : domain(2)){
+                    ref u: [Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
+                    ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, 
+                    const in Domain : domain(2)){
         profiler.startTimer("cheby_init");
 
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
@@ -39,8 +40,9 @@ module cheby {
 
     // The main chebyshev iteration
     proc cheby_iterate (const in x: int, const in y: int, const in halo_depth: int, const ref alpha: real, const ref beta: real,
-    ref u: [Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
-    ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, const in Domain : domain(2)){
+                        ref u: [Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
+                        ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, 
+                        const in Domain : domain(2)){
         profiler.startTimer("cheby_iterate");
 
         const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
