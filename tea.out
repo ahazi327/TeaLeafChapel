@@ -1,7 +1,7 @@
 Solution Parameters:
 	dt_init = 0.004
 	end_time = 100.0
-	end_step = 1.0
+	end_step = 20.0
 	grid_x_min = 0.0
 	grid_y_min = 0.0
 	grid_x_max = 10.0
@@ -62,4 +62,4 @@ state 4
 	y_max = 7.9998
 	radius = 0.0
 	geometry = RECTANGULAR
-CTANGULAR
+TANGULAR

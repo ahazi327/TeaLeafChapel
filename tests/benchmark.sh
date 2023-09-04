@@ -1,4 +1,4 @@
-# Create a function to generate the configuration file.
+  GNU nano 4.8                                                   benchmark.sh                                                             # Create a function to generate the configuration file.
 generate_config() {
     cat > tea.in <<EOF
 *tea
@@ -48,12 +48,17 @@ repeat_tests=5
 num_solvers=4
 
 for ((j=0; j<$num_solvers; j++)); do
+    echo "Using solver method: ${solver_methods[$j]}"
     for ((i=0; i<$num_configs; i++)); do
         generate_config "${x_cells[$i]}" "${y_cells[$i]}" "${end_step[$i]}" "${solver_methods[$j]}"
         for ((k=0; k<$repeat_tests; k++)); do
-            ./objects/tealeaf 
+            echo "Configuration $((i+1)): x_cells=${x_cells[$i]}, y_cells=${y_cells[$i]}, end_step=${end_step[$i]}" "${end_step[$i]}" "${>
+            echo "Test run $((k+1)) for Configuration $((i+1))"
+            ./objects/tealeaf
         done
     done
+    echo "Completed all configurations for solver method: ${solver_methods[$j]}"
+    echo "-------------------------------------" # To add a separator for better readability
 done
 
 # Remove tea.in after execution.
