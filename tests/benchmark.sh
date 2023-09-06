@@ -17,6 +17,7 @@ x_cells             = $1
 y_cells             = $2
 
 $4
+use_c_kernels
 check_result
 
 eps                 = 1.0e-15
@@ -50,6 +51,10 @@ num_solvers=4
 
 num_threads=7 # Change this for each machine to match number of threads tested on 
 
+# Get architecture details 
+hostname
+lscpu
+# Run loop 
 for ((j=0; j<$num_solvers; j++)); do
     echo "Using solver method: ${solver_methods[$j]}"
     for ((i=0; i<$num_configs; i++)); do
@@ -59,7 +64,7 @@ for ((j=0; j<$num_solvers; j++)); do
             echo "$((k+1)) number of threads for Configuration $((i+1))"
             for ((h=0; h<$repeat_tests; h++)); do
                 echo "Test Repeat Number: $((h+1))"
-                CHPL_RT_NUM_THREADS_PER_LOCALE=${threads[$k]} ./objects/tealeaf
+                OMP_NUM_THREADS=${threads[$k]} ./tealeaf
             done
         done
     done
