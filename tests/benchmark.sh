@@ -64,7 +64,7 @@ for ((j=0; j<$num_solvers; j++)); do
             echo "$((k+1)) number of threads for Configuration $((i+1))"
             for ((h=0; h<$repeat_tests; h++)); do
                 echo "Test Repeat Number: $((h+1))"
-                OMP_NUM_THREADS=${threads[$k]} ./tealeaf
+                CHPL_RT_NUM_THREADS_PER_LOCALE=${threads[$k]} ./objects/tealeaf
             done
         done
     done
