@@ -1,3 +1,6 @@
 *
 !*/
 !*.*
+!./tests/results/*.png
+!./tests/results/*.out
+!./tests/results/*.xlsx

@@ -17,7 +17,6 @@ x_cells             = $1
 y_cells             = $2
 
 $4
-use_c_kernels
 check_result
 
 eps                 = 1.0e-15
@@ -42,6 +41,7 @@ x_cells=(512 1024 4000)
 y_cells=(512 1024 4000)
 end_step=(20 20 10)
 solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)
+
 threads=(1 2 4 8 16 32 64)  # Change this for each machine to test scaling
 
 # Run the program with each configuration.
@@ -49,7 +49,7 @@ num_configs=3
 repeat_tests=5
 num_solvers=4
 
-num_threads=7 # Change this for each machine to match number of threads tested on 
+max_threads=256 # Change this for each machine to match number of threads tested on
 
 # Get architecture details 
 hostname
@@ -59,17 +59,17 @@ for ((j=0; j<$num_solvers; j++)); do
     echo "Using solver method: ${solver_methods[$j]}"
     for ((i=0; i<$num_configs; i++)); do
         generate_config "${x_cells[$i]}" "${y_cells[$i]}" "${end_step[$i]}" "${solver_methods[$j]}"
-        for ((k=0; k<$num_threads; k++)); do
+        for ((threads=max_threads; threads>0; threads/=2)); do
             echo "Configuration $((i+1)): x_cells=${x_cells[$i]}, y_cells=${y_cells[$i]}, end_step=${end_step[$i]}" "${end_step[$i]}"
-            echo "$((k+1)) number of threads for Configuration $((i+1))"
+            echo "$threads threads for Configuration $((i+1))"
             for ((h=0; h<$repeat_tests; h++)); do
                 echo "Test Repeat Number: $((h+1))"
-                CHPL_RT_NUM_THREADS_PER_LOCALE=${threads[$k]} ./objects/tealeaf
+                CHPL_RT_NUM_THREADS_PER_LOCALE=$threads ./objects/tealeaf
             done
         done
     done
     echo "Completed all configurations for solver method: ${solver_methods[$j]}"
-    echo "-------------------------------------" # To add a separator for better readability
+    echo "-------------------------------------" # Separator for better readability
 done
 
 # Remove tea.in after execution.

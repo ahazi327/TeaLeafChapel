@@ -58,10 +58,8 @@ module jacobi{
     const ref kx: [Domain] real, const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
 
-        coforall l in Locales do on l {
-            forall ij in Domain.localSubdomain() {
-                r[ij] = u[ij];
-            }
+        forall ij in Domain {
+            r[ij] = u[ij];
         }
 
         if useStencilDist {
@@ -73,16 +71,14 @@ module jacobi{
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         var err: real = 0.0;
 
-        coforall l in Locales with (+ reduce err) do on l {
-            forall ij in Domain.expand(-halo_depth).localSubdomain() with (+ reduce err) {
-                const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
-                    + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
-                / (1.0 + ((kx[ij]+kx[ij + east]))
-                        + ((ky[ij]+ky[ij + north])));
+        forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+            const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
+                + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
+            / (1.0 + ((kx[ij]+kx[ij + east]))
+                    + ((ky[ij]+ky[ij + north])));
 
-                u[ij] = temp;
-                err += abs(temp - r[ij]);
-            }    
+            u[ij] = temp;
+            err += abs(temp - r[ij]);
         }
         error = err;
         

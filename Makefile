@@ -10,8 +10,8 @@ TEST_MOD = test
 # config params
 BLOCK = -s useBlockDist=true
 STENCIL = -s useStencilDist=true
-VERBOSE = -s verbose=false
-LOCALEINFO = -s printLocaleInfo=false
+VERBOSE = -s verbose=true
+LOCALEINFO = -s printLocaleInfo=true
 
 # Collect all the source files with a .chpl extension
 SRCS = $(wildcard *.chpl)

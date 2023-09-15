@@ -9,9 +9,8 @@ module ppcg{
     proc ppcg_init(const in x: int, const in y: int, const in halo_depth: int, const in theta: real, 
                     const ref r: [?Domain] real, ref sd: [Domain] real) {
         profiler.startTimer("ppcg_init");
-        const inner = Domain[halo_depth..< x - halo_depth, halo_depth..<y-halo_depth];
         
-        forall ij in inner do sd[ij] = r[ij] / theta;
+        forall ij in Domain.expand(-halo_depth) do sd[ij] = r[ij] / theta;
         profiler.stopTimer("ppcg_init");
     }
 
@@ -22,8 +21,7 @@ module ppcg{
                                 ref local_Domain : domain){
         profiler.startTimer("ppcg_inner_iteration");
         
-        const inner = {halo_depth..< x - halo_depth, halo_depth..<y-halo_depth};
-        forall (i, j) in inner do {
+        forall (i, j) in Domain.expand(-halo_depth)  do {
             const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*sd[i, j]
                 - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
@@ -33,7 +31,7 @@ module ppcg{
             u[i, j] += sd[i, j];
         }
 
-        forall ij in inner do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
+        forall ij in Domain.expand(-halo_depth)  do sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
         profiler.stopTimer("ppcg_inner_iteration");
     }
 

@@ -25,8 +25,7 @@ module cg {
             u[ij] = energy[ij] *density[ij];
         }
         
-        const inner = Domain[1..<y-1, 1..<x-1];
-        forall (i, j) in inner do {
+        forall (i, j) in Domain.expand(-1)  do {
             if (coefficient == CONDUCTIVITY) then
                 w[i,j] = density[i,j];
             else  
@@ -55,8 +54,7 @@ module cg {
         }
         
         var rro_temp : real; 
-        const inner_2 = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
-        forall (i, j) in inner_2 with (+ reduce rro_temp) do {
+        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce rro_temp) do {
             const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*u[i, j]
                 - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
@@ -78,9 +76,8 @@ module cg {
 
         profiler.startTimer("cg_calc_w");
         var pw_temp : real;
-        const inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
-        forall (i, j) in inner with (+ reduce pw_temp) do{
+        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce pw_temp) do{
             const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
                 + (ky[i, j+1]+ky[i, j]))*p[i, j]
                 - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
@@ -99,9 +96,8 @@ module cg {
                     const ref w: [Domain] real){
         profiler.startTimer("cg_calc_ur");
         var rrn_temp : real;
-        const inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
         
-        forall (i, j) in inner with (+ reduce rrn_temp) do{
+        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce rrn_temp) do{
             u[i, j] += alpha * p[i, j];
             r[i, j] -= alpha * w[i, j];
             
@@ -117,12 +113,11 @@ module cg {
     proc cg_calc_p (const in x: int, const in y: int, const in halo_depth: int, const in beta: real,
     ref p: [?Domain] real, const ref r: [Domain] real) {
         profiler.startTimer("cg_calc_p");
-        const halo_dom = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
 
         // p[halo_dom] = beta * p[halo_dom] + r[halo_dom];  
         // THIS IS MUCH SLOWER THAN A FORALL LOOP (10s slower on a 512x512 grid on this function alone)
         
-        forall ij in halo_dom do {
+        forall ij in Domain.expand(-halo_depth)  do {
             p[ij] = beta * p[ij] + r[ij];
         }
         profiler.stopTimer("cg_calc_p");
