@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Path to your output text file and the Excel file to save the results
-input_file = "benchmarkTeaLeafChapelexplorer.out"
+input_file = "benchmark_TeaLeafChapel_explorer2.out"
 output_file = "results.xlsx"
 
 # Patterns to search for in the output
@@ -60,6 +60,6 @@ df['test_repeat'].replace(placeholder, np.nan, inplace=True)
 # Compute the median for total_time over the next 4 rows where test_repeat is 1
 df['median_total_time'] = [df.iloc[i:i+5]['total_time'].median() if val == 1 else None for i, val in enumerate(df['test_repeat'])]
 
-df.to_excel(output_file, index=True)
+df.to_excel(output_file, index=False)
 
 print("Results parsed successfully!")

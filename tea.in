@@ -10,8 +10,8 @@ xmin                = 0.0
 ymin                = 0.0
 xmax                = 10.0
 ymax                = 10.0
-x_cells             = 512
-y_cells             = 512
+x_cells             = 2024
+y_cells             = 2024
 
 use_jacobi
 check_result
@@ -20,7 +20,7 @@ eps                 = 1.0e-15
 max_iters           = 5000
 
 initial_timestep    = 0.004
-end_step            = 20
+end_step            = 1
 end_time            = 100.0
 
 halo_depth          = 2

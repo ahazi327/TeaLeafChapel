@@ -1,13 +1,13 @@
 Solution Parameters:
 	dt_init = 0.004
 	end_time = 100.0
-	end_step = 20.0
+	end_step = 1.0
 	grid_x_min = 0.0
 	grid_y_min = 0.0
 	grid_x_max = 10.0
 	grid_y_max = 10.0
-	grid_x_cells = 512
-	grid_y_cells = 512
+	grid_x_cells = 2024
+	grid_y_cells = 2024
 	presteps = 20
 	ppcg_inner_steps = 350
 	eps_lim = 0.0001
@@ -26,40 +26,39 @@ state 0
 state 1
 	density = 0.1
 	energy= 25.0
-	x_min = 0.000195313
-	y_min = 1.0002
-	x_max = 0.999805
-	y_max = 1.9998
+	x_min = 4.94071e-05
+	y_min = 1.00005
+	x_max = 0.999951
+	y_max = 1.99995
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 2
 	density = 0.1
 	energy= 0.1
-	x_min = 1.0002
-	y_min = 1.0002
-	x_max = 5.9998
-	y_max = 1.9998
+	x_min = 1.00005
+	y_min = 1.00005
+	x_max = 5.99995
+	y_max = 1.99995
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 3
 	density = 0.1
 	energy= 0.1
-	x_min = 5.0002
-	y_min = 1.0002
-	x_max = 5.9998
-	y_max = 7.9998
+	x_min = 5.00005
+	y_min = 1.00005
+	x_max = 5.99995
+	y_max = 7.99995
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 4
 	density = 0.1
 	energy= 0.1
-	x_min = 5.0002
-	y_min = 7.0002
-	x_max = 9.9998
-	y_max = 7.9998
+	x_min = 5.00005
+	y_min = 7.00005
+	x_max = 9.99995
+	y_max = 7.99995
 	radius = 0.0
 	geometry = RECTANGULAR
-TANGULAR
