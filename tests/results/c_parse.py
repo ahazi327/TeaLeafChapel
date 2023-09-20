@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Path to your output text file and the Excel file to save the results
-input_file = "benchmark_TeaLeafOMP_explorer.out"
+input_file = "benchmark_TeaLeafOMP_oswald.out"
 output_file = "c_results.xlsx"
 
 # Patterns to search for in the output
