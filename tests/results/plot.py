@@ -18,9 +18,32 @@ print("Configurations:", df['configuration'].unique())
 # Extract unique solver methods
 methods = df['solver_method'].unique()
 
+# Example of hardcoded labels
+label_map = {
+    "x_cells=512, y_cells=512, end_step=20 20": "Chapel 512x512 grid",
+    "x_cells=1024, y_cells=1024, end_step=20 20": "Chapel 1024x1024 grid",
+    "x_cells=4000, y_cells=4000, end_step=10 10": "Chapel 4000x4000 grid",
+    "x_cells=512, y_cells=512, end_step=20 20 C": "C 512x512 grid",
+    "x_cells=1024, y_cells=1024, end_step=20 20 C": "C 1024x1024 grid",
+    "x_cells=4000, y_cells=4000, end_step=10 10 C": "C 4000x4000 grid",
+}
+
+# Define your preferred order of configurations
+config_order = [
+    "x_cells=512, y_cells=512, end_step=20 20",
+    "x_cells=1024, y_cells=1024, end_step=20 20",
+    "x_cells=4000, y_cells=4000, end_step=10 10",
+    "x_cells=512, y_cells=512, end_step=20 20 C",
+    "x_cells=1024, y_cells=1024, end_step=20 20 C",
+    "x_cells=4000, y_cells=4000, end_step=10 10 C",
+]
+
 for method in methods:
     plt.figure(figsize=(12, 6))
-    configs = df['configuration'].unique()
+    
+    # Sort configurations based on the predefined order
+    unique_configs = df['configuration'].unique()
+    configs = sorted(unique_configs, key=lambda x: config_order.index(x) if x in config_order else len(config_order))
 
     for config in configs:
         if pd.isna(config):  # Skip NaN configurations
@@ -45,7 +68,7 @@ for method in methods:
 
         if valid_data:  # Only continue if there's any valid data
             filtered_threads, filtered_avg_times = zip(*valid_data)
-            label_name = f"{config}"
+            label_name = label_map.get(config, config)
             plt.plot(range(len(filtered_threads)), filtered_avg_times, marker='o', label=label_name)
 
             for i, txt in enumerate(filtered_avg_times):

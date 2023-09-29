@@ -72,8 +72,8 @@ module ppcg_driver{
     // Invokes the PPCG initialisation kernels
     proc ppcg_init_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real){
         
-        calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r,
-                            chunk_var.kx, chunk_var.ky);
+        calculate_residual(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, chunk_var.kx, 
+                            chunk_var.ky);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_P] = true;
@@ -82,17 +82,17 @@ module ppcg_driver{
 
     // Invokes the main PPCG solver kernels
     proc ppcg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real, 
-                                ref error: real) {
+                                ref error: real){
 
         var pw: real;
-        cg_calc_w(chunk_var.x, chunk_var.y, setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, 
-                    chunk_var.kx, chunk_var.ky);
+        cg_calc_w(setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, 
+                  chunk_var.ky);
 
         const alpha : real = rro / pw;
         var rrn : real = 0.0;
 
-        cg_calc_ur (chunk_var.x, chunk_var.y, setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p,
-                    chunk_var.r, chunk_var.w);
+        cg_calc_ur (setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p, chunk_var.r, 
+                    chunk_var.w);
 
         // Perform the inner iterations
         ppcg_inner_iterations(chunk_var, setting_var);
@@ -105,11 +105,11 @@ module ppcg_driver{
 
         rrn = 0.0;
 
-        calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, rrn);
+        calculate_2norm(setting_var.halo_depth, chunk_var.r, rrn);
 
         const beta : real = rrn / rro;
 
-        cg_calc_p(chunk_var.x, chunk_var.y, setting_var.halo_depth, beta, chunk_var.p, chunk_var.r);
+        cg_calc_p(setting_var.halo_depth, beta, chunk_var.p, chunk_var.r);
 
         error = rrn;
         rro = rrn;
@@ -118,7 +118,7 @@ module ppcg_driver{
     // Performs the inner iterations of the PPCG solver
     proc ppcg_inner_iterations(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
         
-        ppcg_init (chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd);
+        ppcg_init(setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_SD] = true;
@@ -132,9 +132,8 @@ module ppcg_driver{
 
             halo_update_driver(chunk_var, setting_var, 1);
 
-            ppcg_inner_iteration(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.cheby_alphas[pp], 
-                                    chunk_var.cheby_betas[pp], chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, 
-                                    chunk_var.ky, chunk_var.Domain);
+            ppcg_inner_iteration(setting_var.halo_depth, chunk_var.cheby_alphas[pp], chunk_var.cheby_betas[pp], 
+                                chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky);
         }
 
         reset_fields_to_exchange(setting_var);

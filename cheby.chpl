@@ -6,53 +6,51 @@
 module cheby {
     use profile;
 
-    proc cheby_calc_u (const in x: int, const in y: int, const in halo_depth: int, ref u: [?Domain] real,
-                        const ref p: [Domain] real){
+    proc cheby_calc_u(const ref halo_depth: int, ref u: [?Domain] real, const ref p: [Domain] real){
         profiler.startTimer("cheby_calc_u");
         
-        forall ij in Domain.expand(-halo_depth)  do{
-            u[ij] += p[ij];
-        }
+        [ij in Domain.expand(-halo_depth)] u[ij] += p[ij];
+
         profiler.stopTimer("cheby_calc_u");
     }
 
     // Initialises the Chebyshev solver
-    proc cheby_init (const in x: int, const in y: int, const in halo_depth: int, const in theta: real,
-                    ref u: [?Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
+    proc cheby_init(const ref halo_depth: int, const ref theta: real, ref u: [?Domain] real, 
+                    const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
                     ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real){
         profiler.startTimer("cheby_init");
 
-        const inner = Domain[halo_depth..<x-halo_depth, halo_depth..<y-halo_depth];
-        forall (i, j) in inner do{  // with (+ reduce u)
+        forall (i, j) in Domain.expand(-halo_depth) do{ 
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
-                + (ky[i, j+1]+ky[i, j]))*u[i, j]
-                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
-                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                                + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
             w[i, j] = smvp;
             r[i, j] = u0[i, j] - smvp;
             p[i, j] = r[i, j] / theta;
         }
-        cheby_calc_u(x, y, halo_depth, u, p);
+        cheby_calc_u(halo_depth, u, p);
 
         profiler.stopTimer("cheby_init");
     }
 
     // The main chebyshev iteration
-    proc cheby_iterate (const in x: int, const in y: int, const in halo_depth: int, const ref alpha: real, const ref beta: real,
-                        ref u: [?Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
-                        ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real){
+    proc cheby_iterate(const ref halo_depth: int, const ref alpha: real, const ref beta: real,
+                       ref u: [?Domain] real, const ref u0: [Domain] real, ref p: [Domain] real, ref r: [Domain] real,
+                       ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real){
         profiler.startTimer("cheby_iterate");
 
-        forall (i, j) in Domain.expand(-halo_depth)  do{
+        forall (i, j) in Domain.expand(-halo_depth) do{
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
-                + (ky[i, j+1]+ky[i, j]))*u[i, j]
-                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
-                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                                + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
             w[i, j] = smvp;
             r[i, j] = u0[i, j] - smvp;
             p[i, j] = alpha * p[i, j] + beta * r[i, j];
         }
-        cheby_calc_u(x, y, halo_depth, u, p);
+        cheby_calc_u(halo_depth, u, p);
+
         profiler.stopTimer("cheby_iterate");
     }
 }

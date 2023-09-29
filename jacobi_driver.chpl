@@ -41,7 +41,7 @@ module jacobi_driver {
             profiler.stopTimer("comms");
         }
 
-        copy_u(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0);
+        copy_u(setting_var.halo_depth, chunk_var.u, chunk_var.u0);
         
         if useStencilDist {
             profiler.startTimer("comms");
@@ -56,10 +56,10 @@ module jacobi_driver {
 
     // Invokes the main Jacobi solve kernels
     proc jacobi_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, 
-                                    const in tt: int, ref err: real){
+                                    const ref tt: int, ref err: real){
 
-        jacobi_iterate(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
-            chunk_var.r, err, chunk_var.kx, chunk_var.ky);
+        jacobi_iterate(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, err, 
+                        chunk_var.kx, chunk_var.ky);
 
         if useStencilDist {
             profiler.startTimer("comms");
@@ -71,10 +71,10 @@ module jacobi_driver {
                         
             halo_update_driver(chunk_var, setting_var, 1);
             
-            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
-                                chunk_var.r, chunk_var.kx, chunk_var.ky);
+            calculate_residual(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, 
+                                chunk_var.kx, chunk_var.ky);
 
-            calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, err);
+            calculate_2norm(setting_var.halo_depth, chunk_var.r, err);
         }
     }
 

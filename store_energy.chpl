@@ -6,15 +6,8 @@ module store_energy {
     proc store_energy (const ref energy0: [?E_Dom] real, ref energy: [E_Dom] real){
         profiler.startTimer("store_energy");
 
-        forall ij in E_Dom do energy[ij] = energy0[ij];
+        [ij in E_Dom] energy[ij] = energy0[ij];
 
         profiler.stopTimer("store_energy");
     }
-
-    // Invokes the store energy kernel
-    proc store_energy_driver (ref chunk_var : chunks.Chunk){
-        store_energy(chunk_var.energy0, chunk_var.energy);
-    }
-
-
 }

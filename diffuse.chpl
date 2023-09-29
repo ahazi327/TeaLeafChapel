@@ -34,9 +34,12 @@ module diffuse{
                     chunk_var.sd.updateFluff();
                     profiler.stopTimer("comms");
                 }
-                // when Solver.CHEBY_SOLVER{
-                    
-                // }
+                when Solver.CHEBY_SOLVER{
+                    profiler.startTimer("comms");
+                    chunk_var.density.updateFluff();
+                    chunk_var.volume.updateFluff();
+                    profiler.stopTimer("comms");
+                }
                 when Solver.PPCG_SOLVER{
                     profiler.startTimer("comms");
                     chunk_var.density.updateFluff();
@@ -114,8 +117,5 @@ module diffuse{
         writeln("Time elapsed for current timestep: ", wallclock.elapsed(), " seconds");
         const average : real = wallclock.elapsed()/ (setting_var.grid_x_cells * setting_var.grid_y_cells);
         writeln("Avg. time per cell for current timestep: ",  average, " seconds \n");
-
-        // parse_config.write_timestep(setting_var.tea_out_filename, chunk_var, iterations_count, iterations_prime, 
-        //                 inner_steps, setting_var.solver, tt + 1, error, wallclock.elapsed(), average);
     }
 }

@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Path to your output text file and the Excel file to save the results
-input_file = "benchmark_TeaLeafChapel_apachepass.out"
+input_file = "benchmark_TeaLeafChapel_oswald.out"
 output_file = "results.xlsx"
 
 # Patterns to search for in the output
@@ -13,8 +13,8 @@ patterns = {
     'threads': r"(\d+) threads for Configuration",
     'test_repeat': r"Test Repeat Number: (\d+)",
     'total_time': r"Total time elapsed: ([\d.]+) seconds",
-    'expected': r"Expected: \n([\d.]+)",
-    'actual': r"Actual: \n([\d.]+)"
+    # 'expected': r"Expected: \n([\d.]+)",
+    # 'actual': r"Actual: \n([\d.]+)"
 }
 
 # Read the file and extract the relevant information
@@ -37,11 +37,11 @@ for run in runs:
         if match:
             info[key] = match.group(1)
     
-    if 'expected' in info and 'actual' in info:
-        try:
-            info['error'] = float(info['actual']) - float(info['expected'])
-        except:
-            info['error'] = None
+    # if 'expected' in info and 'actual' in info:
+    #     try:
+    #         info['error'] = float(info['actual']) - float(info['expected'])
+    #     except:
+    #         info['error'] = None
 
     data.append(info)
 

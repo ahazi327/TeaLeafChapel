@@ -66630,3 +66630,316 @@ Total time elapsed: 13366.6 seconds
                                                                 End of Run
 
 Test Repeat Number: 3
+
+Using the CHEBY_SOLVER
+
+Timestep 1
+Min. eigenvalue: 1.06142
+Max. eigenvalue: 53759.3
+CG iterations : 989
+Cheby iterations : 2031 (1339 estimated)
+Conduction error : 9.18326e-16
+Time elapsed for current timestep: 1482.78 seconds
+Avg. time per cell for current timestep: 9.26736e-05 seconds 
+
+Timestep 2
+Min. eigenvalue: 1.05384
+Max. eigenvalue: 53759.3
+CG iterations : 833
+Cheby iterations : 2027 (1349 estimated)
+Conduction error : 9.51833e-16
+Time elapsed for current timestep: 1441.8 seconds
+Avg. time per cell for current timestep: 9.01127e-05 seconds 
+
+Timestep 3
+Min. eigenvalue: 1.04619
+Max. eigenvalue: 53760.4
+CG iterations : 681
+Cheby iterations : 2029 (1357 estimated)
+Conduction error : 9.17671e-16
+Time elapsed for current timestep: 1406.07 seconds
+Avg. time per cell for current timestep: 8.78796e-05 seconds 
+
+Timestep 4
+Min. eigenvalue: 1.04082
+Max. eigenvalue: 53760.5
+CG iterations : 516
+Cheby iterations : 2034 (1365 estimated)
+Conduction error : 9.31327e-16
+Time elapsed for current timestep: 1369.47 seconds
+Avg. time per cell for current timestep: 8.55917e-05 seconds 
+
+Timestep 5
+Min. eigenvalue: 1.03286
+Max. eigenvalue: 53760.4
+CG iterations : 375
+Cheby iterations : 2045 (1374 estimated)
+Conduction error : 8.41458e-16
+Time elapsed for current timestep: 1341.61 seconds
+Avg. time per cell for current timestep: 8.38505e-05 seconds 
+
+Timestep 6
+Min. eigenvalue: 1.0262
+Max. eigenvalue: 53758.8
+CG iterations : 245
+Cheby iterations : 2045 (1381 estimated)
+Conduction error : 8.59027e-16
+Time elapsed for current timestep: 1309.42 seconds
+Avg. time per cell for current timestep: 8.18386e-05 seconds 
+
+Timestep 7
+Min. eigenvalue: 1.02056
+Max. eigenvalue: 53755.0
+CG iterations : 125
+Cheby iterations : 2045 (1385 estimated)
+Conduction error : 8.09523e-16
+Time elapsed for current timestep: 1280.65 seconds
+Avg. time per cell for current timestep: 8.00407e-05 seconds 
+
+Timestep 8
+Min. eigenvalue: 1.02246
+Max. eigenvalue: 53706.4
+CG iterations : 25
+Cheby iterations : 2025 (1374 estimated)
+Conduction error : 9.48768e-16
+Time elapsed for current timestep: 1247.1 seconds
+Avg. time per cell for current timestep: 7.79435e-05 seconds 
+
+Timestep 9
+Min. eigenvalue: 1.01119
+Max. eigenvalue: 53710.0
+CG iterations : 24
+Cheby iterations : 2036 (1386 estimated)
+Conduction error : 8.75454e-16
+Time elapsed for current timestep: 1254.05 seconds
+Avg. time per cell for current timestep: 7.83781e-05 seconds 
+
+Timestep 10
+Min. eigenvalue: 1.00423
+Max. eigenvalue: 53642.3
+CG iterations : 26
+Cheby iterations : 2034 (1377 estimated)
+Conduction error : 8.482e-16
+Time elapsed for current timestep: 1253.01 seconds
+Avg. time per cell for current timestep: 7.83133e-05 seconds 
+
+Expected: 
+95.4624
+Actual: 
+95.4624
+Passed with qa_diff of 1.73005e-08
+
+Total time elapsed: 13386.5 seconds
+
+                                                                End of Run
+
+Test Repeat Number: 4
+
+Using the CHEBY_SOLVER
+
+Timestep 1
+Min. eigenvalue: 1.06142
+Max. eigenvalue: 53759.3
+CG iterations : 989
+Cheby iterations : 2031 (1339 estimated)
+Conduction error : 9.18326e-16
+Time elapsed for current timestep: 1484.01 seconds
+Avg. time per cell for current timestep: 9.27506e-05 seconds 
+
+Timestep 2
+Min. eigenvalue: 1.05384
+Max. eigenvalue: 53759.3
+CG iterations : 833
+Cheby iterations : 2027 (1349 estimated)
+Conduction error : 9.51833e-16
+Time elapsed for current timestep: 1438.87 seconds
+Avg. time per cell for current timestep: 8.99297e-05 seconds 
+
+Timestep 3
+Min. eigenvalue: 1.04619
+Max. eigenvalue: 53760.4
+CG iterations : 681
+Cheby iterations : 2029 (1357 estimated)
+Conduction error : 9.17671e-16
+Time elapsed for current timestep: 1402.8 seconds
+Avg. time per cell for current timestep: 8.7675e-05 seconds 
+
+Timestep 4
+Min. eigenvalue: 1.04082
+Max. eigenvalue: 53760.5
+CG iterations : 516
+Cheby iterations : 2034 (1365 estimated)
+Conduction error : 9.31327e-16
+Time elapsed for current timestep: 1365.25 seconds
+Avg. time per cell for current timestep: 8.53282e-05 seconds 
+
+Timestep 5
+Min. eigenvalue: 1.03286
+Max. eigenvalue: 53760.4
+CG iterations : 375
+Cheby iterations : 2045 (1374 estimated)
+Conduction error : 8.41458e-16
+Time elapsed for current timestep: 1338.14 seconds
+Avg. time per cell for current timestep: 8.36336e-05 seconds 
+
+Timestep 6
+Min. eigenvalue: 1.0262
+Max. eigenvalue: 53758.8
+CG iterations : 245
+Cheby iterations : 2045 (1381 estimated)
+Conduction error : 8.59027e-16
+Time elapsed for current timestep: 1306.63 seconds
+Avg. time per cell for current timestep: 8.16643e-05 seconds 
+
+Timestep 7
+Min. eigenvalue: 1.02056
+Max. eigenvalue: 53755.0
+CG iterations : 125
+Cheby iterations : 2045 (1385 estimated)
+Conduction error : 8.09523e-16
+Time elapsed for current timestep: 1277.02 seconds
+Avg. time per cell for current timestep: 7.9814e-05 seconds 
+
+Timestep 8
+Min. eigenvalue: 1.02246
+Max. eigenvalue: 53706.4
+CG iterations : 25
+Cheby iterations : 2025 (1374 estimated)
+Conduction error : 9.48768e-16
+Time elapsed for current timestep: 1241.06 seconds
+Avg. time per cell for current timestep: 7.7566e-05 seconds 
+
+Timestep 9
+Min. eigenvalue: 1.01119
+Max. eigenvalue: 53710.0
+CG iterations : 24
+Cheby iterations : 2036 (1386 estimated)
+Conduction error : 8.75454e-16
+Time elapsed for current timestep: 1247.04 seconds
+Avg. time per cell for current timestep: 7.794e-05 seconds 
+
+Timestep 10
+Min. eigenvalue: 1.00423
+Max. eigenvalue: 53642.3
+CG iterations : 26
+Cheby iterations : 2034 (1377 estimated)
+Conduction error : 8.482e-16
+Time elapsed for current timestep: 1246.44 seconds
+Avg. time per cell for current timestep: 7.79027e-05 seconds 
+
+Expected: 
+95.4624
+Actual: 
+95.4624
+Passed with qa_diff of 1.73005e-08
+
+Total time elapsed: 13347.8 seconds
+
+                                                                End of Run
+
+Test Repeat Number: 5
+
+Using the CHEBY_SOLVER
+
+Timestep 1
+Min. eigenvalue: 1.06142
+Max. eigenvalue: 53759.3
+CG iterations : 989
+Cheby iterations : 2031 (1339 estimated)
+Conduction error : 9.18326e-16
+Time elapsed for current timestep: 1478.42 seconds
+Avg. time per cell for current timestep: 9.24015e-05 seconds 
+
+Timestep 2
+Min. eigenvalue: 1.05384
+Max. eigenvalue: 53759.3
+CG iterations : 833
+Cheby iterations : 2027 (1349 estimated)
+Conduction error : 9.51833e-16
+Time elapsed for current timestep: 1438.59 seconds
+Avg. time per cell for current timestep: 8.9912e-05 seconds 
+
+Timestep 3
+Min. eigenvalue: 1.04619
+Max. eigenvalue: 53760.4
+CG iterations : 681
+Cheby iterations : 2029 (1357 estimated)
+Conduction error : 9.17671e-16
+Time elapsed for current timestep: 1402.28 seconds
+Avg. time per cell for current timestep: 8.76426e-05 seconds 
+
+Timestep 4
+Min. eigenvalue: 1.04082
+Max. eigenvalue: 53760.5
+CG iterations : 516
+Cheby iterations : 2034 (1365 estimated)
+Conduction error : 9.31327e-16
+Time elapsed for current timestep: 1365.18 seconds
+Avg. time per cell for current timestep: 8.5324e-05 seconds 
+
+Timestep 5
+Min. eigenvalue: 1.03286
+Max. eigenvalue: 53760.4
+CG iterations : 375
+Cheby iterations : 2045 (1374 estimated)
+Conduction error : 8.41458e-16
+Time elapsed for current timestep: 1337.57 seconds
+Avg. time per cell for current timestep: 8.35983e-05 seconds 
+
+Timestep 6
+Min. eigenvalue: 1.0262
+Max. eigenvalue: 53758.8
+CG iterations : 245
+Cheby iterations : 2045 (1381 estimated)
+Conduction error : 8.59027e-16
+Time elapsed for current timestep: 1305.32 seconds
+Avg. time per cell for current timestep: 8.15827e-05 seconds 
+
+Timestep 7
+Min. eigenvalue: 1.02056
+Max. eigenvalue: 53755.0
+CG iterations : 125
+Cheby iterations : 2045 (1385 estimated)
+Conduction error : 8.09523e-16
+Time elapsed for current timestep: 1276.65 seconds
+Avg. time per cell for current timestep: 7.97905e-05 seconds 
+
+Timestep 8
+Min. eigenvalue: 1.02246
+Max. eigenvalue: 53706.4
+CG iterations : 25
+Cheby iterations : 2025 (1374 estimated)
+Conduction error : 9.48768e-16
+Time elapsed for current timestep: 1240.36 seconds
+Avg. time per cell for current timestep: 7.75224e-05 seconds 
+
+Timestep 9
+Min. eigenvalue: 1.01119
+Max. eigenvalue: 53710.0
+CG iterations : 24
+Cheby iterations : 2036 (1386 estimated)
+Conduction error : 8.75454e-16
+Time elapsed for current timestep: 1246.15 seconds
+Avg. time per cell for current timestep: 7.78844e-05 seconds 
+
+Timestep 10
+Min. eigenvalue: 1.00423
+Max. eigenvalue: 53642.3
+CG iterations : 26
+Cheby iterations : 2034 (1377 estimated)
+Conduction error : 8.482e-16
+Time elapsed for current timestep: 1245.57 seconds
+Avg. time per cell for current timestep: 7.7848e-05 seconds 
+
+Expected: 
+95.4624
+Actual: 
+95.4624
+Passed with qa_diff of 1.73005e-08
+
+Total time elapsed: 13336.7 seconds
+
+                                                                End of Run
+
+Completed all configurations for solver method: use_chebyshev
+-------------------------------------

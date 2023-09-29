@@ -53,14 +53,12 @@ module jacobi{
     }
 
     // The main Jacobi solve step
-    proc jacobi_iterate(const in x: int, const in y: int, const in halo_depth: int, 
-    ref u: [?Domain] real, const ref u0: [Domain] real, ref r: [Domain] real, ref error: real,
-    const ref kx: [Domain] real, const ref ky: [Domain] real){
+    proc jacobi_iterate(const in halo_depth: int, ref u: [?Domain] real, const ref u0: [Domain] real, 
+                        ref r: [Domain] real, ref error: real, const ref kx: [Domain] real, 
+                        const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
 
-        forall ij in Domain {
-            r[ij] = u[ij];
-        }
+        [ij in Domain] r[ij] = u[ij];
 
         if useStencilDist {
             profiler.startTimer("comms");
@@ -72,13 +70,15 @@ module jacobi{
         var err: real = 0.0;
 
         forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
-            const temp : real = (u0[ij] + ((kx[ij + east]*r[ij + east] + (kx[ij]*r[ij + west])))
-                + ((ky[ij + north]*r[ij + north] + ky[ij]*r[ij + south])))
-            / (1.0 + ((kx[ij]+kx[ij + east]))
-                    + ((ky[ij]+ky[ij + north])));
-
-            u[ij] = temp;
-            err += abs(temp - r[ij]);
+            const stencil : real = (u0[ij] 
+                                        + kx[ij + east] * r[ij + east] 
+                                        + kx[ij] * r[ij + west]
+                                        + ky[ij + north] * r[ij + north] 
+                                        + ky[ij] * r[ij + south])
+                                    / (1.0 + kx[ij] + kx[ij + east] 
+                                        + ky[ij] + ky[ij + north]);
+            u[ij] = stencil;
+            err += abs(stencil - r[ij]);
         }
         error = err;
         

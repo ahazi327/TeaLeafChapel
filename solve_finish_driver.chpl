@@ -10,8 +10,8 @@ module solve_finish_driver {
         var exact_error: real = 0.0;
 
         if setting_var.check_result {
-            calculate_residual(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.u, chunk_var.u0, 
-                                chunk_var.r, chunk_var.kx, chunk_var.ky);
+            calculate_residual(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, 
+                                chunk_var.kx, chunk_var.ky);
                 
             if useStencilDist {
                 profiler.startTimer("comms");
@@ -19,11 +19,12 @@ module solve_finish_driver {
                 profiler.stopTimer("comms");
             } 
 
-            calculate_2norm(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.r, exact_error);
+            calculate_2norm(setting_var.halo_depth, chunk_var.r, exact_error);
             
         }
 
-        finalise(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.energy, chunk_var.density, chunk_var.u);
+        finalise(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.energy, chunk_var.density, 
+                chunk_var.u);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;

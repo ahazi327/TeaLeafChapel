@@ -9,27 +9,23 @@ module field_summary {
     * 		Calculates aggregates of values in field.
     */	
     // The field summary kernel
-    proc field_summary (in x: int, in y: int, in halo_depth: int, const ref volume: [Domain] real,
-    const ref density: [Domain] real, const ref energy0: [Domain] real, const ref u: [Domain] real, ref vol: real,
-    ref mass: real, ref ie: real, ref temp: real, const in Domain : domain(2)){
-
+    proc field_summary (const ref halo_depth: int, const ref volume: [?Domain] real,
+                        const ref density: [Domain] real, const ref energy0: [Domain] real, 
+                        const ref u: [Domain] real, ref vol: real, ref mass: real, 
+                        ref ie: real, ref temp: real){
         profiler.startTimer("field_summary");
 
-        var inner = Domain[halo_depth..<y-halo_depth, halo_depth..<x-halo_depth];
-        for j in {halo_depth..<y-halo_depth} do {
-            for i in {halo_depth..<x-halo_depth} do {
-                var cellVol : real;
-                cellVol = volume[j, i];
+        for (i, j) in Domain.expand(-halo_depth) do {
+            var cellVol : real;
+            cellVol = volume[j, i];
 
-                var cellMass: real;
-                cellMass = cellVol * density[j, i];
+            var cellMass: real;
+            cellMass = cellVol * density[i, j];
 
-                vol += cellVol;
-                mass += cellMass;
-                ie += cellMass * energy0[j, i];
-                temp += cellMass * u[j, i];
-                
-            }
+            vol += cellVol;
+            mass += cellMass;
+            ie += cellMass * energy0[i, j];
+            temp += cellMass * u[i, j];
         }
         profiler.stopTimer("field_summary");
     }
@@ -42,10 +38,10 @@ module field_summary {
     proc field_summary_driver(ref chunk_var :chunks.Chunk, ref setting_var : settings.setting,
         const in is_solve_finished: bool){
         
-        var vol, ie, temp, mass : real = 0.0;
+        var vol, ie, temp, mass : real;
 
-        field_summary(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.volume, 
-        chunk_var.density, chunk_var.energy0, chunk_var.u, vol, mass, ie, temp, {0..<chunk_var.y, 0..<chunk_var.x});
+        field_summary(setting_var.halo_depth, chunk_var.volume, 
+        chunk_var.density, chunk_var.energy0, chunk_var.u, vol, mass, ie, temp);
 
         if(setting_var.check_result && is_solve_finished){ 
             var checking_value : real;

@@ -1,3 +1,4 @@
+#!/bin/bash  
   GNU nano 4.8                                                   benchmark.sh                                                             # Create a function to generate the configuration file.
 generate_config() {
     cat > tea.in <<EOF

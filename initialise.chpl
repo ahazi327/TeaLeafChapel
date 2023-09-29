@@ -13,7 +13,7 @@ module initialise {
 
     // Initialise settings from input file
     proc initialise_application (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, 
-                                ref states : [0..<setting_var.num_states]  state){ 
+                                ref states : [0..<setting_var.num_states] state){ 
         profiler.startTimer("initialise_application");
         
         if printLocaleInfo then
@@ -39,7 +39,7 @@ module initialise {
         setting_var.fields_to_exchange[FIELD_ENERGY1]=true;
         halo_update_driver (chunk_var, setting_var, 2);
 
-        store_energy_driver(chunk_var);
+        store_energy(chunk_var.energy0, chunk_var.energy);
 
         profiler.stopTimer("initialise_application");
     }
