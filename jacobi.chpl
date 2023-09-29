@@ -58,7 +58,11 @@ module jacobi{
                         const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
 
-        [ij in Domain] r[ij] = u[ij];
+        forall j in Domain.dim(1){
+            for i in Domain.dim(0){
+                r[i, j] = u[i, j];
+            }
+        }
 
         if useStencilDist {
             profiler.startTimer("comms");
@@ -66,22 +70,20 @@ module jacobi{
             profiler.stopTimer("comms");
         } 
         
-        const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         var err: real = 0.0;
-
-        forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
-            const stencil : real = (u0[ij] 
-                                        + kx[ij + east] * r[ij + east] 
-                                        + kx[ij] * r[ij + west]
-                                        + ky[ij + north] * r[ij + north] 
-                                        + ky[ij] * r[ij + south])
-                                    / (1.0 + kx[ij] + kx[ij + east] 
-                                        + ky[ij] + ky[ij + north]);
-            u[ij] = stencil;
-            err += abs(stencil - r[ij]);
+        forall j in Domain.expand(-halo_depth).dim(1) with (+ reduce err) {
+            for i in Domain.expand(-halo_depth).dim(0) {
+                u[i, j] = (u0[i,j] 
+                        + kx[i, j + 1] * r[i, j + 1] 
+                        + kx[i, j] * r[i, j - 1]
+                        + ky[i + 1, j] * r[i + 1, j ] 
+                        + ky[i, j] * r[i - 1, j])
+                    / (1.0 + kx[i, j] + kx[i, j+1] 
+                        + ky[i, j] + ky[i + 1, j]);
+                err += abs(u[i, j] - r[i, j]);
+            }
         }
         error = err;
-        
         profiler.stopTimer("jacobi_iterate");
     }
 

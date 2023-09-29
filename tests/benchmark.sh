@@ -38,17 +38,17 @@ EOF
 }
 
 # Multiple configuration variables.
-x_cells=(1024 4000)
-y_cells=(1024 4000)
-end_step=(20 10)
+x_cells=(512 1024 4000)
+y_cells=(512 1024 4000)
+end_step=(20 20 10)
 solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)
 
 # Run the program with each configuration.
-num_configs=1
+num_configs=3
 repeat_tests=5
 num_solvers=4
 
-max_threads=32 # Change this for each machine to match number of threads tested on
+max_threads=256 # Change this for each machine to match number of threads tested on
 
 # Get architecture details 
 hostname
@@ -58,7 +58,7 @@ for ((j=0; j<$num_solvers; j++)); do
     echo "Using solver method: ${solver_methods[$j]}"
     for ((i=0; i<$num_configs; i++)); do
         generate_config "${x_cells[$i]}" "${y_cells[$i]}" "${end_step[$i]}" "${solver_methods[$j]}"
-        for ((threads=max_threads; threads>5; threads/=2)); do
+        for ((threads=max_threads; threads>0; threads/=2)); do
             echo "Configuration $((i+1)): x_cells=${x_cells[$i]}, y_cells=${y_cells[$i]}, end_step=${end_step[$i]}" "${end_step[$i]}"
             echo "$threads threads for Configuration $((i+1))"
             for ((h=0; h<$repeat_tests; h++)); do
