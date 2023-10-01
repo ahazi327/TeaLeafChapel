@@ -1,5 +1,5 @@
 CC = chpl
-CFLAGS = --fast --debug $(VERBOSE) $(LOCALEINFO)
+CFLAGS = --fast $(VERBOSE) $(LOCALEINFO)
 TARGET_DIR = ./objects
 TARGET = $(TARGET_DIR)/tealeaf
 TEST_DIR = ./tests

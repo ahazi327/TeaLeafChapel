@@ -62,5 +62,9 @@ state 4
 	y_max = 7.9998
 	radius = 0.0
 	geometry = RECTANGULAR
+.9998
+	y_max = 7.9998
+	radius = 0.0
+	geometry = RECTANGULAR
 R
  RECTANGULAR

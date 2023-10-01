@@ -17,7 +17,7 @@ ymax                = 10.0
 x_cells             = $1
 y_cells             = $2
 
-$4
+use_chebyshev
 check_result
 
 eps                 = 1.0e-15
@@ -38,38 +38,34 @@ EOF
 }
 
 # Multiple configuration variables.
-x_cells=(512 1024 4000)
-y_cells=(512 1024 4000)
-end_step=(20 20 10)
-solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)
+x_cells=(1024 1448 2048 2896 4096 5792 8192)  # maybe remove earlier configurations  
+y_cells=(1024 1448 2048 2896 4096 5792 8192)
+end_step=(1 1 1 1 1 1)
+locales=(1 2 4 8 16 24 48 96)
+# solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)  # maybe to save time just use Chebyshev
 
 # Run the program with each configuration.
-num_configs=3
-repeat_tests=5
-num_solvers=4
+num_configs=7
+repeat_tests=1
+# num_solvers=4
 
-max_threads=32 # Change this for each machine to match number of threads tested on
 
 # Get architecture details 
 hostname
 lscpu
+
+# Chapel only 
+$CHPL_HOME/util/printchplenv.sh --all
+
 # Run loop 
-for ((j=0; j<$num_solvers; j++)); do
-    echo "Using solver method: ${solver_methods[$j]}"
-    for ((i=0; i<$num_configs; i++)); do
-        generate_config "${x_cells[$i]}" "${y_cells[$i]}" "${end_step[$i]}" "${solver_methods[$j]}"
-        for ((threads=max_threads; threads>5; threads/=2)); do
-            echo "Configuration $((i+1)): x_cells=${x_cells[$i]}, y_cells=${y_cells[$i]}, end_step=${end_step[$i]}" "${end_step[$i]}"
-            echo "$threads threads for Configuration $((i+1))"
-            for ((h=0; h<$repeat_tests; h++)); do
-                echo "Test Repeat Number: $((h+1))"
-                CHPL_RT_NUM_THREADS_PER_LOCALE=$threads ./objects/tealeaf
-            done
-        done
-    done
-    echo "Completed all configurations for solver method: ${solver_methods[$j]}"
-    echo "-------------------------------------" # Separator for better readability
+for ((i=0; i<$num_configs; i++)); do
+    generate_config "${x_cells[$i]}" "${y_cells[$i]}" "${end_step[$i]}"
+    echo "Configuration $((i+1)): x_cells=${x_cells[$i]}, y_cells=${y_cells[$i]}, end_step=${end_step[$i]}" "${end_step[$i]}"
+    ./objects/tealeaf -nl "${locales[$i]}"
 done
+echo "Completed all tests"
+echo "-------------------------------------" # Separator for better readability
+
 
 # Remove tea.in after execution.
 # rm tea.in

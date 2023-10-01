@@ -26,8 +26,7 @@ module jacobi{
         }
 
         forall (i, j) in Inner do{ 
-            const temp : real = energy[i, j] * density[i, j];
-            u[i, j] = temp;
+            u[i, j] = energy[i, j] * density[i, j];
 
             var densityCentre: real;
             var densityLeft: real;
