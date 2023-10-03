@@ -45,10 +45,10 @@ solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)
 
 # Run the program with each configuration.
 num_configs=3
-repeat_tests=5
+repeat_tests=1
 num_solvers=4
 
-max_threads=32 # Change this for each machine to match number of threads tested on
+max_threads=8 # Change this for each machine to match number of threads tested on
 
 # Get architecture details 
 hostname
