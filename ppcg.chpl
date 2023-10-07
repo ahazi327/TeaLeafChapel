@@ -21,17 +21,22 @@ module ppcg{
                                 const ref ky: [Domain] real){
         profiler.startTimer("ppcg_inner_iteration");
         
-        forall (i, j) in Domain.expand(-halo_depth)  do {
-            const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
-                        + (ky[i, j+1]+ky[i, j]))*sd[i, j]
-                        - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
-                        - (ky[i, j+1]*sd[i, j+1]+ky[i, j]*sd[i, j-1]);
+        forall j in Domain.expand(-halo_depth).dim(1) {
+            for i in Domain.expand(-halo_depth).dim(0) {
+                const smvp : real = (1.0 + (kx[i+1, j]+kx[i, j])
+                            + (ky[i, j+1]+ky[i, j]))*sd[i, j]
+                            - (kx[i+1, j]*sd[i+1, j]+kx[i, j]*sd[i-1, j])
+                            - (ky[i, j+1]*sd[i, j+1]+ky[i, j]*sd[i, j-1]);
 
-            r[i, j] -= smvp;
-            u[i, j] += sd[i, j];
+                r[i, j] -= smvp;
+                u[i, j] += sd[i, j];
+            }
         }
-
-        [ij in Domain.expand(-halo_depth)] sd[ij] = alpha * sd[ij] + beta * r[ij]; // TODO check implicit version
+        forall j in Domain.expand(-halo_depth).dim(1){
+            for i in Domain.expand(-halo_depth).dim(0) {
+                sd[i, j] = alpha * sd[i, j] + beta * r[i, j]; // TODO check implicit version
+            }
+        }
 
         profiler.stopTimer("ppcg_inner_iteration");
     }

@@ -76,14 +76,15 @@ module cg {
         profiler.startTimer("cg_calc_w");
         var pw_temp : real;
 
-        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce pw_temp) do{
-            const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
-                + (ky[i, j+1]+ky[i, j]))*p[i, j]
-                - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
-                - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
-            w[i,j] = smvp;
-            pw_temp += smvp * p[i, j];
-            
+        forall j in Domain.expand(-halo_depth).dim(1) with (+ reduce pw_temp) {
+            for i in Domain.expand(-halo_depth).dim(0) {
+                const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
+                    + (ky[i, j+1]+ky[i, j]))*p[i, j]
+                    - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
+                    - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
+                w[i,j] = smvp;
+                pw_temp += smvp * p[i, j];
+            }
         }
         pw += pw_temp;
         profiler.stopTimer("cg_calc_w");
@@ -96,12 +97,14 @@ module cg {
         profiler.startTimer("cg_calc_ur");
 
         var rrn_temp : real;
-        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce rrn_temp) do{
-            u[i, j] += alpha * p[i, j];
-            r[i, j] -= alpha * w[i, j];
-            
-            const temp: real = r[i, j];
-            rrn_temp += temp ** 2;
+        forall j in Domain.expand(-halo_depth).dim(1) with (+ reduce rrn_temp) {
+            for i in Domain.expand(-halo_depth).dim(0) {
+                u[i, j] += alpha * p[i, j];
+                r[i, j] -= alpha * w[i, j];
+                
+                const temp: real = r[i, j];
+                rrn_temp += temp ** 2;
+            }
         }
         rrn += rrn_temp;
         profiler.stopTimer("cg_calc_ur");
@@ -114,8 +117,11 @@ module cg {
 
         // p[halo_dom] = beta * p[halo_dom] + r[halo_dom];  
         // THIS IS MUCH SLOWER THAN A FORALL LOOP (10s slower on a 512x512 grid on this function alone)
-        
-        [ij in Domain.expand(-halo_depth)] p[ij] = beta * p[ij] + r[ij];
+        forall j in Domain.expand(-halo_depth).dim(1) {
+            for i in Domain.expand(-halo_depth).dim(0) {
+                p[i, j] = beta * p[i, j] + r[i, j];
+            }
+        }
 
         profiler.stopTimer("cg_calc_p");
     }
