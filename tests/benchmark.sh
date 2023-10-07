@@ -38,17 +38,17 @@ EOF
 }
 
 # Multiple configuration variables.
-x_cells=(512 1024 4000)
-y_cells=(512 1024 4000)
-end_step=(20 20 10)
+x_cells=(1024)
+y_cells=(1024)
+end_step=(20)
 solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)
 
 # Run the program with each configuration.
-num_configs=3
-repeat_tests=5
+num_configs=1
+repeat_tests=3
 num_solvers=4
 
-max_threads=256 # Change this for each machine to match number of threads tested on
+max_threads=256 # Explorer thread count
 
 # Get architecture details 
 hostname
