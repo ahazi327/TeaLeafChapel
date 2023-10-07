@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Path to your output text file and the Excel file to save the results
-input_file = "benchmark_TeaLeafOMP_gadi.out"
+input_file = "benchmark_TeaLeafOMP_thunderx_clang.out"
 output_file = "c_results.xlsx"
 
 # Patterns to search for in the output
@@ -21,6 +21,13 @@ runs = content.split("End of Run")
 
 data = []
 
+# Safely access list data
+def safe_access(lst, idx):
+    try:
+        return lst[idx]
+    except IndexError:
+        return None
+
 # Iterate over each run and extract the relevant data
 for run in runs:
     if not run.strip():
@@ -32,11 +39,14 @@ for run in runs:
         if matches:
             info[key] = matches
 
-    # If there are multiple matches for a pattern, we'll handle them here
-    for i in range(len(info.get('test_repeat', []))):
+    # Determine the maximum number of matches among all patterns
+    max_matches = max(len(info.get('test_repeat', [])), len(info.get('total_time', [])))
+
+    # Iterate through the maximum number of matches
+    for i in range(max_matches):
         data_entry = {
-            'test_repeat': info.get('test_repeat', [None])[i],
-            'total_time': info.get('total_time', [None])[i]
+            'test_repeat': safe_access(info.get('test_repeat', []), i),
+            'total_time': safe_access(info.get('total_time', []), i)
         }
         data.append(data_entry)
 

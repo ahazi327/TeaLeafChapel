@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from matplotlib.ticker import mpl
 
 # Load the data from the Excel file
 df = pd.read_excel("results.xlsx")
@@ -71,11 +72,16 @@ for method in methods:
             label_name = label_map.get(config, config)
             plt.plot(range(len(filtered_threads)), filtered_avg_times, marker='o', label=label_name)
 
-            for i, txt in enumerate(filtered_avg_times):
-                plt.annotate(f"{txt:.2f}", (i, filtered_avg_times[i]))
+    min_pow_10 = int(np.log10(df['median_total_time'].min()))
+    max_pow_10 = int(np.log10(df['median_total_time'].max()))
+    major_ticks = [10**i for i in range(min_pow_10, max_pow_10+1)]
+
+    plt.yticks(major_ticks)
+    plt.gca().yaxis.set_minor_formatter(mpl.ticker.NullFormatter())
+    plt.gca().yaxis.set_major_formatter(mpl.ticker.ScalarFormatter())
 
     plt.yscale('log')
-    plt.xticks(range(len(filtered_threads)), filtered_threads)  # Set x-ticks to be every thread value
+    plt.xticks(range(len(filtered_threads)), filtered_threads)
     plt.xlabel('Threads')
     plt.ylabel('Wallclock (s)')
     plt.legend(loc='upper left', bbox_to_anchor=(1,1))
