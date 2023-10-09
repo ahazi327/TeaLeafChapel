@@ -1,13 +1,13 @@
 Solution Parameters:
 	dt_init = 0.004
 	end_time = 100.0
-	end_step = 20.0
+	end_step = 1.0
 	grid_x_min = 0.0
 	grid_y_min = 0.0
 	grid_x_max = 10.0
 	grid_y_max = 10.0
-	grid_x_cells = 512
-	grid_y_cells = 512
+	grid_x_cells = 64
+	grid_y_cells = 64
 	presteps = 20
 	ppcg_inner_steps = 350
 	eps_lim = 0.0001
@@ -16,7 +16,7 @@ Solution Parameters:
 	halo_depth = 2
 	check_result = true
 	coefficient = 1
-	num_chunks_per_rank = LOCALE0
+	num_chunks_per_rank = LOCALE0 LOCALE1 LOCALE2 LOCALE3 LOCALE4
 	summary_frequency = 10
 	
 state 0
@@ -26,43 +26,45 @@ state 0
 state 1
 	density = 0.1
 	energy= 25.0
-	x_min = 0.000195313
-	y_min = 1.0002
-	x_max = 0.999805
-	y_max = 1.9998
+	x_min = 0.0015625
+	y_min = 1.00156
+	x_max = 0.998437
+	y_max = 1.99844
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 2
 	density = 0.1
 	energy= 0.1
-	x_min = 1.0002
-	y_min = 1.0002
-	x_max = 5.9998
-	y_max = 1.9998
+	x_min = 1.00156
+	y_min = 1.00156
+	x_max = 5.99844
+	y_max = 1.99844
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 3
 	density = 0.1
 	energy= 0.1
-	x_min = 5.0002
-	y_min = 1.0002
-	x_max = 5.9998
-	y_max = 7.9998
+	x_min = 5.00156
+	y_min = 1.00156
+	x_max = 5.99844
+	y_max = 7.99844
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 4
 	density = 0.1
 	energy= 0.1
-	x_min = 5.0002
-	y_min = 7.0002
-	x_max = 9.9998
-	y_max = 7.9998
+	x_min = 5.00156
+	y_min = 7.00156
+	x_max = 9.99844
+	y_max = 7.99844
 	radius = 0.0
 	geometry = RECTANGULAR
-.9998
+ANGULAR
+y = RECTANGULAR
+9998
 	y_max = 7.9998
 	radius = 0.0
 	geometry = RECTANGULAR

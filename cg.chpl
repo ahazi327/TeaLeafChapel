@@ -6,8 +6,8 @@ module cg {
     use Math;
     use profile;
     use chunks;
-    proc cg_init(const ref x: int, const ref y : int, const ref halo_depth: int, const in coefficient: int, in rx: real, in ry: real, 
-                ref rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
+    proc cg_init(const ref x: int, const ref y : int, const ref halo_depth: int, const in coefficient: int, in rx: real, 
+                in ry: real, ref rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
                 ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  
                 ref kx: [Domain] real, ref ky: [Domain] real){
 
@@ -111,9 +111,6 @@ module cg {
     proc cg_calc_p (const ref halo_depth: int, const in beta: real, ref p: [?Domain] real, 
                     const ref r: [Domain] real) {
         profiler.startTimer("cg_calc_p");
-
-        // p[halo_dom] = beta * p[halo_dom] + r[halo_dom];  
-        // THIS IS MUCH SLOWER THAN A FORALL LOOP (10s slower on a 512x512 grid on this function alone)
         
         [ij in Domain.expand(-halo_depth)] p[ij] = beta * p[ij] + r[ij];
 

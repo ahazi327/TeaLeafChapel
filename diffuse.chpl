@@ -38,12 +38,14 @@ module diffuse{
                     profiler.startTimer("comms");
                     chunk_var.density.updateFluff();
                     chunk_var.volume.updateFluff();
+                    chunk_var.sd.updateFluff();
                     profiler.stopTimer("comms");
                 }
                 when Solver.PPCG_SOLVER{
                     profiler.startTimer("comms");
                     chunk_var.density.updateFluff();
                     chunk_var.volume.updateFluff();
+                    chunk_var.sd.updateFluff();
                     profiler.stopTimer("comms");
                 }
             }

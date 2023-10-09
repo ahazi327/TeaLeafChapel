@@ -1,6 +1,7 @@
 module cheby_driver{
     use eigenvalue_driver;
     use chunks;
+    use profile;
     use settings;
     use local_halos;
     use cg_driver;
@@ -60,6 +61,7 @@ module cheby_driver{
 
                     // Perform main step
                     cheby_main_step_driver(chunk_var, setting_var, num_cheby_iters, is_calc_2norm, error);
+                    
                 }
             }
             
@@ -84,11 +86,16 @@ module cheby_driver{
         calculate_2norm(setting_var.halo_depth, chunk_var.u, bb);
 
         cheby_init(setting_var.halo_depth, chunk_var.theta, chunk_var.u, chunk_var.u0,
-        chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky);
+                    chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
         halo_update_driver(chunk_var, setting_var, 1);
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.u.updateFluff();
+            profiler.stopTimer("comms");
+        }
     }
 
     // Performs the main iteration step
@@ -103,6 +110,11 @@ module cheby_driver{
         {
             error = 0.0;
             calculate_2norm(setting_var.halo_depth, chunk_var.r, error);
+        }
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.u.updateFluff();
+            profiler.stopTimer("comms");
         }
     }
 

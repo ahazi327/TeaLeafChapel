@@ -46,13 +46,21 @@ module cg_driver {
         halo_update_driver(chunk_var, setting_var, 1);
 
         copy_u(setting_var.halo_depth, chunk_var.u, chunk_var.u0);
+
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.p.updateFluff();
+            chunk_var.kx.updateFluff();
+            chunk_var.ky.updateFluff();
+            profiler.stopTimer("comms");
+        }
     }
 
     // Invokes the main CG solve kernels
     proc cg_main_step_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, in tt : int,
                                 ref rro: real, ref error: real){
         var pw: real;
-
+        
         cg_calc_w (setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, chunk_var.ky);
 
         var alpha : real = rro / pw;

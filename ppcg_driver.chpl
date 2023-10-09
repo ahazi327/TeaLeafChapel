@@ -78,6 +78,11 @@ module ppcg_driver{
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_P] = true;
         halo_update_driver(chunk_var, setting_var, 1);
+        if useStencilDist {
+            profiler.startTimer("comms");
+            chunk_var.p.updateFluff();
+            profiler.stopTimer("comms");
+        }
     }
 
     // Invokes the main PPCG solver kernels
