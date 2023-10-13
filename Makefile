@@ -22,15 +22,15 @@ $(shell mkdir -p $(TARGET_DIR))
 
 # Compilation rule for local version
 $(TARGET): $(SRCS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(SRCS)
+	$(CC) $(CFLAGS) -o $(TARGET_DIR)/tealeaflocal $(SRCS)
 
 # Compile the block distribution version
 block: $(SRCS)
-	$(CC) $(CFLAGS) $(BLOCK) -o $(TARGET) $(SRCS)
+	$(CC) $(CFLAGS) $(BLOCK) -o $(TARGET_DIR)/tealeafblock $(SRCS)
 
 # Compile the stencil distribution version
 stencil: $(SRCS)
-	$(CC) $(CFLAGS) $(STENCIL) -o $(TARGET) $(SRCS)
+	$(CC) $(CFLAGS) $(STENCIL) -o $(TARGET_DIR)/tealeafstencil $(SRCS)
 	
 # Test rule
 test: $(TEST_SRC)
