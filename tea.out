@@ -16,7 +16,7 @@ Solution Parameters:
 	halo_depth = 2
 	check_result = true
 	coefficient = 1
-	num_chunks_per_rank = LOCALE0 LOCALE1 LOCALE2 LOCALE3 LOCALE4
+	num_chunks_per_rank = LOCALE0 LOCALE1
 	summary_frequency = 10
 	
 state 0
@@ -61,6 +61,7 @@ state 4
 	x_max = 9.99844
 	y_max = 7.99844
 	radius = 0.0
+	geometry = RECTANGULAR
 	geometry = RECTANGULAR
 ANGULAR
 y = RECTANGULAR

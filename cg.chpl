@@ -77,10 +77,10 @@ module cg {
         var pw_temp : real;
 
         forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce pw_temp) do{
-            const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
-                + (ky[i, j+1]+ky[i, j]))*p[i, j]
-                - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
-                - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
+            const smvp = (1.0 + (kx.localAccess[i+1, j]+kx[i, j])
+                + (ky.localAccess[i, j+1]+ky[i, j]))*p[i, j]
+                - (kx.localAccess[i+1, j]*p.localAccess[i+1, j]+kx[i, j]*p.localAccess[i-1, j])
+                - (ky.localAccess[i, j+1]*p.localAccess[i, j+1]+ky[i, j]*p.localAccess[i, j-1]);
             w[i,j] = smvp;
             pw_temp += smvp * p[i, j];
             

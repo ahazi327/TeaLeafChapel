@@ -86,7 +86,7 @@ for method in methods:
     plt.ylabel('Wallclock (s)')
     plt.legend(loc='upper left', bbox_to_anchor=(1,1))
     plt.grid(True, which="both", ls="--")
-    plt.title(f'{method} Explorer Time-to-solution')
+    plt.title(f'{method} Zenith Time-to-solution')
     plt.tight_layout()
 
     # Save the figure with some padding on the right for the legend

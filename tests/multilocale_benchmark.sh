@@ -38,14 +38,17 @@ EOF
 }
 
 # Multiple configuration variables.
-x_cells=(1024 1448 2048 2896 4096 5792 8192)  # maybe remove earlier configurations  
-y_cells=(1024 1448 2048 2896 4096 5792 8192)
-end_step=(1 1 1 1 1 1)
-locales=(1 2 4 8 16 24 48 96)
+# x_cells=(1024 1448 2048 2896 4096 5792 8192)  # maybe remove earlier configurations  
+# y_cells=(1024 1448 2048 2896 4096 5792 8192)
+x_cells=(4096)
+y_cells=(4096)
+end_step=(1)
+# end_step=(1 1 1 1 1 1)
+locales=(1 2 4 8 16 32 64 128 256)
 # solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)  # maybe to save time just use Chebyshev
 
 # Run the program with each configuration.
-num_configs=7
+num_configs=9
 repeat_tests=1
 # num_solvers=4
 

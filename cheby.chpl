@@ -22,9 +22,9 @@ module cheby {
 
         forall (i, j) in Domain.expand(-halo_depth) do{ 
             const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
-                                + (ky[i, j+1]+ky[i, j]))*u[i, j]
-                                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
-                                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                                + (ky.localAccess[i, j+1]+ky.localAccess[i, j]))*u[i, j]
+                                - (kx.localAccess[i+1, j]*u.localAccess[i+1, j]+kx[i, j]*u.localAccess[i-1, j])
+                                - (ky.localAccess[i, j+1]*u.localAccess[i, j+1]+ky[i, j]*u.localAccess[i, j-1]);
             w[i, j] = smvp;
             r[i, j] = u0[i, j] - smvp;
             p[i, j] = r[i, j] / theta;
@@ -41,10 +41,10 @@ module cheby {
         profiler.startTimer("cheby_iterate");
 
         forall (i, j) in Domain.expand(-halo_depth) do{
-            const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
-                                + (ky[i, j+1]+ky[i, j]))*u[i, j]
-                                - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
-                                - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+            const smvp: real = (1.0 + (kx.localAccess[i+1, j]+kx[i, j])
+                                + (ky.localAccess[i, j+1]+ky[i, j]))*u[i, j]
+                                - (kx.localAccess[i+1, j]*u.localAccess[i+1, j]+kx[i, j]*u.localAccess[i-1, j])
+                                - (ky.localAccess[i, j+1]*u.localAccess[i, j+1]+ky[i, j]*u.localAccess[i, j-1]);
             w[i, j] = smvp;
             r[i, j] = u0[i, j] - smvp;
             p[i, j] = alpha * p[i, j] + beta * r[i, j];
