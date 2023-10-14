@@ -40,10 +40,18 @@ module cg {
         }
 
         const inner_1 = Domain[halo_depth..<y-1, halo_depth..<x-1];
-        forall (i, j) in inner_1 do {
-            kx[i, j] = rx*(w.localAccess[i-1, j]+w[i, j]) / (2.0*w.localAccess[i-1, j]*w[i, j]);
-            ky[i, j] = ry*(w.localAccess[i, j-1]+w[i, j]) / (2.0*w.localAccess[i, j-1]*w[i, j]);
+        if useStencilDist {
+            forall (i, j) in inner_1 do {
+                kx[i, j] = rx*(w.localAccess[i-1, j]+w[i, j]) / (2.0*w.localAccess[i-1, j]*w[i, j]);
+                ky[i, j] = ry*(w.localAccess[i, j-1]+w[i, j]) / (2.0*w.localAccess[i, j-1]*w[i, j]);
+            }
+        } else {
+            forall (i, j) in inner_1 do {
+                kx[i, j] = rx*(w[i-1, j]+w[i, j]) / (2.0*w[i-1, j]*w[i, j]);
+                ky[i, j] = ry*(w[i, j-1]+w[i, j]) / (2.0*w[i, j-1]*w[i, j]);
+            }   
         }
+        
 
         if useStencilDist {
             profiler.startTimer("comms");
@@ -54,16 +62,30 @@ module cg {
         }
         
         var rro_temp : real; 
-        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce rro_temp) do {
-            const smvp = (1.0 + (kx.localAccess[i+1, j]+kx[i, j])
-                + (ky.localAccess[i, j+1]+ky[i, j]))*u[i, j]
-                - (kx.localAccess[i+1, j]*u.localAccess[i+1, j]+kx[i, j]*u.localAccess[i-1, j])
-                - (ky.localAccess[i, j+1]*u.localAccess[i, j+1]+ky[i, j]*u.localAccess[i, j-1]);
-            w[i, j] = smvp;
-            r[i,j] = u[i,j] - smvp;
-            p[i,j] = r[i,j];
-            rro_temp += p[i,j]**2;   
+        if useStencilDist {
+            forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce rro_temp) do {
+                const smvp = (1.0 + (kx.localAccess[i+1, j]+kx[i, j])
+                    + (ky.localAccess[i, j+1]+ky[i, j]))*u[i, j]
+                    - (kx.localAccess[i+1, j]*u.localAccess[i+1, j]+kx[i, j]*u.localAccess[i-1, j])
+                    - (ky.localAccess[i, j+1]*u.localAccess[i, j+1]+ky[i, j]*u.localAccess[i, j-1]);
+                w[i, j] = smvp;
+                r[i,j] = u[i,j] - smvp;
+                p[i,j] = r[i,j];
+                rro_temp += p[i,j]**2;   
+            }
+        } else {
+            forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce rro_temp) do {
+                const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
+                    + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                    - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                    - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                w[i, j] = smvp;
+                r[i,j] = u[i,j] - smvp;
+                p[i,j] = r[i,j];
+                rro_temp += p[i,j]**2;   
+            }   
         }
+        
         
         rro += rro_temp;
         profiler.stopTimer("cg_init");
@@ -75,16 +97,26 @@ module cg {
 
         profiler.startTimer("cg_calc_w");
         var pw_temp : real;
-
-        forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce pw_temp) do{
-            const smvp = (1.0 + (kx.localAccess[i+1, j]+kx.localAccess[i, j])
-                + (ky.localAccess[i, j+1]+ky[i, j]))*p[i, j]
-                - (kx.localAccess[i+1, j]*p.localAccess[i+1, j]+kx.localAccess[i, j]*p.localAccess[i-1, j])
-                - (ky.localAccess[i, j+1]*p.localAccess[i, j+1]+ky.localAccess[i, j]*p.localAccess[i, j-1]);
-            w[i,j] = smvp;
-            pw_temp += smvp * p[i, j];
-            
+        if useStencilDist {
+            forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce pw_temp) do{
+                const smvp = (1.0 + (kx.localAccess[i+1, j]+kx.localAccess[i, j])
+                    + (ky.localAccess[i, j+1]+ky[i, j]))*p[i, j]
+                    - (kx.localAccess[i+1, j]*p.localAccess[i+1, j]+kx.localAccess[i, j]*p.localAccess[i-1, j])
+                    - (ky.localAccess[i, j+1]*p.localAccess[i, j+1]+ky.localAccess[i, j]*p.localAccess[i, j-1]);
+                w[i,j] = smvp;
+                pw_temp += smvp * p[i, j]; 
+             }
+        } else {
+            forall (i, j) in Domain.expand(-halo_depth)  with (+ reduce pw_temp) do{
+                const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
+                    + (ky[i, j+1]+ky[i, j]))*p[i, j]
+                    - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
+                    - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
+                w[i,j] = smvp;
+                pw_temp += smvp * p[i, j]; 
+             }   
         }
+        
         pw += pw_temp;
         profiler.stopTimer("cg_calc_w");
     }

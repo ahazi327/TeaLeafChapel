@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.ticker import mpl
 
 # Load the data from the Excel file
-df = pd.read_excel("results.xlsx")
+df = pd.read_excel("results1D.xlsx")
 
 # Ensure that the 'threads' column is of integer type
 df['threads'].fillna(-1, inplace=True)
@@ -27,6 +27,7 @@ label_map = {
     "x_cells=512, y_cells=512, end_step=20 20 C": "C 512x512 grid",
     "x_cells=1024, y_cells=1024, end_step=20 20 C": "C 1024x1024 grid",
     "x_cells=4000, y_cells=4000, end_step=10 10 C": "C 4000x4000 grid",
+    "x_cells=1024, y_cells=1024, end_step=20 20 1D": "Chapel 1D 1024x1024 grid",
 }
 
 # Define your preferred order of configurations
@@ -34,6 +35,7 @@ config_order = [
     "x_cells=512, y_cells=512, end_step=20 20",
     "x_cells=1024, y_cells=1024, end_step=20 20",
     "x_cells=4000, y_cells=4000, end_step=10 10",
+    "x_cells=1024, y_cells=1024, end_step=20 20 1D",
     "x_cells=512, y_cells=512, end_step=20 20 C",
     "x_cells=1024, y_cells=1024, end_step=20 20 C",
     "x_cells=4000, y_cells=4000, end_step=10 10 C",
@@ -86,7 +88,7 @@ for method in methods:
     plt.ylabel('Wallclock (s)')
     plt.legend(loc='upper left', bbox_to_anchor=(1,1))
     plt.grid(True, which="both", ls="--")
-    plt.title(f'{method} Zenith Time-to-solution')
+    plt.title(f'{method} Explorer Time-to-solution')
     plt.tight_layout()
 
     # Save the figure with some padding on the right for the legend

@@ -14,7 +14,7 @@ module set_chunk_state{
         profiler.startTimer("set_chunk_state");
         
         // Set the initial state
-        foreach ij in chunk_var.energy0.domain {
+        forall ij in chunk_var.energy0.domain with (ref chunk_var){
             chunk_var.energy0[ij] = states[0].energy;
             chunk_var.density[ij] = states[0].density;
         }
@@ -75,7 +75,7 @@ module set_chunk_state{
             }
         }
 
-        foreach ij in chunk_var.energy0.domain do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
+        forall ij in chunk_var.energy0.domain with (ref chunk_var) do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
         
         profiler.stopTimer("set_chunk_state");
     }
