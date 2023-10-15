@@ -21,18 +21,15 @@ module field_summary {
             localTemp = 0.0;
 
         // coforall loop across all locales
-        coforall loc in Locales with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
-            on loc {
-                forall i in Domain.expand(-halo_depth) with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
-                    var cellMass: real;
-                    localVol += volume[i];
-                    cellMass = volume[i] * density[i];
-                    localMass += cellMass;
-                    localIe += cellMass * energy0[i];
-                    localTemp += cellMass * u[i];
-                }
-            }
+        forall i in Domain.expand(-halo_depth) with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
+            var cellMass: real;
+            localVol += volume[i];
+            cellMass = volume[i] * density[i];
+            localMass += cellMass;
+            localIe += cellMass * energy0[i];
+            localTemp += cellMass * u[i];
         }
+        
         vol = localVol;
         mass = localMass;
         ie = localIe;

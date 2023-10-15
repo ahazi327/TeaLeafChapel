@@ -63,7 +63,8 @@ state 4
 	radius = 0.0
 	geometry = RECTANGULAR
 ANGULAR
-	geometry = RECTANGULAR
+ANGULAR
+y = RECTANGULAR
 ANGULAR
 y = RECTANGULAR
 9998
