@@ -15,38 +15,28 @@ module field_summary {
                         ref ie: real, ref temp: real){
         profiler.startTimer("field_summary");
 
-        // Declare arrays to store the results from each locale
-        var localVols: [{0..<Locales.size}] real;
-        var localMasses: [{0..<Locales.size}] real;
-        var localIes: [{0..<Locales.size}] real;
-        var localTemps: [{0..<Locales.size}] real;
+        var localVol = 0.0,
+            localMass = 0.0,
+            localIe = 0.0,
+            localTemp = 0.0;
 
         // coforall loop across all locales
-        coforall loc in Locales do on loc {
-            var localVol = 0.0,
-                localMass = 0.0,
-                localIe = 0.0,
-                localTemp = 0.0;
-
-            for i in Domain.expand(-halo_depth) {
-                localVol += volume[i];
-                localMass += volume[i] * density[i];
-                localIe += volume[i] * density[i] * energy0[i];
-                localTemp += volume[i] * density[i] * u[i];
+        coforall loc in Locales with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
+            on loc {
+                forall i in Domain.expand(-halo_depth) with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
+                    var cellMass: real;
+                    localVol += volume[i];
+                    cellMass = volume[i] * density[i];
+                    localMass += cellMass;
+                    localIe += cellMass * energy0[i];
+                    localTemp += cellMass * u[i];
+                }
             }
-
-            // Write the local results back to the arrays on locale 0
-            localVols[loc.id] = localVol;
-            localMasses[loc.id] = localMass;
-            localIes[loc.id] = localIe;
-            localTemps[loc.id] = localTemp;
         }
-
-        // Sum up the results from all locales
-        vol = + reduce localVols;
-        mass = + reduce localMasses;
-        ie = + reduce localIes;
-        temp = + reduce localTemps;
+        vol = localVol;
+        mass = localMass;
+        ie = localIe;
+        temp = localTemp;
 
         profiler.stopTimer("field_summary");
     }
