@@ -34,29 +34,30 @@ module local_halos {
 
     // Updates faces in turn.
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?Do] real){
-            coforall loc in Locales{
-                on loc {
-                    if useStencilDist {
-                        forall (i, j) in {0..<depth, halo_depth..<x-halo_depth} {
-                            buffer[j, halo_depth-i-1] = buffer[j, i + halo_depth];
-                            buffer[j, x-halo_depth + i] = buffer[j, x-halo_depth-(i + 1)];
-                        }
-                        forall (i, j) in {halo_depth..<y-halo_depth, 0..<depth} {
-                            buffer[y - halo_depth + j, i] = buffer[y - halo_depth - (j + 1), i];
-                            buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
-                        }
-                    } else {
-                        forall (i, j) in {0..<depth, halo_depth..<x-halo_depth} {
-                            buffer[j, halo_depth-i-1] = buffer[j, i + halo_depth];
-                            buffer[j, x-halo_depth + i] = buffer[j, x-halo_depth-(i + 1)];
-                        }
-                        forall (i, j) in {halo_depth..<y-halo_depth, 0..<depth} {
-                            buffer[y - halo_depth + j, i] = buffer[y - halo_depth - (j + 1), i];
-                            buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
-                        }
-                    }
+        const x_domain = {0..<depth, halo_depth..<x-halo_depth};
+        const y_domain = {halo_depth..<y-halo_depth, 0..<depth};
+
+        coforall loc in Locales do on loc {
+            if useStencilDist {
+                forall (i, j) in Do.localSlice(x_domain) {
+                    buffer.localAccess[j, halo_depth-i-1] = buffer.localAccess[j, i + halo_depth];
+                    buffer.localAccess[j, x-halo_depth + i] = buffer.localAccess[j, x-halo_depth-(i + 1)];
+                }
+                forall (i, j) in Do.localSlice(y_domain){
+                    buffer.localAccess[y - halo_depth + j, i] = buffer.localAccess[y - halo_depth - (j + 1), i];
+                    buffer.localAccess[halo_depth - j - 1, i] = buffer.localAccess[halo_depth + j, i];
+                }
+            } else {
+                forall (i, j) in Do.localSlice(x_domain) {
+                    buffer[j, halo_depth-i-1] = buffer[j, i + halo_depth];
+                    buffer[j, x-halo_depth + i] = buffer[j, x-halo_depth-(i + 1)];
+                }
+                forall (i, j) in Do.localSlice(y_domain){
+                    buffer[y - halo_depth + j, i] = buffer[y - halo_depth - (j + 1), i];
+                    buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
                 }
             }
+        }
     }
 }
 
