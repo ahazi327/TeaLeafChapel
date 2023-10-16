@@ -6,8 +6,8 @@ Solution Parameters:
 	grid_y_min = 0.0
 	grid_x_max = 10.0
 	grid_y_max = 10.0
-	grid_x_cells = 8
-	grid_y_cells = 8
+	grid_x_cells = 64
+	grid_y_cells = 64
 	presteps = 20
 	ppcg_inner_steps = 350
 	eps_lim = 0.0001
@@ -26,44 +26,42 @@ state 0
 state 1
 	density = 0.1
 	energy= 25.0
-	x_min = 0.0125
-	y_min = 1.0125
-	x_max = 0.9875
-	y_max = 1.9875
+	x_min = 0.0015625
+	y_min = 1.00156
+	x_max = 0.998437
+	y_max = 1.99844
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 2
 	density = 0.1
 	energy= 0.1
-	x_min = 1.0125
-	y_min = 1.0125
-	x_max = 5.9875
-	y_max = 1.9875
+	x_min = 1.00156
+	y_min = 1.00156
+	x_max = 5.99844
+	y_max = 1.99844
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 3
 	density = 0.1
 	energy= 0.1
-	x_min = 5.0125
-	y_min = 1.0125
-	x_max = 5.9875
-	y_max = 7.9875
+	x_min = 5.00156
+	y_min = 1.00156
+	x_max = 5.99844
+	y_max = 7.99844
 	radius = 0.0
 	geometry = RECTANGULAR
 	
 state 4
 	density = 0.1
 	energy= 0.1
-	x_min = 5.0125
-	y_min = 7.0125
-	x_max = 9.9875
-	y_max = 7.9875
+	x_min = 5.00156
+	y_min = 7.00156
+	x_max = 9.99844
+	y_max = 7.99844
 	radius = 0.0
 	geometry = RECTANGULAR
- RECTANGULAR
-ANGULAR
 ANGULAR
 y = RECTANGULAR
 ANGULAR
