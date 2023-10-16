@@ -36,8 +36,8 @@ module local_halos {
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?Do] real){
         const west_domain = {halo_depth..<y-halo_depth, 0..<depth};
         const east_domain = {halo_depth..<y-halo_depth, x..<x+depth};
-        const south_domain = {0..<depth, halo_depth..<x-halo_depth};
-        const north_domain = {y..<y+depth, halo_depth..<x-halo_depth};
+        const north_domain = {0..<depth, halo_depth..<x-halo_depth};
+        const south_domain = {y..<y+depth, halo_depth..<x-halo_depth};
 
         coforall loc in Locales do on loc {
             forall (i, j) in Do(west_domain).localSubdomain(){ // west
