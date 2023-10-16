@@ -34,24 +34,25 @@ module local_halos {
 
     // Updates faces in turn.
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?Do] real){
-        const x_domain = {0..<depth, halo_depth..<x-halo_depth};
-        const y_domain = {halo_depth..<y-halo_depth, 0..<depth};
+        const x_domain : subdomain(Do) = {halo_depth..<x-halo_depth, 0..<depth};
+        const y_domain : subdomain(Do) = {0..<depth, halo_depth..<y-halo_depth};
 
         coforall loc in Locales do on loc {
-            forall (i, j) in Do.localSlice(x_domain){
-                buffer[j, halo_depth-i-1] = buffer[j, i + halo_depth];
+            forall (i, j) in Do(x_domain).localSubdomain(){
+                buffer[i, halo_depth-j-1] = buffer[i, j + halo_depth];
             }
-            forall (i, j) in Do.localSlice(x_domain){
-                buffer[j, x-halo_depth + i] = buffer[j, x-halo_depth-(i + 1)];
+            forall (i, j) in Do(x_domain).localSubdomain(){
+                buffer[i, x-halo_depth + j] = buffer[i, x-halo_depth-(j + 1)];
             }
             
-            forall (i, j) in Do.localSlice(y_domain) {
-                buffer[y - halo_depth + j, i] = buffer[y - halo_depth - (j + 1), i];
+            forall (i, j) in Do(y_domain).localSubdomain() {
+                buffer[y - halo_depth + i, j] = buffer[y - halo_depth - (i + 1), j];
             }
-            forall (i, j) in Do.localSlice(y_domain) {
-                buffer[halo_depth - j - 1, i] = buffer[halo_depth + j, i];
+            forall (i, j) in Do(y_domain).localSubdomain() {
+                buffer[halo_depth - i - 1, j] = buffer[halo_depth + i, j];
             }
-        }
+        }    
+        
     }
 }
 
