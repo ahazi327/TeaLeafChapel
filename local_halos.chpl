@@ -34,22 +34,24 @@ module local_halos {
 
     // Updates faces in turn.
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?Do] real){
-        const x_domain : subdomain(Do) = {halo_depth..<x-halo_depth, 0..<depth};
-        const y_domain : subdomain(Do) = {0..<depth, halo_depth..<y-halo_depth};
+        const west_domain = {halo_depth..<y-halo_depth, 0..<depth};
+        const east_domain = {halo_depth..<y-halo_depth, x..<x+depth};
+        const south_domain = {0..<depth, halo_depth..<x-halo_depth};
+        const north_domain = {y..<y+depth, halo_depth..<x-halo_depth};
 
         coforall loc in Locales do on loc {
-            forall (i, j) in Do(x_domain).localSubdomain(){
-                buffer[i, halo_depth-j-1] = buffer[i, j + halo_depth];
+            forall (i, j) in Do(west_domain).localSubdomain(){ // west
+                buffer.localAccess[i, halo_depth-j-1] = buffer.localAccess[i, j + halo_depth];
             }
-            forall (i, j) in Do(x_domain).localSubdomain(){
-                buffer[i, x-halo_depth + j] = buffer[i, x-halo_depth-(j + 1)];
+            forall (i, j) in Do(east_domain).localSubdomain(){ // east
+                buffer.localAccess[i, x-halo_depth + j] = buffer.localAccess[i, x-halo_depth-(j + 1)];
             }
             
-            forall (i, j) in Do(y_domain).localSubdomain() {
-                buffer[y - halo_depth + i, j] = buffer[y - halo_depth - (i + 1), j];
+            forall (i, j) in Do(south_domain).localSubdomain() { // south
+                buffer.localAccess[y - halo_depth + i, j] = buffer.localAccess[y - halo_depth - (i + 1), j];
             }
-            forall (i, j) in Do(y_domain).localSubdomain() {
-                buffer[halo_depth - i - 1, j] = buffer[halo_depth + i, j];
+            forall (i, j) in Do(north_domain).localSubdomain() { //  north
+                buffer.localAccess[halo_depth - i - 1, j] = buffer.localAccess[halo_depth + i, j];
             }
         }    
         
