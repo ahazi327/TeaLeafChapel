@@ -2,6 +2,7 @@ module local_halos {
     use chunks;
     use settings;
     use profile;
+    use VisualDebug;
 
     // Invoke the halo update kernels using driver
     proc halo_update_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in depth: int){
@@ -33,28 +34,30 @@ module local_halos {
     }
 
     // Updates faces in turn.
-    proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?Do] real){
-        const west_domain = {halo_depth..<y-halo_depth, 0..<depth};
-        const east_domain = {halo_depth..<y-halo_depth, x..<x+depth};
-        const north_domain = {0..<depth, halo_depth..<x-halo_depth};
-        const south_domain = {y..<y+depth, halo_depth..<x-halo_depth};
-
+    proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?D] real){
         coforall loc in Locales do on loc {
-            forall (i, j) in Do(west_domain).localSubdomain(){ // west
+            const Domain = D.localSubdomain();
+            
+            const west_domain = Domain[halo_depth..<y-halo_depth, 0..<depth]; // west side
+            forall (i, j) in west_domain { 
                 buffer.localAccess[i, halo_depth-j-1] = buffer.localAccess[i, j + halo_depth];
             }
-            forall (i, j) in Do(east_domain).localSubdomain(){ // east
+
+            const east_domain = Domain[halo_depth..<y-halo_depth, x..<x+depth]; // east side  
+            forall (i, j) in east_domain { 
                 buffer.localAccess[i, x-halo_depth + j] = buffer.localAccess[i, x-halo_depth-(j + 1)];
             }
             
-            forall (i, j) in Do(south_domain).localSubdomain() { // south
+            const south_domain = Domain[y..<y+depth, halo_depth..<x-halo_depth]; // south side
+            forall (i, j) in south_domain { 
                 buffer.localAccess[y - halo_depth + i, j] = buffer.localAccess[y - halo_depth - (i + 1), j];
             }
-            forall (i, j) in Do(north_domain).localSubdomain() { //  north
+
+            const north_domain = Domain[0..<depth, halo_depth..<x-halo_depth];  //  north side
+            forall (i, j) in north_domain {
                 buffer.localAccess[halo_depth - i - 1, j] = buffer.localAccess[halo_depth + i, j];
             }
         }    
-        
     }
 }
 
