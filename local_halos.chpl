@@ -2,7 +2,6 @@ module local_halos {
     use chunks;
     use settings;
     use profile;
-    use VisualDebug;
 
     // Invoke the halo update kernels using driver
     proc halo_update_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in depth: int){

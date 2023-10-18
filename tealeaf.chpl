@@ -6,6 +6,7 @@ module main {
     use parse_config;
     use initialise;
     use profile;
+    use VisualDebug;
     
     /* 
         This repository is a translation in to Chapel from C 
@@ -42,7 +43,7 @@ module main {
 
         // Perform the solve using default or overloaded diffuse    
         diffuse(chunk_var, setting_var);
-
+        
         wallclock.stop();
         writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");
 

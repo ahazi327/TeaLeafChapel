@@ -8,7 +8,8 @@ module set_chunk_data{
 	use settings;
 	use chunks;
 	use profile;
-
+	
+	
 	proc set_chunk_data_driver(ref chunk_var: chunks.Chunk,  const ref setting_var : settings.setting){ 
 		profiler.startTimer("set_chunk_data");
 		
@@ -33,12 +34,11 @@ module set_chunk_data{
 			chunk_var.cell_y[ii] = 0.5 * (chunk_var.vertex_y[ii] + chunk_var.vertex_y[ii+1]);
 
 		}
+		
 		forall ii in chunk_var.volume.domain with (ref chunk_var) do {
-			chunk_var.volume[ii] = setting_var.dx * setting_var.dy;
-			chunk_var.x_area[ii] = setting_var.dy;
-			chunk_var.y_area[ii] = setting_var.dx;
+			chunk_var.volume.localAccess[ii] = setting_var.dx * setting_var.dy;
 		}
-
+		
 		profiler.stopTimer("set_chunk_data");
 	}
 }
