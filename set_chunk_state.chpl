@@ -15,8 +15,8 @@ module set_chunk_state{
         
         // Set the initial state
         forall ij in chunk_var.energy0.domain with (ref chunk_var){
-            chunk_var.energy0[ij] = states[0].energy;
-            chunk_var.density[ij] = states[0].density;
+            chunk_var.energy0.localAccess[ij] = states[0].energy;
+            chunk_var.density.localAccess[ij] = states[0].density;
         }
         // Apply all of the states in turn
         for ss in 1..<setting_var.num_states do {
@@ -34,14 +34,14 @@ module set_chunk_state{
             states[ss].x_max -= (setting_var.dx/100.0);
             states[ss].y_max -= (setting_var.dy/100.0);
 
-            forall (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} with (ref chunk_var) do {
+            for (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} do {
 
                 var apply_state: bool = false;
 
                 if states[ss].geometry == settings.Geometry.RECTANGULAR {
-                    if (chunk_var.vertex_x.localAccess[jj+1] >= states[ss].x_min) && 
+                    if (chunk_var.vertex_x[jj+1] >= states[ss].x_min) && 
                     (chunk_var.vertex_x[jj] < states[ss].x_max) && 
-                    (chunk_var.vertex_y.localAccess[kk+1] >= states[ss].y_min) && 
+                    (chunk_var.vertex_y[kk+1] >= states[ss].y_min) && 
                     (chunk_var.vertex_y[kk] < states[ss].y_max){
                         apply_state = true;
                     }
@@ -71,7 +71,7 @@ module set_chunk_state{
                 }
             }
         }
-        forall ij in chunk_var.u.domain with (ref chunk_var) do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
+        forall ij in chunk_var.u.domain with (ref chunk_var) do chunk_var.u.localAccess[ij] = chunk_var.energy0.localAccess[ij] * chunk_var.density.localAccess[ij];
         
         profiler.stopTimer("set_chunk_state");
     }
