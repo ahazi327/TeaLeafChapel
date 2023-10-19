@@ -1,6 +1,6 @@
 *
 *.in
-*.out
+!*.out
 !*/
 !*.*
 !./tests/results/*.png

@@ -15,8 +15,7 @@ module jacobi{
         
         profiler.startTimer("jacobi_init");
 
-        const inner_Domain = {1..<y-1, 1..<x-1};
-        const Inner = {halo_depth..<y - 1, halo_depth..<x - 1};
+        const Inner = Domain[halo_depth..<y - 1, halo_depth..<x - 1];
 
         if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY
         {
@@ -25,26 +24,28 @@ module jacobi{
             exit(-1);
         }
 
+        u = energy * density;
+        
         forall (i, j) in Inner do{ 
-            u[i, j] = energy[i, j] * density[i, j];
+            
 
             var densityCentre: real;
             var densityLeft: real;
             var densityDown: real;
 
             if coefficient == CONDUCTIVITY {  
-                densityCentre = density[i, j];
+                densityCentre = density.localAccess[i, j];
                 densityLeft = density[i, j-1];
                 densityDown = density[i-1, j ];
             }
             else {
-                densityCentre = 1.0/density[i, j];
+                densityCentre = 1.0/density.localAccess[i, j];
                 densityLeft =  1.0/density[i, j - 1];
                 densityDown = 1.0/density[i - 1, j];
             }
 
-            kx[i, j] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
-            ky[i, j] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
+            kx.localAccess[i, j] = rx*(densityLeft+densityCentre)/(2.0*densityLeft*densityCentre);
+            ky.localAccess[i, j] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
         }
 
 
@@ -67,17 +68,30 @@ module jacobi{
         
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         var err: real = 0.0;
-
-        forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
-            const stencil : real = (u0[ij] 
-                                        + kx[ij + east] * r[ij + east] 
-                                        + kx[ij] * r[ij + west]
-                                        + ky[ij + north] * r[ij + north] 
-                                        + ky[ij] * r[ij + south])
-                                    / (1.0 + kx[ij] + kx[ij + east] 
-                                        + ky[ij] + ky[ij + north]);
-            u[ij] = stencil;
-            err += abs(stencil - r[ij]);
+        if useStencilDist {
+            forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+                const stencil : real = (u0.localAccess[ij] 
+                                            + kx.localAccess[ij + east] * r.localAccess[ij + east] 
+                                            + kx.localAccess[ij] * r.localAccess[ij + west]
+                                            + ky.localAccess[ij + north] * r.localAccess[ij + north] 
+                                            + ky.localAccess[ij] * r.localAccess[ij + south])
+                                        / (1.0 + kx.localAccess[ij] + kx.localAccess[ij + east] 
+                                            + ky.localAccess[ij] + ky.localAccess[ij + north]);
+                u.localAccess[ij] = stencil;
+                err += abs(stencil - r.localAccess[ij]);
+            }
+        } else {
+            forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+                const stencil : real = (u0.localAccess[ij] 
+                                            + kx[ij + east] * r[ij + east] 
+                                            + kx.localAccess[ij] * r[ij + west]
+                                            + ky[ij + north] * r[ij + north] 
+                                            + ky.localAccess[ij] * r[ij + south])
+                                        / (1.0 + kx.localAccess[ij] + kx[ij + east] 
+                                            + ky.localAccess[ij] + ky[ij + north]);
+                u.localAccess[ij] = stencil;
+                err += abs(stencil - r.localAccess[ij]);
+            }
         }
         error = err;
         

@@ -44,11 +44,11 @@ end_step=(20 20 10)
 solver_methods=(use_jacobi use_cg use_ppcg use_chebyshev)
 
 # Run the program with each configuration.
-num_configs=3
-repeat_tests=1
+num_configs=3  # Change this to match the number of configurations set above  
+repeat_tests=5
 num_solvers=4
 
-max_threads=8 # Change this for each machine to match number of threads tested on
+max_threads=64 # Change this for each machine to match number of threads tested on
 
 # Get architecture details 
 hostname

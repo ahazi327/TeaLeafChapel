@@ -13,7 +13,7 @@ ymax                = 10.0
 x_cells             = 64
 y_cells             = 64
 
-use_chebyshev
+use_jacobi
 check_result
 
 eps                 = 1.0e-15
