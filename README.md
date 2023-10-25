@@ -40,7 +40,7 @@ To change the flags used, simply open the makefile and edit the ```config params
 and ```CFLAGS``` for Chapel flags.
 
 ## Usage
-There are a number of test problems with known solutions within the ``` tea.problem``` file.
+There are a number of test problems with known solutions within the ```tea.problem``` file.
 Each line pertains to a problem, with the ordering being:
   ```
   'x-axis dimension' 'y-axis dimension' 'timesteps' 'error difference to expected solution'
