@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 
 # Path to your output text file and the Excel file to save the results
-input_file = "benchmark_TeaLeafChapel_explorer_1D.out"
+input_file = "benchmark_TeaLeafChapel_zenith2.out"
 output_file = "results.xlsx"
 
 # Patterns to search for in the output

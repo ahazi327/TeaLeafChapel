@@ -1,5 +1,5 @@
 CC = chpl
-CFLAGS = --fast $(VERBOSE) $(LOCALEINFO)
+CFLAGS = $(VERBOSE) $(LOCALEINFO)
 TARGET_DIR = ./objects
 TARGET = $(TARGET_DIR)/tealeaf
 TEST_DIR = ./tests
@@ -10,6 +10,7 @@ TEST_MOD = test
 # config params
 BLOCK = -s useBlockDist=true
 STENCIL = -s useStencilDist=true
+GPU = -s useGPU=true
 VERBOSE = -s verbose=true
 LOCALEINFO = -s printLocaleInfo=true
 
@@ -36,6 +37,10 @@ stencil: $(SRCS)
 test: $(TEST_SRC)
 	$(CC) $(CFLAGS) $(MAIN_MODULE) $(TEST_MOD) -o $(TEST) $(TEST_SRC)
 	$(TEST)
+
+# Compile the gpu version
+gpu: $(SRCS)
+	$(CC) $(CFLAGS) $(GPU) -o $(TARGET_DIR)/tealeafgpu $(SRCS)
 
 # Record/report rule
 report: $(TARGET)

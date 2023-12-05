@@ -34,7 +34,7 @@ module set_chunk_state{
             states[ss].x_max -= (setting_var.dx/100.0);
             states[ss].y_max -= (setting_var.dy/100.0);
 
-            for (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} do {
+            forall (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} with (ref chunk_var) do {
 
                 var apply_state: bool = false;
 

@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib.ticker import mpl
 
 # Load the data from the Excel file
-df = pd.read_excel("results1D.xlsx")
+df = pd.read_excel("results.xlsx")
 
 # Ensure that the 'threads' column is of integer type
 df['threads'].fillna(-1, inplace=True)

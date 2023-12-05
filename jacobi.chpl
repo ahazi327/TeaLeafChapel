@@ -58,7 +58,17 @@ module jacobi{
                         const ref ky: [Domain] real){
         profiler.startTimer("jacobi_iterate");
 
-        [ij in Domain] r[ij] = u[ij];
+        if useGPU {
+            on here.gpus[0] {
+                // forall ij in Domain with (ref r) {r[ij] = u[ij];}
+                // r=u;
+                foreach ij in Domain {r[ij] = u[ij];}
+            }
+        }
+        else {
+            [ij in Domain] r[ij] = u[ij];
+        }
+                
 
         if useStencilDist {
             profiler.startTimer("comms");
@@ -80,6 +90,20 @@ module jacobi{
                 u.localAccess[ij] = stencil;
                 err += abs(stencil - r.localAccess[ij]);
             }
+        // } else if useGPU {
+        //     on here.gpus[0] {
+        //         forall ij in Domain.expand(-halo_depth) with (+ reduce err, ref u0, ref kx, ref ky, ref r, ref u) {
+        //             const stencil : real = (u0[ij] 
+        //                                         + kx[ij + east] * r[ij + east] 
+        //                                         + kx[ij] * r[ij + west]
+        //                                         + ky[ij + north] * r[ij + north] 
+        //                                         + ky[ij] * r[ij + south])
+        //                                     / (1.0 + kx[ij] + kx[ij + east] 
+        //                                         + ky[ij] + ky[ij + north]);
+        //             u[ij] = stencil;
+        //             err += abs(stencil - r[ij]);
+        //         }
+        //     }
         } else {
             forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
                 const stencil : real = (u0.localAccess[ij] 

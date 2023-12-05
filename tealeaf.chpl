@@ -7,6 +7,7 @@ module main {
     use initialise;
     use profile;
     use VisualDebug;
+    use GpuDiagnostics;
     
     /* 
         This repository is a translation in to Chapel from C 
@@ -41,8 +42,10 @@ module main {
         var chunk_var: chunks.Chunk = new Chunk ();
         initialise_application(chunk_var, setting_var, states);
 
-        // Perform the solve using default or overloaded diffuse    
+        // Perform the solve using default or overloaded diffuse 
+        startGpuDiagnostics();   
         diffuse(chunk_var, setting_var);
+        stopGpuDiagnostics();
         
         wallclock.stop();
         writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");

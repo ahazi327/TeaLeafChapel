@@ -9,6 +9,7 @@ module chunks{
   // Set as True if using multilocale
   config param useStencilDist = false;
   config param useBlockDist = false;
+  config param useGPU = false;
   
   config var global_x = 512;
   config var global_y = 512;
@@ -41,8 +42,8 @@ module chunks{
     const max_iter_domain : domain(1) = {0..<settings.max_iters};
 
     // Define the bounds of the arrays
-    var Domain = if useStencilDist then local_Domain dmapped Stencil(local_Domain, fluff=(1, 1))
-                else if useBlockDist then local_Domain dmapped Block(local_Domain)
+    var Domain = if useStencilDist then local_Domain dmapped stencilDist(local_Domain, fluff=(1, 1))
+                else if useBlockDist then local_Domain dmapped blockDist(local_Domain)
                 else local_Domain;
     
     
