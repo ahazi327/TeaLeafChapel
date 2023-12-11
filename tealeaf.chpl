@@ -39,22 +39,35 @@ module main {
         
         // Create array of records of chunks and initialise
         set_var(setting_var);
-        var chunk_var: chunks.Chunk = new Chunk ();
-        initialise_application(chunk_var, setting_var, states);
+        if useGPU {
+            on here.gpus[0] {
+                var chunk_var: chunks.Chunk = new Chunk ();
+                initialise_application(chunk_var, setting_var, states);
+                diffuse(chunk_var, setting_var);
 
-        // Perform the solve using default or overloaded diffuse 
-        startGpuDiagnostics();   
-        diffuse(chunk_var, setting_var);
-        stopGpuDiagnostics();
+                // Print the verbose profile summary
+                if verbose then profiler.report();
+                writeln("\n                                                                End of Run\n");
+                 // Write output
+                write_file(setting_var.tea_out_filename, chunk_var, setting_var, states);
+
+            }
+        } else{
+            var chunk_var: chunks.Chunk = new Chunk ();
+            initialise_application(chunk_var, setting_var, states);
+
+            // Perform the solve using default or overloaded diffuse 
+            diffuse(chunk_var, setting_var);
+
+            // Print the verbose profile summary
+            if verbose then profiler.report();
+            writeln("\n                                                                End of Run\n");
+
+            // Write output
+            write_file(setting_var.tea_out_filename, chunk_var, setting_var, states);
+        }
         
         wallclock.stop();
-        writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");
-
-        // Print the verbose profile summary
-        if verbose then profiler.report();
-        writeln("\n                                                                End of Run\n");
-
-        // Write output
-        write_file(setting_var.tea_out_filename, chunk_var, setting_var, states);
+        writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");   
     }
 }

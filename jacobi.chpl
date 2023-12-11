@@ -60,9 +60,9 @@ module jacobi{
 
         if useGPU {
             on here.gpus[0] {
-                // forall ij in Domain with (ref r) {r[ij] = u[ij];}
+                forall ij in Domain with (ref r) {r[ij] = u[ij];}
                 // r=u;
-                foreach ij in Domain {r[ij] = u[ij];}
+                // foreach ij in Domain {r[ij] = u[ij];}
             }
         }
         else {
