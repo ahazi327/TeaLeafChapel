@@ -33,22 +33,9 @@ module jacobi_driver {
 
         jacobi_init(chunk_var.x, chunk_var.y, setting_var.halo_depth, setting_var.coefficient, rx, ry,
             chunk_var.u, chunk_var.u0, chunk_var.energy, chunk_var.density, chunk_var.kx, chunk_var.ky);
-        
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.kx.updateFluff();
-            chunk_var.ky.updateFluff();
-            profiler.stopTimer("comms");
-        }
 
         copy_u(setting_var.halo_depth, chunk_var.u, chunk_var.u0);
         
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.u0.updateFluff();
-            profiler.stopTimer("comms");
-        } 
-
         // Need to update for the matvec
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
@@ -60,12 +47,6 @@ module jacobi_driver {
 
         jacobi_iterate(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, err, 
                         chunk_var.kx, chunk_var.ky);
-
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.u.updateFluff();
-            profiler.stopTimer("comms");
-        } 
         
         if tt % 50 == 0 {
                         

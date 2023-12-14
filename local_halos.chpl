@@ -5,13 +5,13 @@ module local_halos {
 
     // Invoke the halo update kernels using driver
     proc halo_update_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, const in depth: int){
-        profiler.startTimer("halo_update_driver");
+        // profiler.startTimer("halo_update_driver");
 
         if is_fields_to_exchange(setting_var) {
             local_halos (chunk_var.x, chunk_var.y, depth, setting_var.halo_depth, setting_var.fields_to_exchange,
             chunk_var.density, chunk_var.energy0, chunk_var.energy, chunk_var.u, chunk_var.p, chunk_var.sd);
         }
-        profiler.stopTimer("halo_update_driver");
+        // profiler.stopTimer("halo_update_driver");
     }
 
     // The kernel for updating halos locally
@@ -39,22 +39,22 @@ module local_halos {
             
             const west_domain = Domain[halo_depth..<y-halo_depth, 0..<depth]; // west side of global halo
             forall (i, j) in west_domain { 
-                buffer.localAccess[i, halo_depth-j-1] = buffer.localAccess[i, j + halo_depth];
+                buffer[i, halo_depth-j-1] = buffer[i, j + halo_depth];
             }
 
             const east_domain = Domain[halo_depth..<y-halo_depth, x..<x+depth]; // east side of global halo
             forall (i, j) in east_domain { 
-                buffer.localAccess[i, x-halo_depth + j] = buffer.localAccess[i, x-halo_depth-(j + 1)];
+                buffer[i, x-halo_depth + j] = buffer[i, x-halo_depth-(j + 1)];
             }
             
             const south_domain = Domain[y..<y+depth, halo_depth..<x-halo_depth]; // south side of global halo
             forall (i, j) in south_domain { 
-                buffer.localAccess[y - halo_depth + i, j] = buffer.localAccess[y - halo_depth - (i + 1), j];
+                buffer[y - halo_depth + i, j] = buffer[y - halo_depth - (i + 1), j];
             }
 
             const north_domain = Domain[0..<depth, halo_depth..<x-halo_depth];  //  north side of global halo
             forall (i, j) in north_domain {
-                buffer.localAccess[halo_depth - i - 1, j] = buffer.localAccess[halo_depth + i, j];
+                buffer[halo_depth - i - 1, j] = buffer[halo_depth + i, j];
             }
         }    
     }

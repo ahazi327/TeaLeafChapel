@@ -10,7 +10,7 @@ module cheby {
     proc cheby_calc_u(const ref halo_depth: int, ref u: [?Domain] real, const ref p: [Domain] real){
         profiler.startTimer("cheby_calc_u");
         
-        [ij in Domain.expand(-halo_depth)] u.localAccess[ij] += p.localAccess[ij];
+        [ij in Domain.expand(-halo_depth)] u[ij] += p[ij];
 
         profiler.stopTimer("cheby_calc_u");
     }
@@ -22,23 +22,23 @@ module cheby {
         profiler.startTimer("cheby_init");
         if useStencilDist{
             forall (i, j) in Domain.expand(-halo_depth) do{ 
-                const smvp: real = (1.0 + (kx.localAccess[i+1, j]+kx.localAccess[i, j])
-                                    + (ky.localAccess[i, j+1]+ky.localAccess[i, j]))*u.localAccess[i, j]
-                                    - (kx.localAccess[i+1, j]*u.localAccess[i+1, j]+kx.localAccess[i, j]*u.localAccess[i-1, j])
-                                    - (ky.localAccess[i, j+1]*u.localAccess[i, j+1]+ky.localAccess[i, j]*u.localAccess[i, j-1]);
-                w.localAccess[i, j] = smvp;
-                r.localAccess[i, j] = u0.localAccess[i, j] - smvp;
-                p.localAccess[i, j] = r.localAccess[i, j] / theta;
+                const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
+                                    + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                                    - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                                    - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                w[i, j] = smvp;
+                r[i, j] = u0[i, j] - smvp;
+                p[i, j] = r[i, j] / theta;
             }
         } else {
             forall (i, j) in Domain.expand(-halo_depth) do{ 
-                const smvp: real = (1.0 + (kx[i+1, j]+kx.localAccess[i, j])
-                                    + (ky[i, j+1]+ky.localAccess[i, j]))*u.localAccess[i, j]
-                                    - (kx[i+1, j]*u[i+1, j]+kx.localAccess[i, j]*u[i-1, j])
-                                    - (ky[i, j+1]*u[i, j+1]+ky.localAccess[i, j]*u[i, j-1]);
-                w.localAccess[i, j] = smvp;
-                r.localAccess[i, j] = u0.localAccess[i, j] - smvp;
-                p.localAccess[i, j] = r.localAccess[i, j] / theta;
+                const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
+                                    + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                                    - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                                    - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                w[i, j] = smvp;
+                r[i, j] = u0[i, j] - smvp;
+                p[i, j] = r[i, j] / theta;
             }
         }
         cheby_calc_u(halo_depth, u, p);
@@ -53,23 +53,23 @@ module cheby {
         profiler.startTimer("cheby_iterate");
         if useStencilDist{
             forall (i, j) in Domain.expand(-halo_depth) do{
-                const smvp: real = (1.0 + (kx.localAccess[i+1, j]+kx.localAccess[i, j])
-                                    + (ky.localAccess[i, j+1]+ky.localAccess[i, j]))*u.localAccess[i, j]
-                                    - (kx.localAccess[i+1, j]*u.localAccess[i+1, j]+kx.localAccess[i, j]*u.localAccess[i-1, j])
-                                    - (ky.localAccess[i, j+1]*u.localAccess[i, j+1]+ky.localAccess[i, j]*u.localAccess[i, j-1]);
-                w.localAccess[i, j] = smvp;
-                r.localAccess[i, j] = u0.localAccess[i, j] - smvp;
-                p.localAccess[i, j] = alpha * p.localAccess[i, j] + beta * r.localAccess[i, j];
+                const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
+                                    + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                                    - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                                    - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                w[i, j] = smvp;
+                r[i, j] = u0[i, j] - smvp;
+                p[i, j] = alpha * p[i, j] + beta * r[i, j];
             }
         } else {
             forall (i, j) in Domain.expand(-halo_depth) do{
-                const smvp: real = (1.0 + (kx[i+1, j]+kx.localAccess[i, j])
-                                    + (ky[i, j+1]+ky.localAccess[i, j]))*u.localAccess[i, j]
-                                    - (kx[i+1, j]*u[i+1, j]+kx.localAccess[i, j]*u[i-1, j])
-                                    - (ky[i, j+1]*u[i, j+1]+ky.localAccess[i, j]*u[i, j-1]);
-                w.localAccess[i, j] = smvp;
-                r.localAccess[i, j] = u0.localAccess[i, j] - smvp;
-                p.localAccess[i, j] = alpha * p.localAccess[i, j] + beta * r.localAccess[i, j];
+                const smvp: real = (1.0 + (kx[i+1, j]+kx[i, j])
+                                    + (ky[i, j+1]+ky[i, j]))*u[i, j]
+                                    - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
+                                    - (ky[i, j+1]*u[i, j+1]+ky[i, j]*u[i, j-1]);
+                w[i, j] = smvp;
+                r[i, j] = u0[i, j] - smvp;
+                p[i, j] = alpha * p[i, j] + beta * r[i, j];
             }
         }
         cheby_calc_u(halo_depth, u, p);

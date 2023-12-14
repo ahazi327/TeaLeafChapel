@@ -13,7 +13,7 @@ module field_summary {
                         const ref density: [Domain] real, const ref energy0: [Domain] real, 
                         const ref u: [Domain] real, ref vol: real, ref mass: real, 
                         ref ie: real, ref temp: real){
-        profiler.startTimer("field_summary");
+        // profiler.startTimer("field_summary");
 
         var localVol = 0.0,
             localMass = 0.0,
@@ -23,11 +23,11 @@ module field_summary {
         // coforall loop across all locales
         forall i in Domain.expand(-halo_depth) with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
             var cellMass: real;
-            localVol += volume.localAccess[i];
-            cellMass = volume.localAccess[i] * density.localAccess[i];
+            localVol += volume[i];
+            cellMass = volume[i] * density[i];
             localMass += cellMass;
-            localIe += cellMass * energy0.localAccess[i];
-            localTemp += cellMass * u.localAccess[i];
+            localIe += cellMass * energy0[i];
+            localTemp += cellMass * u[i];
         }
         
         vol = localVol;
@@ -35,7 +35,7 @@ module field_summary {
         ie = localIe;
         temp = localTemp;
 
-        profiler.stopTimer("field_summary");
+        // profiler.stopTimer("field_summary");
     }
 
 /*

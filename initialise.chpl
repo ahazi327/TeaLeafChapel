@@ -14,7 +14,7 @@ module initialise {
     // Initialise settings from input file
     proc initialise_application (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, 
                                 ref states : [0..<setting_var.num_states] state){ 
-        profiler.startTimer("initialise_application");
+        // profiler.startTimer("initialise_application");
         
         if printLocaleInfo then
             for loc in Locales do
@@ -28,6 +28,7 @@ module initialise {
                 writeln("  ...has ", here.maxTaskPar, " maximum parallelism");
                 }
         writeln();
+        
 
         set_chunk_data_driver(chunk_var, setting_var);
         set_chunk_state_driver(chunk_var, setting_var, states);
@@ -41,6 +42,6 @@ module initialise {
 
         store_energy(chunk_var.energy0, chunk_var.energy);
 
-        profiler.stopTimer("initialise_application");
+        // profiler.stopTimer("initialise_application");
     }
 }

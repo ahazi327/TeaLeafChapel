@@ -11,12 +11,12 @@ module set_chunk_state{
 
     proc set_chunk_state(ref states : [0..<setting_var.num_states]settings.state, ref chunk_var : chunks.Chunk, 
                         const ref setting_var : settings.setting){ 
-        profiler.startTimer("set_chunk_state");
+        // profiler.startTimer("set_chunk_state");
         
         // Set the initial state
         forall ij in chunk_var.energy0.domain with (ref chunk_var){
-            chunk_var.energy0.localAccess[ij] = states[0].energy;
-            chunk_var.density.localAccess[ij] = states[0].density;
+            chunk_var.energy0[ij] = states[0].energy;
+            chunk_var.density[ij] = states[0].density;
         }
         // Apply all of the states in turn
         for ss in 1..<setting_var.num_states do {
@@ -71,9 +71,9 @@ module set_chunk_state{
                 }
             }
         }
-        forall ij in chunk_var.u.domain with (ref chunk_var) do chunk_var.u.localAccess[ij] = chunk_var.energy0.localAccess[ij] * chunk_var.density.localAccess[ij];
+        forall ij in chunk_var.u.domain with (ref chunk_var) do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
         
-        profiler.stopTimer("set_chunk_state");
+        // profiler.stopTimer("set_chunk_state");
     }
 /*
  *      SET CHUNK STATE DRIVER

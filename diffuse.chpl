@@ -17,39 +17,6 @@ module diffuse{
     proc diffuse(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
         const end_step = setting_var.end_step : int;
         writeln("Using the ", setting_var.solver : string, "\n");
-        
-        // Make sure all array's fluff cells are up to date before starting solve method
-        if useStencilDist {
-            select (setting_var.solver){
-                when Solver.JACOBI_SOLVER{
-                    profiler.startTimer("comms");
-                    chunk_var.density.updateFluff();
-                    chunk_var.volume.updateFluff();
-                    profiler.stopTimer("comms");
-                }
-                when Solver.CG_SOLVER{
-                    profiler.startTimer("comms");
-                    chunk_var.density.updateFluff();
-                    chunk_var.volume.updateFluff();
-                    chunk_var.sd.updateFluff();
-                    profiler.stopTimer("comms");
-                }
-                when Solver.CHEBY_SOLVER{
-                    profiler.startTimer("comms");
-                    chunk_var.density.updateFluff();
-                    chunk_var.volume.updateFluff();
-                    chunk_var.sd.updateFluff();
-                    profiler.stopTimer("comms");
-                }
-                when Solver.PPCG_SOLVER{
-                    profiler.startTimer("comms");
-                    chunk_var.density.updateFluff();
-                    chunk_var.volume.updateFluff();
-                    chunk_var.sd.updateFluff();
-                    profiler.stopTimer("comms");
-                }
-            }
-        }
 
         for tt in 0..<end_step do{
             writeln("Timestep ", tt + 1);
@@ -77,13 +44,6 @@ module diffuse{
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;
         setting_var.fields_to_exchange[FIELD_DENSITY] = true;
         halo_update_driver(chunk_var, setting_var, 2);
-
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.density.updateFluff();
-            chunk_var.energy.updateFluff();
-            profiler.stopTimer("comms");
-        }
 
         var error : real = 0;
         var iterations_count : int = 0;

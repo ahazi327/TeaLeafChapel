@@ -6,7 +6,6 @@ module main {
     use parse_config;
     use initialise;
     use profile;
-    use VisualDebug;
     use GpuDiagnostics;
     
     /* 
@@ -22,49 +21,35 @@ module main {
         var wallclock = new stopwatch();
         wallclock.start();
 
-        // Create the settings wrapper
-        var setting_var: setting;
-        setting_var = new setting();
-        
-        set_default_settings(setting_var);
-
-        // Initialise states
-        find_num_states(setting_var); 
-        const states_domain = {0..<setting_var.num_states};
-        var states: [states_domain] settings.state;
-        states = new settings.state();
-
-        // Read input files for state and setting information
-        read_config(setting_var, states);
-        
-        // Create array of records of chunks and initialise
-        set_var(setting_var);
         if useGPU {
             on here.gpus[0] {
+                // Create the settings wrapper
+                var setting_var: setting;
+                setting_var = new setting();
+                
+                set_default_settings(setting_var);
+
+                // Initialise states
+                find_num_states(setting_var); 
+                const states_domain = {0..<setting_var.num_states};
+                var states: [states_domain] settings.state;
+                states = new settings.state();
+
+                // Read input files for state and setting information
+                read_config(setting_var, states);
+                
+                // Create array of records of chunks and initialise
+                set_var(setting_var);
                 var chunk_var: chunks.Chunk = new Chunk ();
-                initialise_application(chunk_var, setting_var, states);
+
+                initialise_application(chunk_var, setting_var, states);    //TODO WORK ON THIS TO FIX SEGMENTATION FAULTS
+
                 diffuse(chunk_var, setting_var);
 
                 // Print the verbose profile summary
-                if verbose then profiler.report();
-                writeln("\n                                                                End of Run\n");
-                 // Write output
-                write_file(setting_var.tea_out_filename, chunk_var, setting_var, states);
+                // if verbose then profiler.report();
 
             }
-        } else{
-            var chunk_var: chunks.Chunk = new Chunk ();
-            initialise_application(chunk_var, setting_var, states);
-
-            // Perform the solve using default or overloaded diffuse 
-            diffuse(chunk_var, setting_var);
-
-            // Print the verbose profile summary
-            if verbose then profiler.report();
-            writeln("\n                                                                End of Run\n");
-
-            // Write output
-            write_file(setting_var.tea_out_filename, chunk_var, setting_var, states);
         }
         
         wallclock.stop();
