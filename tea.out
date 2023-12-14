@@ -62,6 +62,10 @@ state 4
 	y_max = 7.99844
 	radius = 0.0
 	geometry = RECTANGULAR
+9844
+	y_max = 7.99844
+	radius = 0.0
+	geometry = RECTANGULAR
 ANGULAR
 y = RECTANGULAR
 ANGULAR
