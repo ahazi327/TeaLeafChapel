@@ -38,12 +38,14 @@ module main {
                 // Read input files for state and setting information
                 read_config(setting_var, states);
                 
+                
                 // Create array of records of chunks and initialise
                 set_var(setting_var);
+                
                 var chunk_var: chunks.Chunk = new Chunk ();
 
-                initialise_application(chunk_var, setting_var, states);    //TODO WORK ON THIS TO FIX SEGMENTATION FAULTS
-
+                initialise_application(chunk_var, setting_var, states);
+                writeln("chunk are ", chunk_var);
                 diffuse(chunk_var, setting_var);
 
                 // Print the verbose profile summary
