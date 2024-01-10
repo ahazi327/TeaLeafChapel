@@ -75,6 +75,7 @@ module chunks{
     var kx: [Domain] real = noinit;
     var ky: [Domain] real = noinit;
     var sd: [Domain] real = noinit;
+    var temp: [Domain] real = noinit;
 
     var cell_x: [x_domain] real = noinit;
     var cell_dx: [x_domain] real = noinit;

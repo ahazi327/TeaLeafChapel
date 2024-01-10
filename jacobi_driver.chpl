@@ -17,8 +17,8 @@ module jacobi_driver {
         for tt in 0..<setting_var.max_iters do {
 
             jacobi_main_step_driver(chunk_var, setting_var, tt, err);
-
             halo_update_driver(chunk_var, setting_var, 1);
+            
             if(abs(err) < setting_var.eps) then break;
             tt_prime += 1;
         }
@@ -46,7 +46,7 @@ module jacobi_driver {
                                     const ref tt: int, ref err: real){
 
         jacobi_iterate(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, err, 
-                        chunk_var.kx, chunk_var.ky);
+                        chunk_var.kx, chunk_var.ky, chunk_var.temp);
         
         if tt % 50 == 0 {
                         

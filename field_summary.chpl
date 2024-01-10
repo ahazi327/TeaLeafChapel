@@ -28,6 +28,7 @@ module field_summary {
             localMass += cellMass;
             localIe += cellMass * energy0[i];
             localTemp += cellMass * u[i];
+            // writeln(localTemp);
         }
         
         vol = localVol;

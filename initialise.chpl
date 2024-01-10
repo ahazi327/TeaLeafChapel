@@ -27,6 +27,7 @@ module initialise {
                         " GB of memory");
                 writeln("  ...has ", here.maxTaskPar, " maximum parallelism");
                 }
+            
         writeln();
         
 

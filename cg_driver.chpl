@@ -46,14 +46,6 @@ module cg_driver {
         halo_update_driver(chunk_var, setting_var, 1);
 
         copy_u(setting_var.halo_depth, chunk_var.u, chunk_var.u0);
-
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.p.updateFluff();
-            chunk_var.kx.updateFluff();
-            chunk_var.ky.updateFluff();
-            profiler.stopTimer("comms");
-        }
     }
 
     // Invokes the main CG solve kernels
@@ -78,11 +70,6 @@ module cg_driver {
         error = rrn;
         rro = rrn;
         
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.p.updateFluff();
-            profiler.stopTimer("comms");
-        }
     }
 
 }

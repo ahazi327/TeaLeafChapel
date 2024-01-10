@@ -23,6 +23,7 @@ module main {
 
         if useGPU {
             on here.gpus[0] {
+                // startVerboseGpu()
                 // Create the settings wrapper
                 var setting_var: setting;
                 setting_var = new setting();
@@ -45,11 +46,12 @@ module main {
                 var chunk_var: chunks.Chunk = new Chunk ();
 
                 initialise_application(chunk_var, setting_var, states);
-                writeln("chunk are ", chunk_var);
+                // writeln("chunk are ", chunk_var);
                 diffuse(chunk_var, setting_var);
 
                 // Print the verbose profile summary
                 // if verbose then profiler.report();
+                // stopVerboseGpu()
 
             }
         }

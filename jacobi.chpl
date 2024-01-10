@@ -6,6 +6,8 @@ module jacobi{
     use chunks;
     use Math;
     use profile;
+    use GPU;
+    use GpuDiagnostics;
 
     // Initialises the Jacobi solver
     proc jacobi_init(const in x: int, const in y: int, const in halo_depth: int, const in coefficient: real, 
@@ -23,7 +25,10 @@ module jacobi{
             exit(-1);
         }
 
-        u = energy * density;
+        // u = energy * density;
+        for ij in Domain {
+            u[ij] = energy[ij] * density[ij];
+        }
         
         forall (i, j) in Inner do{ 
             
@@ -54,15 +59,15 @@ module jacobi{
     // The main Jacobi solve step
     proc jacobi_iterate(const in halo_depth: int, ref u: [?Domain] real, const ref u0: [Domain] real, 
                         ref r: [Domain] real, ref error: real, const ref kx: [Domain] real, 
-                        const ref ky: [Domain] real){
-        // profiler.startTimer("jacobi_iterate");
-
-        forall ij in Domain {r[ij] = u[ij];}
+                        const ref ky: [Domain] real, ref temp: [Domain] real){
+        startGpuDiagnostics();
+        // startVerboseGpu();
+        @assertOnGpu foreach ij in Domain {r[ij] = u[ij];}
 
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         var err: real = 0.0;
 
-        forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+        @assertOnGpu foreach ij in Domain.expand(-halo_depth) {
             const stencil : real = (u0[ij] 
                                         + kx[ij + east] * r[ij + east] 
                                         + kx[ij] * r[ij + west]
@@ -71,12 +76,20 @@ module jacobi{
                                     / (1.0 + kx[ij] + kx[ij + east] 
                                         + ky[ij] + ky[ij + north]);
             u[ij] = stencil;
-            err += abs(stencil - r[ij]);
-        }
-        writeln("err is ", err);
-        error = err;
 
-        // profiler.stopTimer("jacobi_iterate");
+        }
+
+        // Required changes as GPUs do not support forall reductions in Chapel
+        // var temp : [Domain] real = abs(u - r); 
+        @assertOnGpu foreach ij in Domain {
+            temp[ij] = abs(u[ij] - r[ij]);
+        }
+        error = gpuSumReduce(temp);
+        stopGpuDiagnostics();
+        // stopVerboseGpu();
+
+        // writeln(getGpuDiagnostics());
+        // assertGpuDiags(kernel_launch_aod=3);
     }
 
     

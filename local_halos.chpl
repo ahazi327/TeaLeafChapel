@@ -34,29 +34,26 @@ module local_halos {
 
     // Updates faces in turn.
     proc update_face (const in x: int, const in y: int, const in halo_depth: int, const in depth: int, ref buffer: [?D] real){
-        coforall loc in Locales do on loc {
-            const Domain = D.localSubdomain();
             
-            const west_domain = Domain[halo_depth..<y-halo_depth, 0..<depth]; // west side of global halo
-            forall (i, j) in west_domain { 
-                buffer[i, halo_depth-j-1] = buffer[i, j + halo_depth];
-            }
+        const west_domain = D[halo_depth..<y-halo_depth, 0..<depth]; // west side of global halo
+        forall (i, j) in west_domain { 
+            buffer[i, halo_depth-j-1] = buffer[i, j + halo_depth];
+        }
 
-            const east_domain = Domain[halo_depth..<y-halo_depth, x..<x+depth]; // east side of global halo
-            forall (i, j) in east_domain { 
-                buffer[i, x-halo_depth + j] = buffer[i, x-halo_depth-(j + 1)];
-            }
-            
-            const south_domain = Domain[y..<y+depth, halo_depth..<x-halo_depth]; // south side of global halo
-            forall (i, j) in south_domain { 
-                buffer[y - halo_depth + i, j] = buffer[y - halo_depth - (i + 1), j];
-            }
+        const east_domain = D[halo_depth..<y-halo_depth, x..<x+depth]; // east side of global halo
+        forall (i, j) in east_domain { 
+            buffer[i, x-halo_depth + j] = buffer[i, x-halo_depth-(j + 1)];
+        }
+        
+        const south_domain = D[y..<y+depth, halo_depth..<x-halo_depth]; // south side of global halo
+        forall (i, j) in south_domain { 
+            buffer[y - halo_depth + i, j] = buffer[y - halo_depth - (i + 1), j];
+        }
 
-            const north_domain = Domain[0..<depth, halo_depth..<x-halo_depth];  //  north side of global halo
-            forall (i, j) in north_domain {
-                buffer[halo_depth - i - 1, j] = buffer[halo_depth + i, j];
-            }
-        }    
+        const north_domain = D[0..<depth, halo_depth..<x-halo_depth];  //  north side of global halo
+        forall (i, j) in north_domain {
+            buffer[halo_depth - i - 1, j] = buffer[halo_depth + i, j];
+        }  
     }
 }
 

@@ -34,7 +34,7 @@ module set_chunk_state{
             states[ss].x_max -= (setting_var.dx/100.0);
             states[ss].y_max -= (setting_var.dy/100.0);
 
-            forall (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} with (ref chunk_var) do {
+            for (kk, jj) in {0..<chunk_var.y, 0..<chunk_var.x} do {
 
                 var apply_state: bool = false;
 
@@ -71,7 +71,7 @@ module set_chunk_state{
                 }
             }
         }
-        forall ij in chunk_var.u.domain with (ref chunk_var) do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
+        for ij in chunk_var.u.domain do chunk_var.u[ij] = chunk_var.energy0[ij] * chunk_var.density[ij];
         
         // profiler.stopTimer("set_chunk_state");
     }
