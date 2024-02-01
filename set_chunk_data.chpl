@@ -11,7 +11,7 @@ module set_chunk_data{
 	
 	
 	proc set_chunk_data_driver(ref chunk_var: chunks.Chunk,  const ref setting_var : settings.setting){ 
-		// profiler.startTimer("set_chunk_data");
+		//  // profiler.startTimer("set_chunk_data");
 			const x_min: real = setting_var.grid_x_min + setting_var.dx * (chunk_var.left:real);
 			const  y_min: real = setting_var.grid_y_min + setting_var.dy * (chunk_var.bottom:real);
 
@@ -39,6 +39,6 @@ module set_chunk_data{
 			}
 
 		
-		// profiler.stopTimer("set_chunk_data");
+		//  // profiler.stopTimer("set_chunk_data");
 	}
 }

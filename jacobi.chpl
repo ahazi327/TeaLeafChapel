@@ -18,18 +18,17 @@ module jacobi{
         // profiler.startTimer("jacobi_init");
         const Inner = Domain[halo_depth..<y - 1, halo_depth..<x - 1];
 
-        if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY
-        {
-            writeln("Coefficient ", coefficient, " is not valid.\n");
-            profiler.stopTimer("jacobi_init");
-            exit(-1);
-        }
-
+        // if coefficient < 1 && coefficient < RECIP_CONDUCTIVITY
+        // {
+        //     writeln("Coefficient ", coefficient, " is not valid.\n");
+        //      // profiler.stopTimer("jacobi_init");
+        //     exit(-1);
+        // }
+        
         // u = energy * density;
-        for ij in Domain {
+        forall ij in Domain {
             u[ij] = energy[ij] * density[ij];
         }
-        
         forall (i, j) in Inner do{ 
             
 
@@ -52,44 +51,51 @@ module jacobi{
             ky[i, j] = ry*(densityDown+densityCentre)/(2.0*densityDown*densityCentre);
         }
 
-
         // profiler.stopTimer("jacobi_init");
     }
 
     // The main Jacobi solve step
     proc jacobi_iterate(const in halo_depth: int, ref u: [?Domain] real, const ref u0: [Domain] real, 
                         ref r: [Domain] real, ref error: real, const ref kx: [Domain] real, 
-                        const ref ky: [Domain] real, ref temp: [Domain] real){
-        startGpuDiagnostics();
-        // startVerboseGpu();
-        @assertOnGpu foreach ij in Domain {r[ij] = u[ij];}
+                        const ref ky: [Domain] real, ref temp: [Domain] real, const ref reduced_OneD : domain(1), const ref reduced_local_domain : domain(2), const ref local_domain : domain(2), const ref OneD : domain(1)){
+
+        forall (i, j) in Domain {
+            r[i,j] = u[i,j];
+        }
 
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
-        var err: real = 0.0;
+        
+        if useGPU {
+            forall ij in Domain.expand(-halo_depth) {
+                const stencil : real = (u0[ij] 
+                                            + kx[ij + east] * r[ij + east] 
+                                            + kx[ij] * r[ij + west]
+                                            + ky[ij + north] * r[ij + north] 
+                                            + ky[ij] * r[ij + south])
+                                        / (1.0 + kx[ij] + kx[ij + east] 
+                                            + ky[ij] + ky[ij + north]);
+                u[ij] = stencil;
 
-        @assertOnGpu foreach ij in Domain.expand(-halo_depth) {
-            const stencil : real = (u0[ij] 
-                                        + kx[ij + east] * r[ij + east] 
-                                        + kx[ij] * r[ij + west]
-                                        + ky[ij + north] * r[ij + north] 
-                                        + ky[ij] * r[ij + south])
-                                    / (1.0 + kx[ij] + kx[ij + east] 
-                                        + ky[ij] + ky[ij + north]);
-            u[ij] = stencil;
+                temp[ij] = abs(u[ij] - r[ij]);
+            }
+            
+            error = gpuSumReduce(temp);
+        } else {
+            var err: real = 0.0;
+            forall ij in Domain.expand(-halo_depth) with (+ reduce err) {
+                const stencil : real = (u0[ij] 
+                                            + kx[ij + east] * r[ij + east] 
+                                            + kx[ij] * r[ij + west]
+                                            + ky[ij + north] * r[ij + north] 
+                                            + ky[ij] * r[ij + south])
+                                        / (1.0 + kx[ij] + kx[ij + east] 
+                                            + ky[ij] + ky[ij + north]);
+                u[ij] = stencil;
 
+                err += abs(stencil - r[ij]);
+            }
+            error = err;
         }
-
-        // Required changes as GPUs do not support forall reductions in Chapel
-        // var temp : [Domain] real = abs(u - r); 
-        @assertOnGpu foreach ij in Domain {
-            temp[ij] = abs(u[ij] - r[ij]);
-        }
-        error = gpuSumReduce(temp);
-        stopGpuDiagnostics();
-        // stopVerboseGpu();
-
-        // writeln(getGpuDiagnostics());
-        // assertGpuDiags(kernel_launch_aod=3);
     }
 
     

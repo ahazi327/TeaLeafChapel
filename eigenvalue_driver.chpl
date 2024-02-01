@@ -9,7 +9,7 @@ module eigenvalue_driver {
     proc eigenvalue_driver_initialise(ref chunk_var : chunks.Chunk, const ref setting_var : settings.setting, 
                                         const ref num_cg_iters: int){
         //chunks per rank for loop
-        profiler.startTimer("eigenvalue_driver_initialise");
+        // profiler.startTimer("eigenvalue_driver_initialise");
         var diag : [0..<num_cg_iters] real;
         var offdiag : [0..<num_cg_iters] real;
 
@@ -44,7 +44,7 @@ module eigenvalue_driver {
         chunk_var.eigmin *= 0.95;
         chunk_var.eigmax *= 1.05;
 
-        profiler.stopTimer("eigenvalue_driver_initialise");
+        // profiler.stopTimer("eigenvalue_driver_initialise");
         
         writeln("Min. eigenvalue: ", chunk_var.eigmin);
         writeln("Max. eigenvalue: ", chunk_var.eigmax);

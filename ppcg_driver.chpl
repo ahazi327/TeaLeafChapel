@@ -48,11 +48,6 @@ module ppcg_driver{
 
                     ppcg_init_driver(chunk_var, setting_var, rro);
 
-                    if useStencilDist {
-                        profiler.startTimer("comms");
-                        chunk_var.r.updateFluff();
-                        profiler.stopTimer("comms");
-                    }
                 }
                 // Perform the main step
                 ppcg_main_step_driver(chunk_var, setting_var, rro, error);
@@ -78,11 +73,7 @@ module ppcg_driver{
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_P] = true;
         halo_update_driver(chunk_var, setting_var, 1);
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.p.updateFluff();
-            profiler.stopTimer("comms");
-        }
+
     }
 
     // Invokes the main PPCG solver kernels
@@ -91,22 +82,16 @@ module ppcg_driver{
 
         var pw: real;
         cg_calc_w(setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, 
-                  chunk_var.ky);
+                  chunk_var.ky, chunk_var.temp);
 
         const alpha : real = rro / pw;
         var rrn : real = 0.0;
 
         cg_calc_ur (setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p, chunk_var.r, 
-                    chunk_var.w);
+                    chunk_var.w, chunk_var.temp);
 
         // Perform the inner iterations
         ppcg_inner_iterations(chunk_var, setting_var);
-
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.r.updateFluff();
-            profiler.stopTimer("comms");
-        }
 
         rrn = 0.0;
 
@@ -129,11 +114,6 @@ module ppcg_driver{
         setting_var.fields_to_exchange[FIELD_SD] = true;
 
         for pp in 0..<setting_var.ppcg_inner_steps do {
-            if useStencilDist {
-                profiler.startTimer("comms");
-                chunk_var.sd.updateFluff();
-                profiler.stopTimer("comms");
-            }   
 
             halo_update_driver(chunk_var, setting_var, 1);
 

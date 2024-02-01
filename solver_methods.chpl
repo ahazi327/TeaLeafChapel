@@ -4,12 +4,15 @@
 module solver_methods {
     use profile;
     use chunks;
+    use GPU;
     
     // Copies the current u into u0
     proc copy_u (const in halo_depth: int, const ref u: [?u_domain] real, ref u0: [u_domain] real){
         // profiler.startTimer("copy_u");
 
-        [ij in u_domain.expand(-halo_depth)] u0[ij] = u[ij];
+        forall ij in u_domain.expand(-halo_depth){
+            u0[ij] = u[ij];
+        } 
 
         // profiler.stopTimer("copy_u");
     }
@@ -31,11 +34,21 @@ module solver_methods {
     }
 
     // Calculates the 2 norm of a given buffer
-    proc calculate_2norm (const in halo_depth: int, const ref buffer: [?buffer_domain] real, ref norm: real){
+    proc calculate_2norm (const in halo_depth: int, ref buffer: [?buffer_domain] real, ref norm: real){
         // profiler.startTimer("calculate_2norm");
+        var norm_temp: real;
 
-        var norm_temp: real = + reduce (buffer[buffer_domain.expand(-halo_depth) ] ** 2);
-        norm += norm_temp;
+        if useGPU {
+            forall ij in buffer_domain.expand(-halo_depth) {
+                buffer[ij] = buffer[ij] ** 2;
+            } 
+        
+            norm_temp = gpuSumReduce(buffer); // This causes a lot of transfers between host and device
+        
+        } else {
+            norm_temp = + reduce (buffer[buffer_domain.expand(-halo_depth) ] ** 2);
+        }
+        norm = norm_temp;
 
         // profiler.stopTimer("calculate_2norm");
     }
@@ -46,8 +59,9 @@ module solver_methods {
         // profiler.startTimer("finalise");
 
         const halo_domain = Domain[halo_depth-1..< y - halo_depth, halo_depth-1..<x-halo_depth];
-        [ij in halo_domain] energy[ij] = u[ij] / density[ij];
-
+        forall ij in halo_domain{
+            energy[ij] = u[ij] / density[ij];
+        }
         // profiler.stopTimer("finalise");
     }
 }

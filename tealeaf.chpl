@@ -23,10 +23,10 @@ module main {
 
         if useGPU {
             on here.gpus[0] {
-                // startVerboseGpu()
                 // Create the settings wrapper
                 var setting_var: setting;
                 setting_var = new setting();
+                writeln("Device : ", setting_var.locale);
                 
                 set_default_settings(setting_var);
 
@@ -46,16 +46,41 @@ module main {
                 var chunk_var: chunks.Chunk = new Chunk ();
 
                 initialise_application(chunk_var, setting_var, states);
-                // writeln("chunk are ", chunk_var);
+
+                diffuse(chunk_var, setting_var);
+            }
+        } else {
+            on here {
+                // Create the settings wrapper
+                var setting_var: setting;
+                setting_var = new setting();
+                writeln("Device : ", setting_var.locale);
+                
+                set_default_settings(setting_var);
+
+                // Initialise states
+                find_num_states(setting_var); 
+                const states_domain = {0..<setting_var.num_states};
+                var states: [states_domain] settings.state;
+                states = new settings.state();
+
+                // Read input files for state and setting information
+                read_config(setting_var, states);
+                
+                
+                // Create array of records of chunks and initialise
+                set_var(setting_var);
+                
+                var chunk_var: chunks.Chunk = new Chunk ();
+
+                initialise_application(chunk_var, setting_var, states);
+
                 diffuse(chunk_var, setting_var);
 
                 // Print the verbose profile summary
-                // if verbose then profiler.report();
-                // stopVerboseGpu()
-
+                if !useGPU && verbose then  profiler.report();
             }
         }
-        
         wallclock.stop();
         writeln("\nTotal time elapsed: ", wallclock.elapsed(), " seconds");   
     }

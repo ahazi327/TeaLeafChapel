@@ -33,14 +33,18 @@ module chunks{
     
     // Domains
     const local_Domain : domain(2) = {0..<y, 0..<x};
+    const OneD  : domain(1) = {0..<y*x};
+    const reduced_local_domain = local_Domain.expand(-halo_depth);
+    const reduced_OneD  : domain(1) = {0..<(y - 2 * halo_depth) * (x - 2 * halo_depth)};
+
     const x_domain : domain(1) = {0..<x};
     const y_domain : domain(1) = {0..<y};
     const x1_domain: domain(1)  = {0..<x+1};
     const y1_domain : domain(1) = {0..<y+1};
-    const x_area_domain : domain(2) = {0..<y, 0..<x+1};
-    const y_area_domain : domain(2) = {0..<y+1, 0..<x};
+    // const x_area_domain : domain(2) = {0..<y, 0..<x+1};
+    // const y_area_domain : domain(2) = {0..<y+1, 0..<x};
     const max_iter_domain : domain(1) = {0..<settings.max_iters};
-
+    
     // Define the bounds of the arrays
     var Domain = if useStencilDist then local_Domain dmapped stencilDist(local_Domain, fluff=(1, 1))
                 else if useBlockDist then local_Domain dmapped blockDist(local_Domain)
@@ -70,12 +74,13 @@ module chunks{
     var u0: [Domain] real = noinit;
     var p: [Domain] real = noinit;
     var r: [Domain] real = noinit;
-    var mi: [Domain] real = noinit;
+    // var mi: [Domain] real = noinit;
     var w: [Domain] real = noinit;
     var kx: [Domain] real = noinit;
     var ky: [Domain] real = noinit;
     var sd: [Domain] real = noinit;
     var temp: [Domain] real = noinit;
+    
 
     var cell_x: [x_domain] real = noinit;
     var cell_dx: [x_domain] real = noinit;
@@ -88,8 +93,8 @@ module chunks{
     var vertex_dy: [y1_domain] real = noinit;
 
     var volume: [Domain] real = noinit;
-    var x_area: [x_area_domain] real = noinit;
-    var y_area: [y_area_domain] real = noinit;
+    // var x_area: [x_area_domain] real = noinit;
+    // var y_area: [y_area_domain] real = noinit;
 
     // Cheby and PPCG arrays
     var theta: real;

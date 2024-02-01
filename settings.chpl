@@ -109,6 +109,7 @@ module settings{
 
   }
 
+  
   // Resets all of the fields to be exchanged
   proc reset_fields_to_exchange(ref setting_var : setting)
   {

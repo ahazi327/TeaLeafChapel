@@ -4344,7 +4344,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000817 se
 Procedure copy_u called 20 times.             Total time spent: 0.004745 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.01516 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.007708 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 11.6855 seconds
+Procedure //writeln called 18049 times.             Total time spent: 11.6855 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.008921 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.007854 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010851 seconds
@@ -4499,7 +4499,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00088 sec
 Procedure copy_u called 20 times.             Total time spent: 0.004555 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016488 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.008388 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 14.8223 seconds
+Procedure //writeln called 18049 times.             Total time spent: 14.8223 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.012072 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.005062 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010467 seconds
@@ -4654,7 +4654,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000863 se
 Procedure copy_u called 20 times.             Total time spent: 0.004444 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016557 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.008201 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 15.9116 seconds
+Procedure //writeln called 18049 times.             Total time spent: 15.9116 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.018317 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.004948 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01101 seconds
@@ -4811,7 +4811,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000733 se
 Procedure copy_u called 20 times.             Total time spent: 0.002274 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015656 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.011027 seconds
-Procedure cg_calc_ur called 18048 times.             Total time spent: 7.22834 seconds
+Procedure //writeln called 18048 times.             Total time spent: 7.22834 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.008469 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.00201 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009084 seconds
@@ -4966,7 +4966,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000804 se
 Procedure copy_u called 20 times.             Total time spent: 0.002277 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016592 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.011724 seconds
-Procedure cg_calc_ur called 18047 times.             Total time spent: 8.30934 seconds
+Procedure //writeln called 18047 times.             Total time spent: 8.30934 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.021793 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001985 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009058 seconds
@@ -5121,7 +5121,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000805 se
 Procedure copy_u called 20 times.             Total time spent: 0.002274 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015409 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.011373 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 11.3047 seconds
+Procedure //writeln called 18049 times.             Total time spent: 11.3047 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.026093 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001995 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008796 seconds
@@ -5278,7 +5278,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000515 se
 Procedure copy_u called 20 times.             Total time spent: 0.001537 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015339 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013657 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 7.49461 seconds
+Procedure //writeln called 18049 times.             Total time spent: 7.49461 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.01564 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001345 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009683 seconds
@@ -5433,7 +5433,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000551 se
 Procedure copy_u called 20 times.             Total time spent: 0.001487 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018366 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013084 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 7.50507 seconds
+Procedure //writeln called 18049 times.             Total time spent: 7.50507 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.007938 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001301 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.00987 seconds
@@ -5588,7 +5588,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000486 se
 Procedure copy_u called 20 times.             Total time spent: 0.001489 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016102 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.01314 seconds
-Procedure cg_calc_ur called 18046 times.             Total time spent: 7.64504 seconds
+Procedure //writeln called 18046 times.             Total time spent: 7.64504 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.012827 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001291 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009507 seconds
@@ -5745,7 +5745,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000587 se
 Procedure copy_u called 20 times.             Total time spent: 0.001277 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.01767 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013823 seconds
-Procedure cg_calc_ur called 18051 times.             Total time spent: 10.314 seconds
+Procedure //writeln called 18051 times.             Total time spent: 10.314 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.013598 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001336 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010135 seconds
@@ -5900,7 +5900,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00075 sec
 Procedure copy_u called 20 times.             Total time spent: 0.001226 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018907 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013631 seconds
-Procedure cg_calc_ur called 18047 times.             Total time spent: 10.2956 seconds
+Procedure //writeln called 18047 times.             Total time spent: 10.2956 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.013675 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.001342 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009585 seconds
@@ -6055,7 +6055,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00059 sec
 Procedure copy_u called 20 times.             Total time spent: 0.001253 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.01789 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013668 seconds
-Procedure cg_calc_ur called 18051 times.             Total time spent: 10.3009 seconds
+Procedure //writeln called 18051 times.             Total time spent: 10.3009 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.01194 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.00131 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010051 seconds
@@ -6212,7 +6212,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000553 se
 Procedure copy_u called 20 times.             Total time spent: 0.005549 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017755 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013084 seconds
-Procedure cg_calc_ur called 18050 times.             Total time spent: 18.7814 seconds
+Procedure //writeln called 18050 times.             Total time spent: 18.7814 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.023515 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.002345 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.012236 seconds
@@ -6367,7 +6367,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000637 se
 Procedure copy_u called 20 times.             Total time spent: 0.005576 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.021984 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012821 seconds
-Procedure cg_calc_ur called 18053 times.             Total time spent: 18.7965 seconds
+Procedure //writeln called 18053 times.             Total time spent: 18.7965 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.023358 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.00225 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010493 seconds
@@ -6522,7 +6522,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000585 se
 Procedure copy_u called 20 times.             Total time spent: 0.005578 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.01836 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012976 seconds
-Procedure cg_calc_ur called 18045 times.             Total time spent: 18.7372 seconds
+Procedure //writeln called 18045 times.             Total time spent: 18.7372 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.02315 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.00229 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008948 seconds
@@ -6679,7 +6679,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000716 se
 Procedure copy_u called 20 times.             Total time spent: 0.012576 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018523 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012887 seconds
-Procedure cg_calc_ur called 18050 times.             Total time spent: 36.8359 seconds
+Procedure //writeln called 18050 times.             Total time spent: 36.8359 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.032492 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.004528 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010208 seconds
@@ -6834,7 +6834,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00067 sec
 Procedure copy_u called 20 times.             Total time spent: 0.012603 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018321 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.01261 seconds
-Procedure cg_calc_ur called 18047 times.             Total time spent: 37.6932 seconds
+Procedure //writeln called 18047 times.             Total time spent: 37.6932 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.032282 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.00439 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010066 seconds
@@ -6989,7 +6989,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000622 se
 Procedure copy_u called 20 times.             Total time spent: 0.012648 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.01759 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012636 seconds
-Procedure cg_calc_ur called 18046 times.             Total time spent: 36.4084 seconds
+Procedure //writeln called 18046 times.             Total time spent: 36.4084 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.032403 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.004367 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010132 seconds
@@ -7146,7 +7146,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000853 se
 Procedure copy_u called 20 times.             Total time spent: 0.014456 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016913 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012401 seconds
-Procedure cg_calc_ur called 18046 times.             Total time spent: 69.6016 seconds
+Procedure //writeln called 18046 times.             Total time spent: 69.6016 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.03204 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.008159 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010052 seconds
@@ -7301,7 +7301,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00083 sec
 Procedure copy_u called 20 times.             Total time spent: 0.014534 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017803 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.011955 seconds
-Procedure cg_calc_ur called 18051 times.             Total time spent: 70.1266 seconds
+Procedure //writeln called 18051 times.             Total time spent: 70.1266 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.032124 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.008129 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010001 seconds
@@ -7456,7 +7456,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00082 sec
 Procedure copy_u called 20 times.             Total time spent: 0.014485 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018372 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.011926 seconds
-Procedure cg_calc_ur called 18050 times.             Total time spent: 69.6337 seconds
+Procedure //writeln called 18050 times.             Total time spent: 69.6337 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.032116 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.00808 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008486 seconds
@@ -7613,7 +7613,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001409 se
 Procedure copy_u called 20 times.             Total time spent: 0.01442 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017608 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.01231 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 137.194 seconds
+Procedure //writeln called 18049 times.             Total time spent: 137.194 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.033666 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.016028 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010088 seconds
@@ -7768,7 +7768,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001402 se
 Procedure copy_u called 20 times.             Total time spent: 0.014517 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018662 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012086 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 137.15 seconds
+Procedure //writeln called 18049 times.             Total time spent: 137.15 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.034116 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.016075 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01012 seconds
@@ -7923,7 +7923,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001395 se
 Procedure copy_u called 20 times.             Total time spent: 0.014441 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018471 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.012189 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 137.303 seconds
+Procedure //writeln called 18049 times.             Total time spent: 137.303 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.033908 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.016144 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010079 seconds
@@ -8080,7 +8080,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001857 se
 Procedure copy_u called 20 times.             Total time spent: 0.018632 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020483 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013309 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 273.337 seconds
+Procedure //writeln called 18049 times.             Total time spent: 273.337 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.050103 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.031918 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009898 seconds
@@ -8235,7 +8235,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001853 se
 Procedure copy_u called 20 times.             Total time spent: 0.01878 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020577 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013505 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 273.564 seconds
+Procedure //writeln called 18049 times.             Total time spent: 273.564 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.049751 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.031919 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010071 seconds
@@ -8390,7 +8390,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001862 se
 Procedure copy_u called 20 times.             Total time spent: 0.018625 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020443 seconds
 Procedure set_chunk_data called 1 times.             Total time spent: 0.013592 seconds
-Procedure cg_calc_ur called 18049 times.             Total time spent: 272.386 seconds
+Procedure //writeln called 18049 times.             Total time spent: 272.386 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.05011 seconds
 Procedure calculate_2norm called 20 times.             Total time spent: 0.031834 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010127 seconds
@@ -8613,7 +8613,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000834 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 11.8636 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.004539 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015663 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.831843 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.831843 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.018602 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.00177 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008214 seconds
@@ -8831,7 +8831,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000888 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 17.2444 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.005606 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015112 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 1.20945 seconds
+Procedure //writeln called 918 times.             Total time spent: 1.20945 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.026114 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001766 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008913 seconds
@@ -9049,7 +9049,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000896 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 12.7072 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.004461 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016773 seconds
-Procedure cg_calc_ur called 917 times.             Total time spent: 0.931703 seconds
+Procedure //writeln called 917 times.             Total time spent: 0.931703 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.021164 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001761 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008556 seconds
@@ -9269,7 +9269,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000782 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 6.07823 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.002272 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015182 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.427249 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.427249 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.013173 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001832 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007598 seconds
@@ -9487,7 +9487,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000777 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 6.07572 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.002237 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016231 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.428953 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.428953 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.014776 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001817 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007541 seconds
@@ -9705,7 +9705,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000784 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 7.22334 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.002286 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015481 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.552946 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.552946 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.030576 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001805 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007608 seconds
@@ -9925,7 +9925,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000485 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 7.1761 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.001574 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016026 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.425395 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.425395 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.019745 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.00198 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.00801 seconds
@@ -10143,7 +10143,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000563 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 7.73254 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.001527 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017237 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.414365 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.414365 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.025356 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001949 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008192 seconds
@@ -10361,7 +10361,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00049 sec
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 7.52274 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.001508 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018849 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.418514 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.418514 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.027699 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001973 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007996 seconds
@@ -10581,7 +10581,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000639 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 9.85325 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.0013 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.019075 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.581553 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.581553 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.021224 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001718 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007232 seconds
@@ -10799,7 +10799,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000581 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 9.98459 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.001311 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018696 seconds
-Procedure cg_calc_ur called 917 times.             Total time spent: 0.574905 seconds
+Procedure //writeln called 917 times.             Total time spent: 0.574905 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.023657 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001728 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007362 seconds
@@ -11017,7 +11017,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00064 sec
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 9.79503 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.001224 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017975 seconds
-Procedure cg_calc_ur called 917 times.             Total time spent: 0.596764 seconds
+Procedure //writeln called 917 times.             Total time spent: 0.596764 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.018117 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001706 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007102 seconds
@@ -11237,7 +11237,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000575 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 19.0193 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.005393 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017525 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 0.969134 seconds
+Procedure //writeln called 918 times.             Total time spent: 0.969134 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.044687 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001843 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010487 seconds
@@ -11455,7 +11455,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000547 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 19.0219 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.005575 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016682 seconds
-Procedure cg_calc_ur called 917 times.             Total time spent: 0.98173 seconds
+Procedure //writeln called 917 times.             Total time spent: 0.98173 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.043931 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001901 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010321 seconds
@@ -11673,7 +11673,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000617 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 18.9928 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.005479 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.03023 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 1.04687 seconds
+Procedure //writeln called 918 times.             Total time spent: 1.04687 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.043416 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001933 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01042 seconds
@@ -11893,7 +11893,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000681 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 40.3104 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.012602 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018799 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 1.94949 seconds
+Procedure //writeln called 918 times.             Total time spent: 1.94949 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.065306 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001895 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010382 seconds
@@ -12111,7 +12111,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000618 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 40.0402 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.012647 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015678 seconds
-Procedure cg_calc_ur called 917 times.             Total time spent: 1.87303 seconds
+Procedure //writeln called 917 times.             Total time spent: 1.87303 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.065383 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001924 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010215 seconds
@@ -12329,7 +12329,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000645 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 39.5709 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.012687 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016944 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 1.89291 seconds
+Procedure //writeln called 918 times.             Total time spent: 1.89291 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.065497 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001893 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008675 seconds
@@ -12549,7 +12549,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00086 sec
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 79.7407 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014476 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018493 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 3.59123 seconds
+Procedure //writeln called 918 times.             Total time spent: 3.59123 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.064016 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001869 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01012 seconds
@@ -12767,7 +12767,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000824 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 79.9621 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014581 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.01877 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 3.57567 seconds
+Procedure //writeln called 918 times.             Total time spent: 3.57567 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.063973 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001859 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010174 seconds
@@ -12985,7 +12985,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000838 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 80.0772 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014476 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017299 seconds
-Procedure cg_calc_ur called 917 times.             Total time spent: 3.58047 seconds
+Procedure //writeln called 917 times.             Total time spent: 3.58047 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.064036 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001866 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008594 seconds
@@ -13205,7 +13205,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00141 sec
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 154.965 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014386 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018314 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 7.05832 seconds
+Procedure //writeln called 918 times.             Total time spent: 7.05832 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.065915 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001952 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010106 seconds
@@ -13423,7 +13423,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001403 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 154.805 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014405 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017819 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 7.00971 seconds
+Procedure //writeln called 918 times.             Total time spent: 7.00971 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.065841 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001925 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01003 seconds
@@ -13641,7 +13641,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001395 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 155.418 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014526 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015317 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 7.00499 seconds
+Procedure //writeln called 918 times.             Total time spent: 7.00499 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.065809 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001971 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01003 seconds
@@ -13861,7 +13861,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001915 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 307.88 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.018751 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.021496 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 13.8832 seconds
+Procedure //writeln called 918 times.             Total time spent: 13.8832 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.087695 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001956 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010201 seconds
@@ -14079,7 +14079,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001882 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 309.795 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.01894 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020467 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 13.904 seconds
+Procedure //writeln called 918 times.             Total time spent: 13.904 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.087709 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001959 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010119 seconds
@@ -14297,7 +14297,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001937 se
 Procedure ppcg_inner_iteration called 12250 times.             Total time spent: 307.368 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.018873 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020992 seconds
-Procedure cg_calc_ur called 918 times.             Total time spent: 13.9403 seconds
+Procedure //writeln called 918 times.             Total time spent: 13.9403 seconds
 Procedure calculate_residual called 40 times.             Total time spent: 0.087458 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001972 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.01015 seconds
@@ -14521,7 +14521,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000818 se
 Procedure cheby_calc_u called 8855 times.             Total time spent: 5.67947 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.00725 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015834 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 1.0975 seconds
+Procedure //writeln called 885 times.             Total time spent: 1.0975 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.012123 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001751 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009242 seconds
@@ -14740,7 +14740,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000827 se
 Procedure cheby_calc_u called 8865 times.             Total time spent: 5.7416 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.008463 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016933 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 1.07966 seconds
+Procedure //writeln called 885 times.             Total time spent: 1.07966 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.015229 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001791 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008145 seconds
@@ -14959,7 +14959,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000851 se
 Procedure cheby_calc_u called 8915 times.             Total time spent: 7.4495 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.008825 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015839 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 1.24857 seconds
+Procedure //writeln called 885 times.             Total time spent: 1.24857 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.015555 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001753 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.00911 seconds
@@ -15180,7 +15180,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000756 se
 Procedure cheby_calc_u called 8915 times.             Total time spent: 3.73092 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.01018 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016459 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.706047 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.706047 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.031554 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001767 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007562 seconds
@@ -15399,7 +15399,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000799 se
 Procedure cheby_calc_u called 8855 times.             Total time spent: 3.6521 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.004289 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.016048 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.480258 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.480258 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.014561 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.00204 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007457 seconds
@@ -15618,7 +15618,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000793 se
 Procedure cheby_calc_u called 8895 times.             Total time spent: 1.85916 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.004191 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015685 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.424544 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.424544 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.007874 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001786 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007418 seconds
@@ -15839,7 +15839,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000508 se
 Procedure cheby_calc_u called 8865 times.             Total time spent: 1.40884 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.008797 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017467 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.426954 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.426954 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.025277 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001975 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.007471 seconds
@@ -16058,7 +16058,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000574 se
 Procedure cheby_calc_u called 8875 times.             Total time spent: 1.4328 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.008623 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.021659 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.420021 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.420021 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.017293 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001972 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.00814 seconds
@@ -16277,7 +16277,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000536 se
 Procedure cheby_calc_u called 8845 times.             Total time spent: 1.43123 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.006134 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.019353 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.431615 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.431615 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.014282 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001981 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008194 seconds
@@ -16498,7 +16498,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00066 sec
 Procedure cheby_calc_u called 8885 times.             Total time spent: 0.802731 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.006501 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.019465 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.516492 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.516492 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.013406 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001733 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.00887 seconds
@@ -16717,7 +16717,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000619 se
 Procedure cheby_calc_u called 8895 times.             Total time spent: 0.804858 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.005238 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018897 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.522216 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.522216 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.011412 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.00174 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008628 seconds
@@ -16936,7 +16936,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.0006 seco
 Procedure cheby_calc_u called 8865 times.             Total time spent: 0.921856 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.005897 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018653 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.531884 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.531884 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.013576 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001726 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.00865 seconds
@@ -17157,7 +17157,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000568 se
 Procedure cheby_calc_u called 8855 times.             Total time spent: 1.50892 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.006058 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018427 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.937777 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.937777 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.020036 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001852 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009019 seconds
@@ -17376,7 +17376,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00058 sec
 Procedure cheby_calc_u called 8885 times.             Total time spent: 1.47739 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.006096 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018506 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.927895 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.927895 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.019847 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001836 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008949 seconds
@@ -17595,7 +17595,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000555 se
 Procedure cheby_calc_u called 8815 times.             Total time spent: 1.46235 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.006071 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018961 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 0.924276 seconds
+Procedure //writeln called 885 times.             Total time spent: 0.924276 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.019825 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001841 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.008914 seconds
@@ -17816,7 +17816,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000673 se
 Procedure cheby_calc_u called 8825 times.             Total time spent: 4.49211 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.012663 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.019423 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 1.82543 seconds
+Procedure //writeln called 885 times.             Total time spent: 1.82543 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.026815 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001947 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010213 seconds
@@ -18035,7 +18035,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00063 sec
 Procedure cheby_calc_u called 8835 times.             Total time spent: 4.47295 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.012651 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017194 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 1.84552 seconds
+Procedure //writeln called 885 times.             Total time spent: 1.84552 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.02653 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.00196 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010286 seconds
@@ -18254,7 +18254,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000612 se
 Procedure cheby_calc_u called 8885 times.             Total time spent: 4.49902 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.012628 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018156 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 1.81043 seconds
+Procedure //writeln called 885 times.             Total time spent: 1.81043 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.026712 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.002644 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010228 seconds
@@ -18475,7 +18475,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000911 se
 Procedure cheby_calc_u called 8835 times.             Total time spent: 7.31758 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014461 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017847 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 3.45123 seconds
+Procedure //writeln called 885 times.             Total time spent: 3.45123 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.029037 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001833 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009654 seconds
@@ -18694,7 +18694,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000824 se
 Procedure cheby_calc_u called 8855 times.             Total time spent: 7.32592 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014539 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.018154 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 3.60509 seconds
+Procedure //writeln called 885 times.             Total time spent: 3.60509 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.029143 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001827 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009656 seconds
@@ -18913,7 +18913,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.000847 se
 Procedure cheby_calc_u called 8825 times.             Total time spent: 7.25852 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014576 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017051 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 3.43882 seconds
+Procedure //writeln called 885 times.             Total time spent: 3.43882 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.029158 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001857 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009318 seconds
@@ -19134,7 +19134,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001403 se
 Procedure cheby_calc_u called 8865 times.             Total time spent: 12.5844 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014428 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.017078 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 6.73965 seconds
+Procedure //writeln called 885 times.             Total time spent: 6.73965 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.028272 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001936 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009591 seconds
@@ -19353,7 +19353,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001404 se
 Procedure cheby_calc_u called 8865 times.             Total time spent: 12.6543 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014634 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.015055 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 6.91982 seconds
+Procedure //writeln called 885 times.             Total time spent: 6.91982 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.028182 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001914 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.009551 seconds
@@ -19572,7 +19572,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00142 sec
 Procedure cheby_calc_u called 8865 times.             Total time spent: 12.6204 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.014472 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.021403 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 6.75124 seconds
+Procedure //writeln called 885 times.             Total time spent: 6.75124 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.028177 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001952 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010083 seconds
@@ -19793,7 +19793,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.00186 sec
 Procedure cheby_calc_u called 8875 times.             Total time spent: 24.3535 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.018891 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020249 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 13.409 seconds
+Procedure //writeln called 885 times.             Total time spent: 13.409 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.033038 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001958 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010073 seconds
@@ -20012,7 +20012,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001905 se
 Procedure cheby_calc_u called 8875 times.             Total time spent: 24.3205 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.019633 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.020973 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 13.4815 seconds
+Procedure //writeln called 885 times.             Total time spent: 13.4815 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.033138 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001954 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010192 seconds
@@ -20231,7 +20231,7 @@ Procedure store_energy called 1 times.             Total time spent: 0.001877 se
 Procedure cheby_calc_u called 8875 times.             Total time spent: 24.3637 seconds
 Procedure copy_u called 20 times.             Total time spent: 0.019071 seconds
 Procedure set_chunk_state called 1 times.             Total time spent: 0.021559 seconds
-Procedure cg_calc_ur called 885 times.             Total time spent: 13.4053 seconds
+Procedure //writeln called 885 times.             Total time spent: 13.4053 seconds
 Procedure calculate_residual called 20 times.             Total time spent: 0.033309 seconds
 Procedure eigenvalue_driver_initialise called 20 times.             Total time spent: 0.001991 seconds
 Procedure field_summary called 3 times.             Total time spent: 0.010128 seconds

@@ -3,6 +3,7 @@ module field_summary {
     use chunks;
     use IO;
     use profile;
+    use GPU;
 
    /*
     * 		FIELD SUMMARY KERNEL
@@ -15,27 +16,45 @@ module field_summary {
                         ref ie: real, ref temp: real){
         // profiler.startTimer("field_summary");
 
-        var localVol = 0.0,
+        if useGPU{
+                var tempVol: [Domain] real = noinit, 
+                tempMass: [Domain] real = noinit,
+                tempIe: [Domain] real = noinit,
+                tempTemp: [Domain] real = noinit;
+
+                forall ij in Domain.expand(-halo_depth){
+                    var cellMass: real;
+                    tempVol[ij] = volume[ij];
+                    cellMass = volume[ij] * density[ij];
+                    tempMass[ij] = cellMass;
+                    tempIe[ij] = cellMass * energy0[ij];
+                    tempTemp[ij] = cellMass * u[ij];
+                }
+
+                vol = gpuSumReduce(tempVol);
+                mass = gpuSumReduce(tempMass);
+                ie = gpuSumReduce(tempIe);
+                temp = gpuSumReduce(tempTemp);
+        } else {
+            var localVol = 0.0,
             localMass = 0.0,
             localIe = 0.0,
             localTemp = 0.0;
-
-        // coforall loop across all locales
-        forall i in Domain.expand(-halo_depth) with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
-            var cellMass: real;
-            localVol += volume[i];
-            cellMass = volume[i] * density[i];
-            localMass += cellMass;
-            localIe += cellMass * energy0[i];
-            localTemp += cellMass * u[i];
-            // writeln(localTemp);
-        }
         
-        vol = localVol;
-        mass = localMass;
-        ie = localIe;
-        temp = localTemp;
-
+            forall ij in Domain.expand(-halo_depth) with (+ reduce localVol, + reduce localMass, + reduce localIe, + reduce localTemp) {
+                var cellMass: real;
+                localVol += volume[ij];
+                cellMass = volume[ij] * density[ij];
+                localMass += cellMass;
+                localIe += cellMass * energy0[ij];
+                localTemp += cellMass * u[ij];
+            }
+            
+            vol = localVol;
+            mass = localMass;
+            ie = localIe;
+            temp = localTemp;
+        }
         // profiler.stopTimer("field_summary");
     }
 

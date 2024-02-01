@@ -66,6 +66,7 @@ module diffuse{
                             iterations_prime, inner_steps);
             }
         }
+
         writeln("Conduction error : ", error);
         // Perform solve finalisation tasks
         solve_finished_driver(chunk_var, setting_var);
@@ -78,5 +79,8 @@ module diffuse{
         writeln("Time elapsed for current timestep: ", wallclock.elapsed(), " seconds");
         const average : real = wallclock.elapsed()/ (setting_var.grid_x_cells * setting_var.grid_y_cells);
         writeln("Avg. time per cell for current timestep: ",  average, " seconds \n");
+
+        
+        // writeln(getGpuDiagnostics());
     }
 }

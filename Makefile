@@ -10,7 +10,7 @@ TEST_MOD = test
 # config params
 BLOCK = -s useBlockDist=true
 STENCIL = -s useStencilDist=true
-GPU = -s useGPU=true
+GPU = -s useGPU=true --gpu-ptxas-enforce-optimization --gpu-block-size=1024 --no-checks --report-gpu
 VERBOSE = -s verbose=true
 LOCALEINFO = -s printLocaleInfo=true
 
@@ -40,7 +40,7 @@ test: $(TEST_SRC)
 
 # Compile the gpu version
 gpu: $(SRCS)
-	$(CC) $(CFLAGS) $(GPU) -o $(TARGET_DIR)/tealeafgpu $(SRCS)
+	$(CC) $(CFLAGS) $(GPU)  -o $(TARGET_DIR)/tealeafgpu $(SRCS) 
 
 # Record/report rule
 report: $(TARGET)

@@ -91,11 +91,7 @@ module cheby_driver{
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
         halo_update_driver(chunk_var, setting_var, 1);
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.u.updateFluff();
-            profiler.stopTimer("comms");
-        }
+
     }
 
     // Performs the main iteration step
@@ -111,11 +107,7 @@ module cheby_driver{
             error = 0.0;
             calculate_2norm(setting_var.halo_depth, chunk_var.r, error);
         }
-        if useStencilDist {
-            profiler.startTimer("comms");
-            chunk_var.u.updateFluff();
-            profiler.stopTimer("comms");
-        }
+
     }
 
     // Calculates the estimated iterations for Chebyshev solver
