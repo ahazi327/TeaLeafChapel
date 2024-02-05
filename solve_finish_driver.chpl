@@ -11,14 +11,14 @@ module solve_finish_driver {
 
         if setting_var.check_result {
             calculate_residual(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, 
-                                chunk_var.kx, chunk_var.ky);
+                chunk_var.kx, chunk_var.ky, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
-            calculate_2norm(setting_var.halo_depth, chunk_var.r, exact_error);
-            
+            calculate_2norm(setting_var.halo_depth, chunk_var.r, exact_error, chunk_var.reduced_OneD, 
+                chunk_var.reduced_local_domain);
         }
 
         finalise(chunk_var.x, chunk_var.y, setting_var.halo_depth, chunk_var.energy, chunk_var.density, 
-                chunk_var.u);
+            chunk_var.u, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_ENERGY1] = true;

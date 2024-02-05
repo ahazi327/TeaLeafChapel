@@ -66,7 +66,8 @@ module jacobi{
         const north = (1,0), south = (-1,0), east = (0,1), west = (0,-1);
         
         if useGPU {
-            forall ij in Domain.expand(-halo_depth) {
+            forall oneDIdx in reduced_OneD {
+                const ij = reduced_local_domain.orderToIndex(oneDIdx);
                 const stencil : real = (u0[ij] 
                                             + kx[ij + east] * r[ij + east] 
                                             + kx[ij] * r[ij + west]

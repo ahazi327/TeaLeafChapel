@@ -11,18 +11,19 @@ module field_summary {
     */	
     // The field summary kernel
     proc field_summary (const ref halo_depth: int, const ref volume: [?Domain] real,
-                        const ref density: [Domain] real, const ref energy0: [Domain] real, 
-                        const ref u: [Domain] real, ref vol: real, ref mass: real, 
-                        ref ie: real, ref temp: real){
-        // profiler.startTimer("field_summary");
+        const ref density: [Domain] real, const ref energy0: [Domain] real, const ref u: [Domain] real, 
+        ref vol: real, ref mass: real, ref ie: real, ref temp: real, const ref reduced_OneD : domain(1), 
+        const ref reduced_local_domain : domain(2)){
 
+        // profiler.startTimer("field_summary");
         if useGPU{
                 var tempVol: [Domain] real = noinit, 
                 tempMass: [Domain] real = noinit,
                 tempIe: [Domain] real = noinit,
                 tempTemp: [Domain] real = noinit;
 
-                forall ij in Domain.expand(-halo_depth){
+                forall oneDIdx in reduced_OneD {
+                    const ij = reduced_local_domain.orderToIndex(oneDIdx);
                     var cellMass: real;
                     tempVol[ij] = volume[ij];
                     cellMass = volume[ij] * density[ij];
@@ -68,8 +69,8 @@ module field_summary {
         
         var vol, ie, temp, mass : real;
 
-        field_summary(setting_var.halo_depth, chunk_var.volume, 
-        chunk_var.density, chunk_var.energy0, chunk_var.u, vol, mass, ie, temp);
+        field_summary(setting_var.halo_depth, chunk_var.volume, chunk_var.density, chunk_var.energy0, 
+            chunk_var.u, vol, mass, ie, temp, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         if(setting_var.check_result && is_solve_finished){ 
             var checking_value : real;

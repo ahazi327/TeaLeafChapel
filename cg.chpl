@@ -10,7 +10,8 @@ module cg {
     proc cg_init(const ref x: int, const ref y : int, const ref halo_depth: int, const in coefficient: int, in rx: real, 
                 in ry: real, ref rro: real,  ref density: [?Domain] real,  ref energy: [Domain] real,
                 ref u: [Domain] real,  ref p: [Domain] real,  ref r: [Domain] real,  ref w: [Domain] real,  
-                ref kx: [Domain] real, ref ky: [Domain] real, ref temp: [Domain] real){
+                ref kx: [Domain] real, ref ky: [Domain] real, ref temp: [Domain] real, const ref reduced_OneD : domain(1), 
+                const ref reduced_local_domain : domain(2)){
 
         // profiler.startTimer("cg_init");
         if coefficient != CONDUCTIVITY && coefficient != RECIP_CONDUCTIVITY
@@ -20,7 +21,7 @@ module cg {
             exit(-1);
         }
 
-        foreach ij in Domain {
+        forall ij in Domain {
             p[ij] = 0;
             r[ij] = 0;
             u[ij] = energy[ij] *density[ij];
@@ -42,7 +43,8 @@ module cg {
         }   
          
         if useGPU then {  // GPU version of Loop
-            forall (i, j) in Domain.expand(-halo_depth) do {
+            forall oneDIdx in reduced_OneD {
+                const (i, j) = reduced_local_domain.orderToIndex(oneDIdx);
                 const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
                     + (ky[i, j+1]+ky[i, j]))*u[i, j]
                     - (kx[i+1, j]*u[i+1, j]+kx[i, j]*u[i-1, j])
@@ -76,20 +78,22 @@ module cg {
 
     // Calculates w
     proc cg_calc_w (const in halo_depth: int, ref pw: real, const ref p: [?Domain] real, 
-                    ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, ref temp: [Domain] real){
+                    ref w: [Domain] real, const ref kx: [Domain] real, const ref ky: [Domain] real, 
+                    ref temp: [Domain] real, const ref reduced_OneD : domain(1), 
+                    const ref reduced_local_domain : domain(2)){
 
         // profiler.startTimer("cg_calc_w");
         
         if useGPU {
-        forall (i, j) in Domain.expand(-halo_depth)  do{
-            const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
-                + (ky[i, j+1]+ky[i, j]))*p[i, j]
-                - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
-                - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
-            w[i,j] = smvp;
-            temp[i, j] = smvp * p[i, j]; 
-        }   
-        
+            forall oneDIdx in reduced_OneD {
+                const (i, j) = reduced_local_domain.orderToIndex(oneDIdx);
+                const smvp = (1.0 + (kx[i+1, j]+kx[i, j])
+                    + (ky[i, j+1]+ky[i, j]))*p[i, j]
+                    - (kx[i+1, j]*p[i+1, j]+kx[i, j]*p[i-1, j])
+                    - (ky[i, j+1]*p[i, j+1]+ky[i, j]*p[i, j-1]);
+                w[i,j] = smvp;
+                temp[i, j] = smvp * p[i, j]; 
+            }   
             pw = gpuSumReduce(temp);
         } else {
             var pw_temp : real;
@@ -111,11 +115,13 @@ module cg {
     // Calculates u and r
     proc cg_calc_ur(const in halo_depth: int, const in alpha: real, ref rrn: real, 
                     ref u: [?Domain] real, const ref p: [Domain] real, 
-                    ref r: [Domain] real, const ref w: [Domain] real, ref temp: [Domain] real){
+                    ref r: [Domain] real, const ref w: [Domain] real, ref temp: [Domain] real,
+                    const ref reduced_OneD : domain(1), const ref reduced_local_domain : domain(2)){
         // profiler.startTimer("cg_calc_ur");
 
         if useGPU {
-            forall (i, j) in Domain.expand(-halo_depth) do{
+            forall oneDIdx in reduced_OneD {
+                const (i, j) = reduced_local_domain.orderToIndex(oneDIdx);
                 u[i, j] += alpha * p[i, j];
                 r[i, j] -= alpha * w[i, j];
                 
@@ -140,10 +146,14 @@ module cg {
 
     // Calculates p
     proc cg_calc_p (const ref halo_depth: int, const in beta: real, ref p: [?Domain] real, 
-                    const ref r: [Domain] real) {
+                    const ref r: [Domain] real, const ref reduced_OneD : domain(1), 
+                    const ref reduced_local_domain : domain(2)) {
         // profiler.startTimer("cg_calc_p");
         
-        [ij in Domain.expand(-halo_depth)] p[ij] = beta * p[ij] + r[ij];
+        forall oneDIdx in reduced_OneD {
+                const ij = reduced_local_domain.orderToIndex(oneDIdx);
+            p[ij] = beta * p[ij] + r[ij];
+        }
 
         // profiler.stopTimer("cg_calc_p");
     }

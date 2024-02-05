@@ -68,7 +68,7 @@ module ppcg_driver{
     proc ppcg_init_driver (ref chunk_var : chunks.Chunk, ref setting_var : settings.setting, ref rro: real){
         
         calculate_residual(setting_var.halo_depth, chunk_var.u, chunk_var.u0, chunk_var.r, chunk_var.kx, 
-                            chunk_var.ky);
+            chunk_var.ky, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_P] = true;
@@ -82,24 +82,26 @@ module ppcg_driver{
 
         var pw: real;
         cg_calc_w(setting_var.halo_depth, pw, chunk_var.p, chunk_var.w, chunk_var.kx, 
-                  chunk_var.ky, chunk_var.temp);
+            chunk_var.ky, chunk_var.temp, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         const alpha : real = rro / pw;
         var rrn : real = 0.0;
 
         cg_calc_ur (setting_var.halo_depth, alpha, rrn, chunk_var.u, chunk_var.p, chunk_var.r, 
-                    chunk_var.w, chunk_var.temp);
+            chunk_var.w, chunk_var.temp, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         // Perform the inner iterations
         ppcg_inner_iterations(chunk_var, setting_var);
 
         rrn = 0.0;
 
-        calculate_2norm(setting_var.halo_depth, chunk_var.r, rrn);
+        calculate_2norm(setting_var.halo_depth, chunk_var.r, rrn, chunk_var.reduced_OneD, 
+            chunk_var.reduced_local_domain);
 
         const beta : real = rrn / rro;
 
-        cg_calc_p(setting_var.halo_depth, beta, chunk_var.p, chunk_var.r);
+        cg_calc_p(setting_var.halo_depth, beta, chunk_var.p, chunk_var.r, chunk_var.reduced_OneD, 
+            chunk_var.reduced_local_domain);
 
         error = rrn;
         rro = rrn;
