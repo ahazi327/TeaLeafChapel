@@ -29,11 +29,16 @@ This version of TeaLeafChapel has been tested to work on Chapel version 1.32.0.
    ```bash
    make stencil
    ```
+   To make the version using Chapel's GPU support: 
+   ```bash
+   make gpu
+   ```
    This will produce an object file with the names respectively:
    ```
    tealeaflocal
    tealeafblock
    tealeafstencil
+   tealeafgpu
    ```
 To change the flags used, simply open the makefile and edit the ```config params``` for command line outputs
 and ```CFLAGS``` for Chapel flags.
