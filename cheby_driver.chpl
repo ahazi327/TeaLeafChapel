@@ -87,7 +87,8 @@ module cheby_driver{
             chunk_var.reduced_local_domain);
 
         cheby_init(setting_var.halo_depth, chunk_var.theta, chunk_var.u, chunk_var.u0,
-                    chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky);
+            chunk_var.p, chunk_var.r, chunk_var.w, chunk_var.kx, chunk_var.ky, chunk_var.reduced_OneD, 
+            chunk_var.reduced_local_domain);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_U] = true;
@@ -101,7 +102,7 @@ module cheby_driver{
         // chunks per rank loop
         cheby_iterate (setting_var.halo_depth, chunk_var.cheby_alphas[num_cheby_iters],
             chunk_var.cheby_betas[num_cheby_iters], chunk_var.u, chunk_var.u0, chunk_var.p, chunk_var.r, 
-            chunk_var.w, chunk_var.kx, chunk_var.ky);
+            chunk_var.w, chunk_var.kx, chunk_var.ky, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         if is_calc_2norm then
         {

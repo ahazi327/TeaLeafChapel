@@ -59,7 +59,8 @@ module jacobi{
                         ref r: [Domain] real, ref error: real, const ref kx: [Domain] real, 
                         const ref ky: [Domain] real, ref temp: [Domain] real, const ref reduced_OneD : domain(1), const ref reduced_local_domain : domain(2), const ref local_domain : domain(2), const ref OneD : domain(1)){
 
-        forall (i, j) in Domain {
+        forall oneDIdx in OneD {
+            const (i,j) = local_domain.orderToIndex(oneDIdx);
             r[i,j] = u[i,j];
         }
 

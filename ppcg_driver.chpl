@@ -110,7 +110,8 @@ module ppcg_driver{
     // Performs the inner iterations of the PPCG solver
     proc ppcg_inner_iterations(ref chunk_var : chunks.Chunk, ref setting_var : settings.setting){
         
-        ppcg_init(setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd);
+        ppcg_init(setting_var.halo_depth, chunk_var.theta, chunk_var.r, chunk_var.sd, 
+            chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
 
         reset_fields_to_exchange(setting_var);
         setting_var.fields_to_exchange[FIELD_SD] = true;
@@ -120,7 +121,7 @@ module ppcg_driver{
             halo_update_driver(chunk_var, setting_var, 1);
 
             ppcg_inner_iteration(setting_var.halo_depth, chunk_var.cheby_alphas[pp], chunk_var.cheby_betas[pp], 
-                                chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky);
+                chunk_var.u, chunk_var.r, chunk_var.sd, chunk_var.kx, chunk_var.ky, chunk_var.reduced_OneD, chunk_var.reduced_local_domain);
         }
 
         reset_fields_to_exchange(setting_var);
